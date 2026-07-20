@@ -1,102 +1,440 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Accommodation and travel for Claire and Carl's wedding">
-  <title>Accommodation | Claire & Carl</title>
-  <link rel="stylesheet" href="styles.css">
-  <script src="script.js" defer></script>
+    <meta charset="utf-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+
+    <meta
+        name="description"
+        content="Accommodation and travel information for Claire and Carl's wedding"
+    >
+
+    <title>Accommodation | Claire & Carl</title>
+
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+
+    <style>
+        /*
+         * These rules ensure this page behaves consistently
+         * even if older CSS is cached by the browser.
+         */
+
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            width: 100%;
+            background: rgba(255, 253, 249, 0.96);
+            border-bottom: 1px solid rgba(23, 23, 23, 0.12);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .accommodation-hero {
+            padding: 90px 20px 70px;
+            overflow-wrap: anywhere;
+        }
+
+        .accommodation-hero h1 {
+            max-width: 100%;
+            font-size: clamp(2.5rem, 8vw, 6.5rem);
+            line-height: 1;
+        }
+
+        .travel-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 22px;
+            margin-top: 36px;
+        }
+
+        .travel-card {
+            min-width: 0;
+            padding: 30px;
+            border: 1px solid var(--line);
+        }
+
+        .travel-card h2 {
+            margin: 0 0 10px;
+            font-size: 1.65rem;
+            font-weight: 500;
+        }
+
+        .travel-card p {
+            margin: 0;
+            color: var(--muted);
+        }
+
+        .travel-card .map-link {
+            margin-top: 22px;
+        }
+
+        @media (max-width: 820px) {
+            .accommodation-hero {
+                padding: 44px 18px 50px;
+            }
+
+            .accommodation-hero h1 {
+                font-size: clamp(2.25rem, 11vw, 4.2rem);
+                letter-spacing: 0.06em;
+            }
+
+            .travel-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .accommodation-hero {
+                padding: 36px 16px 42px;
+            }
+
+            .accommodation-hero h1 {
+                font-size: 2.35rem;
+                letter-spacing: 0.035em;
+            }
+
+            .travel-card {
+                padding: 24px 20px;
+            }
+        }
+    </style>
 </head>
+
 <body>
-  <div class="password-screen">
-    <div class="password-card">
-      <p class="eyebrow">Claire & Carl</p>
-      <h1>Welcome</h1>
-      <p>Please enter the wedding password to continue.</p>
-      <form class="password-form">
-        <label class="hidden" for="site-password">Password</label>
-        <input id="site-password" type="password" autocomplete="current-password" placeholder="Wedding password" required autofocus>
-        <button type="submit">Enter</button>
-        <p class="password-error" aria-live="polite"></p>
-      </form>
+
+    <!-- Password screen -->
+    <div class="password-screen">
+        <div class="password-card">
+            <p class="eyebrow">Claire & Carl</p>
+
+            <h1>Welcome</h1>
+
+            <p>
+                Please enter the wedding password to continue.
+            </p>
+
+            <form class="password-form">
+                <label
+                    class="hidden"
+                    for="site-password"
+                >
+                    Password
+                </label>
+
+                <input
+                    id="site-password"
+                    type="password"
+                    autocomplete="current-password"
+                    placeholder="Wedding password"
+                    required
+                    autofocus
+                >
+
+                <button type="submit">
+                    Enter
+                </button>
+
+                <p
+                    class="password-error"
+                    aria-live="polite"
+                ></p>
+            </form>
+        </div>
     </div>
-  </div>
-  <header class="site-header">
-    <nav class="nav" aria-label="Primary navigation">
-      <a class="brand" href="index.html">C & C</a>
-      <button class="menu-button" type="button" aria-expanded="false">Menu</button>
-      <div class="nav-links">
-<a href="index.html">Home</a>
-<a href="venue.html">Venue</a>
-<a href="accommodation.html" aria-current="page">Accommodation</a>
-<a href="gifts.html">Gifts</a>
-<a href="faq.html">FAQ</a>
-<a href="rsvp.html">RSVP</a>
-      </div>
-    </nav>
-  </header>
-  <main>
-    <section class="page-hero">
-      <p class="eyebrow">Where to stay</p>
-      <h1>Accommodation</h1>
-      <p>There are places to stay around Chesterfield, Baslow and the Peak District. Book early because the wedding falls on a bank-holiday weekend.</p>
-    </section>
 
-    <section class="section">
-      <p class="eyebrow">Recommended areas</p>
-      <h2 class="section-title">Where to base yourself</h2>
-      <div class="hotel-grid">
-        <article class="hotel-card">
-          <h2>Chesterfield</h2>
-          <p>The widest choice of hotels, taxis and transport links. A practical option for most guests.</p>
-          <p class="hotel-meta">Roughly 10–20 minutes by car, depending on where you stay.</p>
-        </article>
-        <article class="hotel-card">
-          <h2>Baslow & Chatsworth</h2>
-          <p>Inns and boutique stays closer to the Peak District, with attractive villages and countryside nearby.</p>
-          <p class="hotel-meta">Roughly 10–15 minutes by car.</p>
-        </article>
-        <article class="hotel-card">
-          <h2>Peak District cottages</h2>
-          <p>A useful option for families or groups who want to stay together for the weekend.</p>
-          <p class="hotel-meta">Travel time varies, so check the route before booking.</p>
-        </article>
-      </div>
-      <div class="notice">Specific hotel recommendations, room blocks and wedding-day transport can be added here once confirmed.</div>
-    </section>
 
-    <section class="section">
-      <p class="eyebrow">Getting here</p>
-      <h2 class="section-title">Travel</h2>
-      <p class="lead">The venue is The Fox & Goose, Pudding Pie Hill, Chesterfield, S42 7JJ. These are broad driving routes only—use live navigation on the day for traffic and closures.</p>
-      <div class="travel-grid">
-        <article class="travel-card">
-          <h2>From North Wales</h2>
-          <p>Travel east towards the Peak District, typically via the A55 and routes through or around Manchester, then follow signs towards Chesterfield and Baslow.</p>
-          <a class="map-link" href="https://www.google.com/maps/dir/?api=1&destination=The+Fox+and+Goose+Pudding+Pie+Hill+Chesterfield+S42+7JJ&origin=North+Wales" target="_blank" rel="noopener">Open route</a>
-        </article>
-        <article class="travel-card">
-          <h2>From Warwick</h2>
-          <p>Travel north towards the East Midlands, generally using the M42 and M1 before leaving for Chesterfield and continuing towards Pudding Pie Hill.</p>
-          <a class="map-link" href="https://www.google.com/maps/dir/?api=1&destination=The+Fox+and+Goose+Pudding+Pie+Hill+Chesterfield+S42+7JJ&origin=Warwick" target="_blank" rel="noopener">Open route</a>
-        </article>
-        <article class="travel-card">
-          <h2>From Manchester</h2>
-          <p>Travel southeast across the Peak District, commonly via the A6 and local routes through the High Peak towards Baslow and Chesterfield.</p>
-          <a class="map-link" href="https://www.google.com/maps/dir/?api=1&destination=The+Fox+and+Goose+Pudding+Pie+Hill+Chesterfield+S42+7JJ&origin=Manchester" target="_blank" rel="noopener">Open route</a>
-        </article>
-        <article class="travel-card">
-          <h2>From London</h2>
-          <p>Travel north on the M1, leave for Chesterfield, then continue west towards the venue. Allow extra time for bank-holiday traffic.</p>
-          <a class="map-link" href="https://www.google.com/maps/dir/?api=1&destination=The+Fox+and+Goose+Pudding+Pie+Hill+Chesterfield+S42+7JJ&origin=London" target="_blank" rel="noopener">Open route</a>
-        </article>
-      </div>
-    </section>
-  </main>
-  <footer class="site-footer">
-    <p class="footer-script">We can't wait to celebrate with you</p>
-    <p>Claire & Carl · 1 May 2027</p>
-  </footer>
+    <!-- Navigation -->
+    <header class="site-header">
+        <nav
+            class="nav"
+            aria-label="Primary navigation"
+        >
+            <a
+                class="brand"
+                href="index.html"
+            >
+                C & C
+            </a>
+
+            <button
+                class="menu-button"
+                type="button"
+                aria-expanded="false"
+                aria-controls="primary-navigation"
+            >
+                Menu
+            </button>
+
+            <div
+                class="nav-links"
+                id="primary-navigation"
+            >
+                <a href="index.html">
+                    Home
+                </a>
+
+                <a href="venue.html">
+                    Venue
+                </a>
+
+                <a
+                    href="accommodation.html"
+                    aria-current="page"
+                >
+                    Accommodation
+                </a>
+
+                <a href="gifts.html">
+                    Gifts
+                </a>
+
+                <a href="faq.html">
+                    FAQ
+                </a>
+
+                <a href="rsvp.html">
+                    RSVP
+                </a>
+            </div>
+        </nav>
+    </header>
+
+
+    <main>
+
+        <!-- Page heading -->
+        <section class="page-hero accommodation-hero">
+            <p class="eyebrow">
+                Where to stay
+            </p>
+
+            <h1>
+                Accommodation
+            </h1>
+
+            <p>
+                There are places to stay around Chesterfield,
+                Baslow and the Peak District. We recommend
+                booking early because the wedding falls on a
+                bank-holiday weekend.
+            </p>
+        </section>
+
+
+        <!-- Accommodation areas -->
+        <section class="section">
+            <p class="eyebrow">
+                Recommended areas
+            </p>
+
+            <h2 class="section-title">
+                Where to base yourself
+            </h2>
+
+            <div class="hotel-grid">
+
+                <article class="hotel-card">
+                    <h2>
+                        Chesterfield
+                    </h2>
+
+                    <p>
+                        Chesterfield has the widest choice of
+                        hotels, taxis and transport links. It is
+                        likely to be the most practical option
+                        for most guests.
+                    </p>
+
+                    <p class="hotel-meta">
+                        Approximately 10–20 minutes from the
+                        venue by car, depending on where you stay.
+                    </p>
+                </article>
+
+
+                <article class="hotel-card">
+                    <h2>
+                        Baslow and Chatsworth
+                    </h2>
+
+                    <p>
+                        Baslow and the surrounding area offer
+                        country inns, boutique hotels and access
+                        to the Peak District.
+                    </p>
+
+                    <p class="hotel-meta">
+                        Approximately 10–15 minutes from the
+                        venue by car.
+                    </p>
+                </article>
+
+
+                <article class="hotel-card">
+                    <h2>
+                        Peak District cottages
+                    </h2>
+
+                    <p>
+                        A holiday cottage may work well for
+                        families or groups who would like to stay
+                        together for the weekend.
+                    </p>
+
+                    <p class="hotel-meta">
+                        Journey times vary, so please check the
+                        route to the venue before booking.
+                    </p>
+                </article>
+
+            </div>
+
+            <div class="notice">
+                Specific hotel recommendations, room blocks and
+                wedding-day transport information will be added
+                once they have been confirmed.
+            </div>
+        </section>
+
+
+        <!-- Travel -->
+        <section class="section">
+            <p class="eyebrow">
+                Getting here
+            </p>
+
+            <h2 class="section-title">
+                Travel
+            </h2>
+
+            <p class="lead">
+                The venue is The Fox & Goose, Pudding Pie Hill,
+                Chesterfield, S42 7JJ.
+            </p>
+
+            <p>
+                The information below gives a general idea of the
+                main driving routes. Please use live navigation
+                before travelling because traffic, roadworks and
+                closures may affect the journey.
+            </p>
+
+
+            <div class="travel-grid">
+
+                <article class="travel-card">
+                    <h2>
+                        From North Wales
+                    </h2>
+
+                    <p>
+                        Travel east towards the Peak District.
+                        Depending on your starting point, the
+                        route will usually use the A55 before
+                        continuing towards Greater Manchester,
+                        Buxton, Baslow and Chesterfield.
+                    </p>
+
+                    <a
+                        class="map-link"
+                        href="https://www.google.com/maps/dir/?api=1&origin=North+Wales&destination=The+Fox+and+Goose+Pudding+Pie+Hill+Chesterfield+S42+7JJ"
+                        target="_blank"
+                        rel="noopener"
+                    >
+                        Open route
+                    </a>
+                </article>
+
+
+                <article class="travel-card">
+                    <h2>
+                        From Warwick
+                    </h2>
+
+                    <p>
+                        Travel north towards the East Midlands,
+                        generally using the M42 and M1. Leave the
+                        motorway for Chesterfield before
+                        continuing towards Pudding Pie Hill.
+                    </p>
+
+                    <a
+                        class="map-link"
+                        href="https://www.google.com/maps/dir/?api=1&origin=Warwick&destination=The+Fox+and+Goose+Pudding+Pie+Hill+Chesterfield+S42+7JJ"
+                        target="_blank"
+                        rel="noopener"
+                    >
+                        Open route
+                    </a>
+                </article>
+
+
+                <article class="travel-card">
+                    <h2>
+                        From Manchester
+                    </h2>
+
+                    <p>
+                        Travel southeast across the Peak District.
+                        The route will commonly pass through or
+                        near Stockport, Buxton, Bakewell or Baslow
+                        before reaching the venue.
+                    </p>
+
+                    <a
+                        class="map-link"
+                        href="https://www.google.com/maps/dir/?api=1&origin=Manchester&destination=The+Fox+and+Goose+Pudding+Pie+Hill+Chesterfield+S42+7JJ"
+                        target="_blank"
+                        rel="noopener"
+                    >
+                        Open route
+                    </a>
+                </article>
+
+
+                <article class="travel-card">
+                    <h2>
+                        From London
+                    </h2>
+
+                    <p>
+                        Travel north on the M1, leave the motorway
+                        for Chesterfield and then continue west
+                        towards the venue. Allow extra time for
+                        bank-holiday traffic.
+                    </p>
+
+                    <a
+                        class="map-link"
+                        href="https://www.google.com/maps/dir/?api=1&origin=London&destination=The+Fox+and+Goose+Pudding+Pie+Hill+Chesterfield+S42+7JJ"
+                        target="_blank"
+                        rel="noopener"
+                    >
+                        Open route
+                    </a>
+                </article>
+
+            </div>
+        </section>
+
+    </main>
+
+
+    <footer class="site-footer">
+        <p class="footer-script">
+            We can't wait to celebrate with you
+        </p>
+
+        <p>
+            Claire & Carl · 1 May 2027
+        </p>
+    </footer>
+
 </body>
 </html>
