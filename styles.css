@@ -551,27 +551,35 @@ fieldset.form-field {
 }
 
 .photo-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
+    column-count: 3;
+    column-gap: 20px;
+    width: 100%;
 }
 
 .photo-card {
-  margin: 0;
+    display: inline-block;
+    width: 100%;
+    margin: 0 0 20px;
+    break-inside: avoid;
 }
 
 .photo-card img {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  display: block;
-  object-fit: cover;
-  border: 1px solid var(--line);
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--line);
 }
 
-.photo-card figcaption {
-  padding-top: 10px;
-  font-family: "Allura", cursive;
-  font-size: 1.8rem;
+@media (max-width: 900px) {
+    .photo-grid {
+        column-count: 2;
+    }
+}
+
+@media (max-width: 600px) {
+    .photo-grid {
+        column-count: 1;
+    }
 }
 
 .travel-grid {
