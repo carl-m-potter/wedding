@@ -6,7 +6,8 @@ A four-page static website designed for GitHub Pages.
 
 - `index.html` — landing page
 - `venue.html` — venue, date and timings
-- `hotels.html` — accommodation guidance
+- `accommodation.html` — accommodation and travel guidance
+- `gifts.html` — gift information placeholder
 - `faq.html` — expandable FAQs
 - `rsvp.html` — RSVP form connected to Formspree
 - `thanks.html` — confirmation page after submission
@@ -49,3 +50,9 @@ The visible wording is written directly in each HTML file. Shared styling is in 
 ## RSVP form
 
 The RSVP form submits to `https://formspree.io/f/meeykknk`.
+
+## Adding your photos
+
+The home page currently uses four placeholder SVG files in the `images` folder.
+
+Replace them with your own photographs and update the image extensions in `index.html`. Landscape images with a 4:3 crop work best.

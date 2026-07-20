@@ -535,3 +535,88 @@ fieldset.form-field {
     grid-column: 1 / -1;
   }
 }
+
+
+.section-heading-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 32px;
+  margin-bottom: 32px;
+}
+
+.gallery-intro {
+  max-width: 430px;
+  color: var(--muted);
+}
+
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.photo-card {
+  margin: 0;
+}
+
+.photo-card img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  display: block;
+  object-fit: cover;
+  border: 1px solid var(--line);
+}
+
+.photo-card figcaption {
+  padding-top: 10px;
+  font-family: "Allura", cursive;
+  font-size: 1.8rem;
+}
+
+.travel-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px;
+  margin-top: 36px;
+}
+
+.travel-card {
+  border: 1px solid var(--line);
+  padding: 30px;
+}
+
+.travel-card h2 {
+  margin: 0 0 10px;
+  font-size: 1.65rem;
+  font-weight: 500;
+}
+
+.travel-card p {
+  color: var(--muted);
+}
+
+.gift-placeholder {
+  margin-top: 42px;
+  padding: 34px;
+  border: 1px solid var(--line);
+  text-align: center;
+  background: var(--soft);
+}
+
+.gift-placeholder h3 {
+  margin: 0 0 8px;
+  font-size: 2rem;
+  font-weight: 400;
+}
+
+@media (max-width: 760px) {
+  .section-heading-row {
+    display: block;
+  }
+
+  .photo-grid,
+  .travel-grid {
+    grid-template-columns: 1fr;
+  }
+}
