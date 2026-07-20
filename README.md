@@ -8,6 +8,8 @@ A four-page static website designed for GitHub Pages.
 - `venue.html` — venue, date and timings
 - `hotels.html` — accommodation guidance
 - `faq.html` — expandable FAQs
+- `rsvp.html` — RSVP form connected to Formspree
+- `thanks.html` — confirmation page after submission
 
 ## Current password
 
@@ -43,3 +45,7 @@ For genuine access control, put the site behind a service such as Cloudflare Acc
 ## Editing content
 
 The visible wording is written directly in each HTML file. Shared styling is in `styles.css`.
+
+## RSVP form
+
+The RSVP form submits to `https://formspree.io/f/meeykknk`.
