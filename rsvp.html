@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="RSVP for Claire and Carl's wedding — 1 May 2027">
+  <title>RSVP | Claire & Carl</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="password-screen">
+    <div class="password-card">
+      <p class="eyebrow">Claire & Carl</p>
+      <h1>Welcome</h1>
+      <p>Please enter the wedding password to continue.</p>
+      <form class="password-form">
+        <label class="hidden" for="site-password">Password</label>
+        <input id="site-password" type="password" autocomplete="current-password" placeholder="Wedding password" required autofocus>
+        <button type="submit">Enter</button>
+        <p class="password-error" aria-live="polite"></p>
+      </form>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <nav class="nav" aria-label="Primary navigation">
+      <a class="brand" href="index.html">C & C</a>
+      <button class="menu-button" type="button" aria-expanded="false">Menu</button>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="venue.html">Venue</a>
+        <a href="hotels.html">Hotels</a>
+        <a href="faq.html">FAQ</a>
+        <a href="rsvp.html" aria-current="page">RSVP</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <p class="eyebrow">Join us</p>
+      <h1>RSVP</h1>
+      <p>Please complete one form per household. Your invitation will confirm exactly who is invited.</p>
+    </section>
+
+    <section class="section narrow">
+      <form class="rsvp-form" action="https://formspree.io/f/meeykknk" method="POST">
+        <input type="hidden" name="_subject" value="New wedding RSVP">
+        <input type="hidden" name="_next" value="thanks.html">
+
+        <div class="form-grid">
+          <div class="form-field form-field-full">
+            <label for="guest-name">Your full name</label>
+            <input id="guest-name" name="Guest name" type="text" autocomplete="name" required>
+          </div>
+
+          <div class="form-field form-field-full">
+            <label for="email">Email address</label>
+            <input id="email" name="Email" type="email" autocomplete="email" required>
+          </div>
+
+          <fieldset class="form-field form-field-full">
+            <legend>Will you be attending?</legend>
+            <label class="radio-option">
+              <input type="radio" name="Attending" value="Yes" required>
+              <span>Joyfully accepts</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="Attending" value="No" required>
+              <span>Regretfully declines</span>
+            </label>
+          </fieldset>
+
+          <div class="form-field form-field-full">
+            <label for="party-members">Names of other invited guests attending with you</label>
+            <textarea id="party-members" name="Other guests attending" rows="3" placeholder="Leave blank if none"></textarea>
+          </div>
+
+          <div class="form-field form-field-full">
+            <label for="dietary">Dietary requirements or allergies</label>
+            <textarea id="dietary" name="Dietary requirements" rows="3" placeholder="Please include the guest's name beside each requirement"></textarea>
+          </div>
+
+          <div class="form-field">
+            <label for="song">Song request</label>
+            <input id="song" name="Song request" type="text">
+          </div>
+
+          <div class="form-field">
+            <label for="phone">Phone number <span class="optional">(optional)</span></label>
+            <input id="phone" name="Phone number" type="tel" autocomplete="tel">
+          </div>
+
+          <div class="form-field form-field-full">
+            <label for="message">Message for Claire and Carl <span class="optional">(optional)</span></label>
+            <textarea id="message" name="Message" rows="4"></textarea>
+          </div>
+        </div>
+
+        <button class="submit-button" type="submit">Send RSVP</button>
+      </form>
+
+      <div class="notice">
+        Please submit your RSVP by the deadline shown on your formal invitation.
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p class="footer-script">We can't wait to celebrate with you</p>
+    <p>Claire & Carl · 1 May 2027</p>
+  </footer>
+</body>
+</html>

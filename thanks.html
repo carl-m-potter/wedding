@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="RSVP received for Claire and Carl's wedding">
+  <title>Thank you | Claire & Carl</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="password-screen">
+    <div class="password-card">
+      <p class="eyebrow">Claire & Carl</p>
+      <h1>Welcome</h1>
+      <p>Please enter the wedding password to continue.</p>
+      <form class="password-form">
+        <label class="hidden" for="site-password">Password</label>
+        <input id="site-password" type="password" autocomplete="current-password" placeholder="Wedding password" required autofocus>
+        <button type="submit">Enter</button>
+        <p class="password-error" aria-live="polite"></p>
+      </form>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <nav class="nav" aria-label="Primary navigation">
+      <a class="brand" href="index.html">C & C</a>
+      <button class="menu-button" type="button" aria-expanded="false">Menu</button>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="venue.html">Venue</a>
+        <a href="hotels.html">Hotels</a>
+        <a href="faq.html">FAQ</a>
+        <a href="rsvp.html">RSVP</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-card">
+        <p class="kicker">Your response has been received</p>
+        <h1 class="display" style="font-size:clamp(3.5rem,10vw,7rem)">Thank You</h1>
+        <p class="script">Claire & Carl</p>
+        <p class="lead">We have received your RSVP.</p>
+        <a class="button" href="index.html">Return home</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p class="footer-script">We can't wait to celebrate with you</p>
+    <p>Claire & Carl · 1 May 2027</p>
+  </footer>
+</body>
+</html>
