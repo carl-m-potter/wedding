@@ -54,7 +54,9 @@
         <p id="login-status" class="password-error" aria-live="polite"></p>
       </form>
 
-      <form id="rsvp-form" class="rsvp-form" hidden>
+      <form id="rsvp-form" class="rsvp-form" action="https://formspree.io/f/meeykknk" method="POST" hidden>
+        <input type="hidden" name="_subject" value="New wedding RSVP">
+        <input type="hidden" name="_next" value="thanks.html">
         <input type="hidden" id="party-name" name="Invitation party">
         <input type="hidden" id="invite-type" name="Invite type">
         <input type="hidden" id="selected-guests" name="Guests attending">
@@ -129,13 +131,9 @@
 
       FUTURE CUSTOM DOMAIN:
       After Cloudflare routes your-domain/api/* to this Worker, change this to:
-          */
-    const WORKER_LOGIN_URL =
-  "https://wedding1.carlclaireunwin.workers.dev/?action=login";
-
-const RSVP_API_URL =
-  "https://wedding1.carlclaireunwin.workers.dev/?action=rsvp";
-    const RSVP_API_URL = "https://wedding1.carlclaireunwin.workers.dev/?action=rsvp";
+      const WORKER_LOGIN_URL = "/api/login";
+    */
+    const WORKER_LOGIN_URL = "https://wedding1.carlclaireunwin.workers.dev/login";
     const STORAGE_KEY = "carl-claire-rsvp-invitation-v2";
 
     const loginForm = document.getElementById("invite-login");
@@ -330,9 +328,7 @@ const RSVP_API_URL =
       });
     });
 
-    rsvpForm.addEventListener("submit", async event => {
-      event.preventDefault();
-
+    rsvpForm.addEventListener("submit", event => {
       const attendanceChoice =
         document.querySelector('input[name="Attending"]:checked');
 
@@ -340,6 +336,7 @@ const RSVP_API_URL =
         attendanceChoice?.value === "Yes" &&
         checkedGuestNames().length === 0
       ) {
+        event.preventDefault();
         alert("Please select at least one person who will be attending.");
         guestFieldset.scrollIntoView({
           behavior: "smooth",
@@ -357,52 +354,6 @@ const RSVP_API_URL =
 
       submitButton.disabled = true;
       submitButton.textContent = "Sending RSVP…";
-
-      const payload = {
-        party: partyInput.value,
-        inviteType: inviteTypeInput.value,
-        loggedInAs: loginNameInput.value,
-        attending: attendanceChoice.value,
-        guestsAttending: selectedGuestsInput.value || "None",
-        dietaryRequirements: dietaryTextarea.value || "None",
-        email: document.getElementById("email").value,
-        phone: document.getElementById("phone").value,
-        message: document.getElementById("message").value
-      };
-
-      try {
-        const response = await fetch(RSVP_API_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        });
-
-        if (!response.ok) {
-          throw new Error("Submission failed");
-        }
-
-        rsvpForm.innerHTML = `
-          <div class="notice">
-            <h2>Thank you, ${invitation.loginDisplayName}!</h2>
-            <p>We've received your RSVP.</p>
-            <p>We can't wait to celebrate with you on 1 May 2027.</p>
-          </div>
-        `;
-
-        localStorage.setItem(
-          "carl-claire-rsvp-submitted",
-          JSON.stringify({
-            party: payload.party,
-            submittedAt: new Date().toISOString()
-          })
-        );
-      } catch {
-        submitButton.disabled = false;
-        submitButton.textContent = "Send RSVP";
-        alert(
-          "Your RSVP could not be sent. Please check your internet connection and try again."
-        );
-      }
     });
 
     const rememberedInvitation = localStorage.getItem(STORAGE_KEY);
