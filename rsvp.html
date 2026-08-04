@@ -42,34 +42,45 @@
     <section class="page-hero">
       <p class="eyebrow">Join us</p>
       <h1>RSVP</h1>
-      <p>Please confirm who will be attending from your invitation.</p>
+      <p>Enter your name and wedding password to find your invitation.</p>
     </section>
 
     <section class="section narrow">
-      <div id="loading-message" class="notice">Loading your invitation…</div>
+      <form id="invite-login" class="rsvp-form">
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="first-name">First name</label>
+            <input id="first-name" type="text" autocomplete="given-name" required>
+          </div>
 
-      <div id="invalid-invite" class="notice" hidden>
-        This invitation link is invalid or incomplete. Please use the private RSVP link sent with your invitation.
-      </div>
+          <div class="form-field">
+            <label for="last-name">Last name</label>
+            <input id="last-name" type="text" autocomplete="family-name" required>
+          </div>
+
+          <div class="form-field form-field-full">
+            <label for="invite-password">Wedding password</label>
+            <input id="invite-password" type="password" autocomplete="current-password" required>
+          </div>
+        </div>
+
+        <button class="submit-button" type="submit">Find my invitation</button>
+        <p id="login-error" class="password-error" aria-live="polite"></p>
+      </form>
 
       <form id="rsvp-form" class="rsvp-form" action="https://formspree.io/f/meeykknk" method="POST" hidden>
         <input type="hidden" name="_subject" value="New wedding RSVP">
         <input type="hidden" name="_next" value="thanks.html">
-        <input type="hidden" id="invite-token" name="Invitation token">
         <input type="hidden" id="party-name" name="Invitation party">
         <input type="hidden" id="invite-type" name="Invite type">
         <input type="hidden" id="selected-guests" name="Guests attending">
+        <input type="hidden" id="login-name" name="Logged in as">
 
         <div class="form-grid">
           <div class="form-field form-field-full">
-            <p><strong>Invitation:</strong> <span id="invitation-label"></span></p>
-          </div>
-
-          <div class="form-field form-field-full">
-            <label for="respondent-name">Your name</label>
-            <select id="respondent-name" name="Respondent name" required>
-              <option value="">Choose your name…</option>
-            </select>
+            <p class="eyebrow">Your invitation</p>
+            <h2 id="welcome-heading"></h2>
+            <p id="reservation-summary"></p>
           </div>
 
           <div class="form-field form-field-full">
@@ -91,7 +102,7 @@
 
           <fieldset id="guest-fieldset" class="form-field form-field-full">
             <legend>Who will be attending?</legend>
-            <p class="optional">Select everyone who will be attending.</p>
+            <p class="optional">Select everyone who will be joining us.</p>
             <div id="guest-options"></div>
           </fieldset>
 
@@ -126,23 +137,20 @@
   </footer>
 
   <script>
-    const WORKER_URL = "https://wedding1.carlclaireunwin.workers.dev/invite";
+    const WORKER_LOGIN_URL = "https://wedding1.carlclaireunwin.workers.dev/login";
 
-    const params = new URLSearchParams(window.location.search);
-    const token = params.get("invite");
-
-    const loadingMessage = document.getElementById("loading-message");
-    const invalidInvite = document.getElementById("invalid-invite");
-    const form = document.getElementById("rsvp-form");
-    const inviteTokenInput = document.getElementById("invite-token");
-    const partyInput = document.getElementById("party-name");
-    const inviteTypeInput = document.getElementById("invite-type");
-    const selectedGuestsInput = document.getElementById("selected-guests");
-    const invitationLabel = document.getElementById("invitation-label");
-    const respondentSelect = document.getElementById("respondent-name");
+    const loginForm = document.getElementById("invite-login");
+    const rsvpForm = document.getElementById("rsvp-form");
+    const loginError = document.getElementById("login-error");
     const guestOptions = document.getElementById("guest-options");
     const guestFieldset = document.getElementById("guest-fieldset");
     const dietaryTextarea = document.getElementById("dietary");
+    const selectedGuestsInput = document.getElementById("selected-guests");
+    const partyInput = document.getElementById("party-name");
+    const inviteTypeInput = document.getElementById("invite-type");
+    const loginNameInput = document.getElementById("login-name");
+    const welcomeHeading = document.getElementById("welcome-heading");
+    const reservationSummary = document.getElementById("reservation-summary");
     const attendanceRadios = document.querySelectorAll('input[name="Attending"]');
 
     let invitation = null;
@@ -183,10 +191,7 @@
     function setGuestSelectionEnabled(enabled) {
       guestOptions.querySelectorAll('input[type="checkbox"]').forEach(input => {
         input.disabled = !enabled;
-
-        if (!enabled) {
-          input.checked = false;
-        }
+        if (!enabled) input.checked = false;
       });
 
       guestFieldset.hidden = !enabled;
@@ -194,23 +199,20 @@
       updateDietary(true);
     }
 
-    function renderInvitation(data) {
+    function renderInvitation(data, loginName) {
       invitation = data;
-
-      inviteTokenInput.value = token;
       partyInput.value = data.party;
       inviteTypeInput.value = data.inviteType;
-      invitationLabel.textContent = `${data.party} — ${data.inviteType} invitation`;
+      loginNameInput.value = loginName;
 
-      respondentSelect.innerHTML = '<option value="">Choose your name…</option>';
+      const placeWord = data.guests.length === 1 ? "place" : "places";
+      welcomeHeading.textContent = `Welcome, ${data.party}`;
+      reservationSummary.textContent =
+        `We've reserved ${data.guests.length} ${placeWord} for your ${data.inviteType.toLowerCase()} invitation.`;
+
       guestOptions.innerHTML = "";
 
       data.guests.forEach((guest, index) => {
-        const option = document.createElement("option");
-        option.value = guest.name;
-        option.textContent = guest.name;
-        respondentSelect.appendChild(option);
-
         const label = document.createElement("label");
         label.className = "radio-option";
 
@@ -233,17 +235,46 @@
         guestOptions.appendChild(label);
       });
 
-      loadingMessage.hidden = true;
-      form.hidden = false;
+      loginForm.hidden = true;
+      rsvpForm.hidden = false;
       updateSelectedGuests();
       updateDietary(true);
+      rsvpForm.scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
-    function showInvalidInvite() {
-      loadingMessage.hidden = true;
-      invalidInvite.hidden = false;
-      form.hidden = true;
-    }
+    loginForm.addEventListener("submit", async event => {
+      event.preventDefault();
+      loginError.textContent = "";
+
+      const firstName = document.getElementById("first-name").value;
+      const lastName = document.getElementById("last-name").value;
+      const password = document.getElementById("invite-password").value;
+      const submitButton = loginForm.querySelector('button[type="submit"]');
+
+      submitButton.disabled = true;
+      submitButton.textContent = "Finding invitation…";
+
+      try {
+        const response = await fetch(WORKER_LOGIN_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ firstName, lastName, password })
+        });
+
+        if (!response.ok) {
+          throw new Error("Login failed");
+        }
+
+        const data = await response.json();
+        renderInvitation(data, `${firstName.trim()} ${lastName.trim()}`);
+      } catch {
+        loginError.textContent =
+          "We couldn't find an invitation with those details. Check the spelling and password, then try again.";
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = "Find my invitation";
+      }
+    });
 
     attendanceRadios.forEach(radio => {
       radio.addEventListener("change", () => {
@@ -257,7 +288,7 @@
       });
     });
 
-    form.addEventListener("submit", event => {
+    rsvpForm.addEventListener("submit", event => {
       const attendanceChoice = document.querySelector('input[name="Attending"]:checked');
 
       if (attendanceChoice?.value === "Yes" && checkedGuestNames().length === 0) {
@@ -271,32 +302,6 @@
         dietaryTextarea.value = "None";
       }
     });
-
-    async function loadInvitation() {
-      if (!token) {
-        showInvalidInvite();
-        return;
-      }
-
-      try {
-        const response = await fetch(`${WORKER_URL}?token=${encodeURIComponent(token)}`, {
-          headers: { "Accept": "application/json" },
-          cache: "no-store"
-        });
-
-        if (!response.ok) {
-          throw new Error("Invitation not found");
-        }
-
-        const data = await response.json();
-        renderInvitation(data);
-      } catch (error) {
-        console.error(error);
-        showInvalidInvite();
-      }
-    }
-
-    loadInvitation();
   </script>
 </body>
 </html>
