@@ -51,7 +51,7 @@
         </div>
 
         <button class="submit-button" type="submit">Find my invitation</button>
-        <p id="login-error" class="password-error" aria-live="polite"></p>
+        <p id="login-status" class="password-error" aria-live="polite"></p>
       </form>
 
       <form id="rsvp-form" class="rsvp-form" action="https://formspree.io/f/meeykknk" method="POST" hidden>
@@ -66,6 +66,7 @@
           <div class="form-field form-field-full">
             <p class="eyebrow">Your invitation</p>
             <h2 id="welcome-heading"></h2>
+            <p id="invitation-message"></p>
             <p id="reservation-summary"></p>
             <button id="sign-out-button" type="button" class="text-button">Not you? Sign out</button>
           </div>
@@ -124,12 +125,20 @@
   </footer>
 
   <script>
+    /*
+      CURRENT SETUP:
+      Keep the full workers.dev URL while the website is hosted at github.io.
+
+      FUTURE CUSTOM DOMAIN:
+      After Cloudflare routes your-domain/api/* to this Worker, change this to:
+      const WORKER_LOGIN_URL = "/api/login";
+    */
     const WORKER_LOGIN_URL = "https://wedding1.carlclaireunwin.workers.dev/login";
-    const STORAGE_KEY = "carl-claire-rsvp-login";
+    const STORAGE_KEY = "carl-claire-rsvp-invitation-v2";
 
     const loginForm = document.getElementById("invite-login");
     const rsvpForm = document.getElementById("rsvp-form");
-    const loginError = document.getElementById("login-error");
+    const loginStatus = document.getElementById("login-status");
     const guestOptions = document.getElementById("guest-options");
     const guestFieldset = document.getElementById("guest-fieldset");
     const dietaryTextarea = document.getElementById("dietary");
@@ -138,6 +147,7 @@
     const inviteTypeInput = document.getElementById("invite-type");
     const loginNameInput = document.getElementById("login-name");
     const welcomeHeading = document.getElementById("welcome-heading");
+    const invitationMessage = document.getElementById("invitation-message");
     const reservationSummary = document.getElementById("reservation-summary");
     const attendanceRadios = document.querySelectorAll('input[name="Attending"]');
     const signOutButton = document.getElementById("sign-out-button");
@@ -165,7 +175,7 @@
       const lines = invitation.guests
         .filter(guest => selectedNames.includes(guest.name))
         .filter(guest => guest.dietary && guest.dietary.toLowerCase() !== "none")
-        .map(guest => `${guest.name}: ${guest.dietary}`);
+        .map(guest => `${guest.dietary} — ${guest.name}`);
 
       return lines.length ? lines.join("\n") : "None";
     }
@@ -180,7 +190,10 @@
     function setGuestSelectionEnabled(enabled) {
       guestOptions.querySelectorAll('input[type="checkbox"]').forEach(input => {
         input.disabled = !enabled;
-        if (!enabled) input.checked = false;
+
+        if (!enabled) {
+          input.checked = false;
+        }
       });
 
       guestFieldset.hidden = !enabled;
@@ -188,12 +201,12 @@
       updateDietary(true);
     }
 
-    function rememberLogin(data) {
-      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    function rememberInvitation(data) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     }
 
-    function clearRememberedLogin() {
-      sessionStorage.removeItem(STORAGE_KEY);
+    function clearRememberedInvitation() {
+      localStorage.removeItem(STORAGE_KEY);
     }
 
     function renderInvitation(data, shouldRemember = true) {
@@ -203,11 +216,18 @@
       inviteTypeInput.value = data.inviteType;
       loginNameInput.value = data.loginDisplayName;
 
-      const placeWord = data.guests.length === 1 ? "place" : "places";
-
       welcomeHeading.textContent = `Welcome, ${data.loginDisplayName}`;
+
+      invitationMessage.textContent =
+        data.inviteType === "Day"
+          ? "You're invited to join us for the whole day."
+          : "You're invited to celebrate with us in the evening.";
+
+      const guestCount = data.guests.length;
+      const guestWord = guestCount === 1 ? "guest" : "guests";
+
       reservationSummary.textContent =
-        `We've reserved ${data.guests.length} ${placeWord} for your ${data.inviteType.toLowerCase()} invitation.`;
+        `There are ${guestCount} ${guestWord} on this invitation.`;
 
       guestOptions.innerHTML = "";
 
@@ -219,15 +239,18 @@
         checkbox.type = "checkbox";
         checkbox.value = guest.name;
         checkbox.id = `invited-guest-${index}`;
+        checkbox.checked = guest.name === data.loginDisplayName;
+
         checkbox.addEventListener("change", () => {
           updateSelectedGuests();
           updateDietary(true);
         });
 
         const text = document.createElement("span");
-        text.textContent = guest.personType === "Child"
-          ? `${guest.name} (child)`
-          : guest.name;
+        text.textContent =
+          guest.personType === "Child"
+            ? `${guest.name} (child)`
+            : guest.name;
 
         label.appendChild(checkbox);
         label.appendChild(text);
@@ -241,14 +264,14 @@
       updateDietary(true);
 
       if (shouldRemember) {
-        rememberLogin(data);
+        rememberInvitation(data);
       }
     }
 
     loginForm.addEventListener("submit", async event => {
       event.preventDefault();
 
-      loginError.textContent = "";
+      loginStatus.textContent = "";
 
       const firstName = document.getElementById("first-name").value;
       const lastName = document.getElementById("last-name").value;
@@ -256,7 +279,8 @@
       const submitButton = loginForm.querySelector('button[type="submit"]');
 
       submitButton.disabled = true;
-      submitButton.textContent = "Finding invitation…";
+      submitButton.textContent = "Finding your invitation…";
+      loginStatus.textContent = "Please wait while we find your invitation.";
 
       try {
         const response = await fetch(WORKER_LOGIN_URL, {
@@ -270,10 +294,11 @@
         }
 
         const data = await response.json();
+        loginStatus.textContent = "";
         renderInvitation(data);
       } catch {
-        loginError.textContent =
-          "We couldn't find a matching invitation. Please check the spelling of your name and the wedding password.";
+        loginStatus.textContent =
+          "We couldn't find a matching invitation. Check the spelling of your first and last name and make sure the wedding password is exactly right.";
       } finally {
         submitButton.disabled = false;
         submitButton.textContent = "Find my invitation";
@@ -281,13 +306,13 @@
     });
 
     signOutButton.addEventListener("click", () => {
-      clearRememberedLogin();
+      clearRememberedInvitation();
       invitation = null;
       rsvpForm.reset();
       rsvpForm.hidden = true;
       loginForm.hidden = false;
       loginForm.reset();
-      loginError.textContent = "";
+      loginStatus.textContent = "";
       document.getElementById("first-name").focus();
     });
 
@@ -304,27 +329,40 @@
     });
 
     rsvpForm.addEventListener("submit", event => {
-      const attendanceChoice = document.querySelector('input[name="Attending"]:checked');
+      const attendanceChoice =
+        document.querySelector('input[name="Attending"]:checked');
 
-      if (attendanceChoice?.value === "Yes" && checkedGuestNames().length === 0) {
+      if (
+        attendanceChoice?.value === "Yes" &&
+        checkedGuestNames().length === 0
+      ) {
         event.preventDefault();
         alert("Please select at least one person who will be attending.");
-        guestFieldset.scrollIntoView({ behavior: "smooth", block: "center" });
+        guestFieldset.scrollIntoView({
+          behavior: "smooth",
+          block: "center"
+        });
         return;
       }
 
       if (!dietaryTextarea.value.trim()) {
         dietaryTextarea.value = "None";
       }
+
+      const submitButton =
+        rsvpForm.querySelector('button[type="submit"]');
+
+      submitButton.disabled = true;
+      submitButton.textContent = "Sending RSVP…";
     });
 
-    const rememberedLogin = sessionStorage.getItem(STORAGE_KEY);
+    const rememberedInvitation = localStorage.getItem(STORAGE_KEY);
 
-    if (rememberedLogin) {
+    if (rememberedInvitation) {
       try {
-        renderInvitation(JSON.parse(rememberedLogin), false);
+        renderInvitation(JSON.parse(rememberedInvitation), false);
       } catch {
-        clearRememberedLogin();
+        clearRememberedInvitation();
       }
     }
   </script>
