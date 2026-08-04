@@ -282,13 +282,12 @@
       submitButton.textContent = "Finding your invitation…";
       loginStatus.textContent = "Please wait while we find your invitation.";
 
-     const response = await fetch(WORKER_LOGIN_URL, {
-  method: "POST",
-  headers: {
-    "Content-Type": "text/plain;charset=UTF-8"
-  },
-  body: JSON.stringify({ firstName, lastName, password })
-});
+      try {
+        const response = await fetch(WORKER_LOGIN_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ firstName, lastName, password })
+        });
 
         if (!response.ok) {
           throw new Error("Login failed");
