@@ -4,7 +4,6 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="RSVP for Claire and Carl's wedding — 1 May 2027">
-  <link rel="canonical" href="https://carlandclaire.co.uk/rsvp/">
   <title>RSVP | Claire & Carl</title>
   <link rel="stylesheet" href="/styles.css">
   <script src="/script.js" defer></script>
@@ -57,7 +56,6 @@
 
       <form id="rsvp-form" class="rsvp-form" action="https://formspree.io/f/meeykknk" method="POST" hidden>
         <input type="hidden" name="_subject" value="New wedding RSVP">
-        <input type="hidden" name="_next" value="/thanks.html">
         <input type="hidden" id="party-name" name="Invitation party">
         <input type="hidden" id="invite-type" name="Invite type">
         <input type="hidden" id="selected-guests" name="Guests attending">
@@ -78,20 +76,20 @@
           </div>
 
           <fieldset class="form-field form-field-full">
-            <legend>Will you be attending our wedding?</legend>
+            <legend>Please confirm your attendance</legend>
             <label class="radio-option">
               <input type="radio" name="Attending" value="Yes" required>
-              <span>We'll be there!</span>
+              <span>Joyfully accepts</span>
             </label>
             <label class="radio-option">
               <input type="radio" name="Attending" value="No" required>
-              <span>We can't make it</span>
+              <span>Regretfully declines</span>
             </label>
           </fieldset>
 
           <fieldset id="guest-fieldset" class="form-field form-field-full">
             <legend>Who is this RSVP for?</legend>
-            <p class="optional">Please select everyone in your party that you are confirming for.</p>
+            <p class="optional">Please select everyone you are confirming for.</p>
             <div id="guest-options"></div>
           </fieldset>
 
@@ -113,6 +111,15 @@
 
         <button class="submit-button" type="submit">Send RSVP</button>
       </form>
+
+      <section id="rsvp-thank-you" class="notice" hidden tabindex="-1" aria-live="polite">
+        <h2 id="thank-you-heading">Thank you!</h2>
+        <p id="thank-you-response"></p>
+        <p>We&rsquo;ve received your RSVP and can&rsquo;t wait to celebrate with you on 1 May 2027.</p>
+        <p>If anything changes before the RSVP deadline, return to this page and submit a new response.</p>
+        <p class="footer-script">Claire &amp; Carl</p>
+      </section>
+
 
       <div class="notice">
         Please submit your RSVP by the deadline shown on your formal invitation.
@@ -152,6 +159,9 @@
     const reservationSummary = document.getElementById("reservation-summary");
     const attendanceRadios = document.querySelectorAll('input[name="Attending"]');
     const signOutButton = document.getElementById("sign-out-button");
+    const thankYouPanel = document.getElementById("rsvp-thank-you");
+    const thankYouHeading = document.getElementById("thank-you-heading");
+    const thankYouResponse = document.getElementById("thank-you-response");
 
     let invitation = null;
     let dietaryWasEdited = false;
@@ -315,6 +325,7 @@
       invitation = null;
       rsvpForm.reset();
       rsvpForm.hidden = true;
+      thankYouPanel.hidden = true;
       loginForm.hidden = false;
       loginForm.reset();
       loginStatus.textContent = "";
@@ -333,7 +344,9 @@
       });
     });
 
-    rsvpForm.addEventListener("submit", event => {
+    rsvpForm.addEventListener("submit", async event => {
+      event.preventDefault();
+
       const attendanceChoice =
         document.querySelector('input[name="Attending"]:checked');
 
@@ -341,8 +354,7 @@
         attendanceChoice?.value === "Yes" &&
         checkedGuestNames().length === 0
       ) {
-        event.preventDefault();
-        alert("Please select at least one person who will be attending.");
+        alert("Please select at least one person you are confirming for.");
         guestFieldset.scrollIntoView({
           behavior: "smooth",
           block: "center"
@@ -356,9 +368,50 @@
 
       const submitButton =
         rsvpForm.querySelector('button[type="submit"]');
+      const originalButtonText = submitButton.textContent;
 
       submitButton.disabled = true;
       submitButton.textContent = "Sending RSVP…";
+
+      try {
+        const response = await fetch(rsvpForm.action, {
+          method: "POST",
+          body: new FormData(rsvpForm),
+          headers: {
+            "Accept": "application/json"
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error("Formspree submission failed");
+        }
+
+        const confirmedNames = checkedGuestNames();
+        const responseText =
+          attendanceChoice.value === "Yes"
+            ? confirmedNames.length === 1
+              ? `We've recorded that ${confirmedNames[0]} will be attending.`
+              : `We've recorded that ${confirmedNames.join(", ")} will be attending.`
+            : "We've recorded that nobody from this invitation will be attending.";
+
+        thankYouHeading.textContent =
+          `Thank you, ${invitation.loginDisplayName}!`;
+        thankYouResponse.textContent = responseText;
+
+        rsvpForm.hidden = true;
+        thankYouPanel.hidden = false;
+        thankYouPanel.focus();
+        thankYouPanel.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+      } catch {
+        submitButton.disabled = false;
+        submitButton.textContent = originalButtonText;
+        alert(
+          "Your RSVP could not be sent. Please check your connection and try again. Nothing you entered has been lost."
+        );
+      }
     });
 
     const rememberedInvitation = localStorage.getItem(STORAGE_KEY);
