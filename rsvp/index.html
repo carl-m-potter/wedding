@@ -36,8 +36,7 @@
         <div class="form-grid">
           <div class="form-field">
             <label for="first-name">First name</label>
-            <input id="first-name" type="text" autocomplete="given-name" list="first-name-suggestions" required>
-            <datalist id="first-name-suggestions"></datalist>
+            <input id="first-name" type="text" autocomplete="given-name" required>
           </div>
 
           <div class="form-field">
@@ -144,243 +143,12 @@
       const WORKER_LOGIN_URL = "/api/login";
     */
     const WORKER_LOGIN_URL = "https://api.carlandclaire.co.uk/login";
+    const WORKER_LOOKUP_URL = "https://api.carlandclaire.co.uk/lookup";
     const STORAGE_KEY = "carl-claire-rsvp-invitation-v2";
-    const UNIQUE_FIRST_NAMES = {
-      "andrea": "pickering",
-      "anya": "pickering",
-      "darcie": "pickering",
-      "tristan": "pickering",
-      "debbie": "unwin",
-      "anna": "desalvo",
-      "buster": "dickinson",
-      "camilla": "dickinson",
-      "frank": "dickinson",
-      "carl": "potter",
-      "harper": "unwin",
-      "arwel": "williams",
-      "carrie": "potter-williams",
-      "katie": "davies",
-      "maxwell": "potter-williams",
-      "summer": "wilson-williams",
-      "rowena": "doughty",
-      "ellen": "smith",
-      "jody": "smith",
-      "pat": "fidler",
-      "erin": "jeffries",
-      "gemma": "stokes",
-      "marc": "tait",
-      "ian": "potter",
-      "jane": "potter",
-      "julie": "bennett",
-      "karen": "unwin",
-      "richard": "unwin",
-      "leonie": "fiveash",
-      "fiona": "potter",
-      "kyle": "potter",
-      "mark": "potter",
-      "iris": "potter",
-      "katherine": "potter",
-      "matt": "potter",
-      "phoebe": "potter",
-      "jean": "potter",
-      "mick": "potter",
-      "neil": "perkins",
-      "sioned": "perkins",
-      "eben": "howe",
-      "sam": "unwin",
-      "ralph": "bunting",
-      "rupert": "bunting",
-      "andy": "barr",
-      "jacob": "barr",
-      "stephanie": "wall",
-      "dianne": "wall",
-      "lee": "wall",
-      "steve": "wall",
-      "tilly": "wynne-thompson",
-      "wilfred": "wynne-thompson",
-      "evie-mair": "potter",
-      "lisa": "potter",
-      "tomos": "potter",
-      "tony": "potter",
-      "anne": "wall",
-      "eirlys": "potter",
-      "emily": "cotton",
-      "jamie": "unwin",
-      "joel": "mcavenne",
-      "lizzie": "pidd",
-      "pete": "owen",
-      "sally": "lebrun",
-      "sid": "morris",
-      "stella": "wall",
-      "thomas": "tracy",
-      "vikki": "lloyd",
-      "will": "unwin",
-      "zac": "gaskell",
-      "Andrea & John": "||Day",
-      "Ben & Debbie": "||Day",
-      "Cam & Buster": "||Day",
-      "Carl & Claire": "||Day",
-      "Carrie & Arwel": "||Day",
-      "Daniel & Rowena": "||Day",
-      "Ellen & Jody": "||Day",
-      "Gemma & Marc": "||Day",
-      "Ian & Jane": "||Day",
-      "Julie & John": "||Evening",
-      "Karen & Richard": "||Day",
-      "Leonie & Scott": "||Day",
-      "Mark & Fiona": "||Day",
-      "Matt & Kat": "||Day",
-      "Mick & Jean": "||Day",
-      "Neil & Sioned": "||Day",
-      "Sam & Fam": "||Day",
-      "Sarah": "||Day",
-      "Sarah & Andy": "||Evening",
-      "Stephanie & Rich": "||Day",
-      "Steve & Diane": "||Day",
-      "Tilly & Alex": "||Day",
-      "Tony & Lisa": "||Day",
-      "Anne Wall": "||Day",
-      "Eirlys Potter": "||Day",
-      "Emily Cotton": "||Day",
-      "Hannah Keeling": "||Day",
-      "Hannah Macleod": "||Day",
-      "Jamie Unwin": "||Day",
-      "Joel McAvenne": "||Day",
-      "Lizzie Pidd": "||Day",
-      "Pete Owen": "||Day",
-      "Sally LeBrun": "||Day",
-      "Sarah Lloyd": "||Day",
-      "Sidlybob": "||Day",
-      "Stella Wall": "||Day",
-      "Thomas Tracy": "||Day",
-      "Vikki Lloyd": "||Day",
-      "Will Unwin": "||Day",
-      "Zac Gaskell": "||Day"
-};
-    const ALL_FIRST_NAMES = [
-      "Andrea & John",
-      "Anne Wall",
-      "Ben & Debbie",
-      "Cam & Buster",
-      "Carl & Claire",
-      "Carrie & Arwel",
-      "Daniel & Rowena",
-      "Eirlys Potter",
-      "Ellen & Jody",
-      "Emily Cotton",
-      "Gemma & Marc",
-      "Hannah Keeling",
-      "Hannah Macleod",
-      "Ian & Jane",
-      "Jamie Unwin",
-      "Joel McAvenne",
-      "Julie & John",
-      "Karen & Richard",
-      "Leonie & Scott",
-      "Lizzie Pidd",
-      "Mark & Fiona",
-      "Matt & Kat",
-      "Mick & Jean",
-      "Neil & Sioned",
-      "Pete Owen",
-      "Sally LeBrun",
-      "Sam & Fam",
-      "Sarah",
-      "Sarah & Andy",
-      "Sarah Lloyd",
-      "Sidlybob",
-      "Stella Wall",
-      "Stephanie & Rich",
-      "Steve & Diane",
-      "Thomas Tracy",
-      "Tilly & Alex",
-      "Tony & Lisa",
-      "Vikki Lloyd",
-      "Will Unwin",
-      "Zac Gaskell",
-      "alex",
-      "andrea",
-      "andy",
-      "anna",
-      "anne",
-      "anya",
-      "arwel",
-      "ben",
-      "buster",
-      "camilla",
-      "carl",
-      "carrie",
-      "claire",
-      "daniel",
-      "darcie",
-      "debbie",
-      "dianne",
-      "eben",
-      "eirlys",
-      "ellen",
-      "emily",
-      "erin",
-      "evie-mair",
-      "fiona",
-      "frank",
-      "gemma",
-      "hannah",
-      "harper",
-      "ian",
-      "iris",
-      "jacob",
-      "jamie",
-      "jane",
-      "jean",
-      "jody",
-      "joel",
-      "john",
-      "julie",
-      "karen",
-      "katherine",
-      "katie",
-      "kyle",
-      "lee",
-      "leonie",
-      "lisa",
-      "lizzie",
-      "marc",
-      "mark",
-      "matt",
-      "maxwell",
-      "mick",
-      "neil",
-      "pat",
-      "pete",
-      "phoebe",
-      "ralph",
-      "richard",
-      "rowena",
-      "rupert",
-      "sally",
-      "sam",
-      "sarah",
-      "sid",
-      "sioned",
-      "stella",
-      "stephanie",
-      "steve",
-      "summer",
-      "thomas",
-      "tilly",
-      "tomos",
-      "tony",
-      "tristan",
-      "vikki",
-      "wilfred",
-      "will",
-      "zac"
-];
 
     const loginForm = document.getElementById("invite-login");
     const firstNameInput = document.getElementById("first-name");
     const lastNameInput = document.getElementById("last-name");
-    const firstNameSuggestions = document.getElementById("first-name-suggestions");
     const rsvpForm = document.getElementById("rsvp-form");
     const loginStatus = document.getElementById("login-status");
     const guestOptions = document.getElementById("guest-options");
@@ -402,50 +170,61 @@
     let invitation = null;
     let dietaryWasEdited = false;
 
-    function titleCaseName(value) {
-      return value
-        .split("-")
-        .map(part => part ? part[0].toUpperCase() + part.slice(1) : part)
-        .join("-");
+    let surnameLookupTimer = null;
+    let surnameLookupRequest = 0;
+
+    function clearAutofilledSurname() {
+      if (lastNameInput.dataset.autofilled === "true") {
+        lastNameInput.value = "";
+      }
+      lastNameInput.dataset.autofilled = "false";
     }
 
-    function populateFirstNameSuggestions() {
-      const query = firstNameInput.value.trim().toLowerCase();
-      firstNameSuggestions.innerHTML = "";
+    async function lookupSurname() {
+      const firstName = firstNameInput.value.trim();
 
-      if (!query) {
+      if (!firstName) {
+        clearAutofilledSurname();
         return;
       }
 
-      ALL_FIRST_NAMES
-        .filter(name => name.startsWith(query))
-        .slice(0, 8)
-        .forEach(name => {
-          const option = document.createElement("option");
-          option.value = titleCaseName(name);
-          firstNameSuggestions.appendChild(option);
+      const requestNumber = ++surnameLookupRequest;
+      const lookupUrl = new URL(WORKER_LOOKUP_URL);
+      lookupUrl.searchParams.set("firstName", firstName);
+
+      try {
+        const response = await fetch(lookupUrl.toString(), {
+          method: "GET",
+          cache: "no-store"
         });
-    }
 
-    function autofillLastName() {
-      const firstName = firstNameInput.value.trim().toLowerCase();
-      const uniqueLastName = UNIQUE_FIRST_NAMES[firstName];
+        if (!response.ok || requestNumber !== surnameLookupRequest) {
+          return;
+        }
 
-      if (uniqueLastName) {
-        lastNameInput.value = titleCaseName(uniqueLastName);
-      } else if (lastNameInput.dataset.autofilled === "true") {
-        lastNameInput.value = "";
+        const result = await response.json();
+
+        if (result.found && result.lastName) {
+          lastNameInput.value = result.lastName;
+          lastNameInput.dataset.autofilled = "true";
+        } else {
+          clearAutofilledSurname();
+        }
+      } catch {
+        clearAutofilledSurname();
       }
-
-      lastNameInput.dataset.autofilled = uniqueLastName ? "true" : "false";
     }
 
     firstNameInput.addEventListener("input", () => {
-      populateFirstNameSuggestions();
-      autofillLastName();
+      clearTimeout(surnameLookupTimer);
+      clearAutofilledSurname();
+      surnameLookupTimer = setTimeout(lookupSurname, 500);
     });
 
-    firstNameInput.addEventListener("change", autofillLastName);
+    firstNameInput.addEventListener("blur", () => {
+      clearTimeout(surnameLookupTimer);
+      lookupSurname();
+    });
 
     lastNameInput.addEventListener("input", () => {
       lastNameInput.dataset.autofilled = "false";
@@ -614,7 +393,6 @@
       loginForm.hidden = false;
       loginForm.reset();
       lastNameInput.dataset.autofilled = "false";
-      firstNameSuggestions.innerHTML = "";
       loginStatus.textContent = "";
       document.getElementById("first-name").focus();
     });
