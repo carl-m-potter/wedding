@@ -285,7 +285,9 @@
     }
 
     function renderInvitation(data, shouldRemember = true) {
-      invitation = data;
+  invitation = data;
+
+  sessionStorage.setItem("weddingSiteUnlocked", "true");
 
       partyInput.value = data.party;
       inviteTypeInput.value = data.inviteType;
