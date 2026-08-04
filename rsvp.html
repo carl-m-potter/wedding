@@ -9,20 +9,6 @@
   <script src="script.js" defer></script>
 </head>
 <body>
-  <div class="password-screen">
-    <div class="password-card">
-      <p class="eyebrow">Claire & Carl</p>
-      <h1>Welcome</h1>
-      <p>Please enter the wedding password to continue.</p>
-      <form class="password-form">
-        <label class="hidden" for="site-password">Password</label>
-        <input id="site-password" type="password" autocomplete="current-password" placeholder="Wedding password" required autofocus>
-        <button type="submit">Enter</button>
-        <p class="password-error" aria-live="polite"></p>
-      </form>
-    </div>
-  </div>
-
   <header class="site-header">
     <nav class="nav" aria-label="Primary navigation">
       <a class="brand" href="index.html">C & C</a>
@@ -81,6 +67,7 @@
             <p class="eyebrow">Your invitation</p>
             <h2 id="welcome-heading"></h2>
             <p id="reservation-summary"></p>
+            <button id="sign-out-button" type="button" class="text-button">Not you? Sign out</button>
           </div>
 
           <div class="form-field form-field-full">
@@ -138,6 +125,7 @@
 
   <script>
     const WORKER_LOGIN_URL = "https://wedding1.carlclaireunwin.workers.dev/login";
+    const STORAGE_KEY = "carl-claire-rsvp-login";
 
     const loginForm = document.getElementById("invite-login");
     const rsvpForm = document.getElementById("rsvp-form");
@@ -152,6 +140,7 @@
     const welcomeHeading = document.getElementById("welcome-heading");
     const reservationSummary = document.getElementById("reservation-summary");
     const attendanceRadios = document.querySelectorAll('input[name="Attending"]');
+    const signOutButton = document.getElementById("sign-out-button");
 
     let invitation = null;
     let dietaryWasEdited = false;
@@ -199,14 +188,24 @@
       updateDietary(true);
     }
 
-    function renderInvitation(data, loginName) {
+    function rememberLogin(data) {
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+
+    function clearRememberedLogin() {
+      sessionStorage.removeItem(STORAGE_KEY);
+    }
+
+    function renderInvitation(data, shouldRemember = true) {
       invitation = data;
+
       partyInput.value = data.party;
       inviteTypeInput.value = data.inviteType;
-      loginNameInput.value = loginName;
+      loginNameInput.value = data.loginDisplayName;
 
       const placeWord = data.guests.length === 1 ? "place" : "places";
-      welcomeHeading.textContent = `Welcome, ${data.party}`;
+
+      welcomeHeading.textContent = `Welcome, ${data.loginDisplayName}`;
       reservationSummary.textContent =
         `We've reserved ${data.guests.length} ${placeWord} for your ${data.inviteType.toLowerCase()} invitation.`;
 
@@ -237,13 +236,18 @@
 
       loginForm.hidden = true;
       rsvpForm.hidden = false;
+
       updateSelectedGuests();
       updateDietary(true);
-      rsvpForm.scrollIntoView({ behavior: "smooth", block: "start" });
+
+      if (shouldRemember) {
+        rememberLogin(data);
+      }
     }
 
     loginForm.addEventListener("submit", async event => {
       event.preventDefault();
+
       loginError.textContent = "";
 
       const firstName = document.getElementById("first-name").value;
@@ -266,14 +270,25 @@
         }
 
         const data = await response.json();
-        renderInvitation(data, `${firstName.trim()} ${lastName.trim()}`);
+        renderInvitation(data);
       } catch {
         loginError.textContent =
-          "We couldn't find an invitation with those details. Check the spelling and password, then try again.";
+          "We couldn't find a matching invitation. Please check the spelling of your name and the wedding password.";
       } finally {
         submitButton.disabled = false;
         submitButton.textContent = "Find my invitation";
       }
+    });
+
+    signOutButton.addEventListener("click", () => {
+      clearRememberedLogin();
+      invitation = null;
+      rsvpForm.reset();
+      rsvpForm.hidden = true;
+      loginForm.hidden = false;
+      loginForm.reset();
+      loginError.textContent = "";
+      document.getElementById("first-name").focus();
     });
 
     attendanceRadios.forEach(radio => {
@@ -302,6 +317,16 @@
         dietaryTextarea.value = "None";
       }
     });
+
+    const rememberedLogin = sessionStorage.getItem(STORAGE_KEY);
+
+    if (rememberedLogin) {
+      try {
+        renderInvitation(JSON.parse(rememberedLogin), false);
+      } catch {
+        clearRememberedLogin();
+      }
+    }
   </script>
 </body>
 </html>
