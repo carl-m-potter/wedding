@@ -283,10 +283,14 @@
       loginStatus.textContent = "Please wait while we find your invitation.";
 
       try {
-        const response = await fetch(WORKER_LOGIN_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ firstName, lastName, password })
+        const loginUrl = new URL(WORKER_LOGIN_URL);
+        loginUrl.searchParams.set("firstName", firstName);
+        loginUrl.searchParams.set("lastName", lastName);
+        loginUrl.searchParams.set("password", password);
+
+        const response = await fetch(loginUrl.toString(), {
+          method: "GET",
+          cache: "no-store"
         });
 
         if (!response.ok) {
