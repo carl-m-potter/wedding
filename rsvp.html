@@ -42,119 +42,34 @@
     <section class="page-hero">
       <p class="eyebrow">Join us</p>
       <h1>RSVP</h1>
-      <p>Please complete one form per invitation. Select your name and confirm who will be attending.</p>
+      <p>Please confirm who will be attending from your invitation.</p>
     </section>
 
     <section class="section narrow">
-      <form class="rsvp-form" action="https://formspree.io/f/meeykknk" method="POST">
+      <div id="loading-message" class="notice">Loading your invitation…</div>
+
+      <div id="invalid-invite" class="notice" hidden>
+        This invitation link is invalid or incomplete. Please use the private RSVP link sent with your invitation.
+      </div>
+
+      <form id="rsvp-form" class="rsvp-form" action="https://formspree.io/f/meeykknk" method="POST" hidden>
         <input type="hidden" name="_subject" value="New wedding RSVP">
         <input type="hidden" name="_next" value="thanks.html">
+        <input type="hidden" id="invite-token" name="Invitation token">
         <input type="hidden" id="party-name" name="Invitation party">
         <input type="hidden" id="invite-type" name="Invite type">
-        <input type="hidden" id="selected-household-guests" name="Guests attending">
+        <input type="hidden" id="selected-guests" name="Guests attending">
 
         <div class="form-grid">
           <div class="form-field form-field-full">
-            <label for="guest-name">Select your name</label>
-            <select id="guest-name" name="Guest name" required>
-              <option value="">Choose your name...</option>
-              <optgroup label="Day guests">
-                <option value="Alex Hodgkinson">Alex Hodgkinson</option>
-                <option value="Alex Wynne-Thompson">Alex Wynne-Thompson</option>
-                <option value="Andrea Pickering">Andrea Pickering</option>
-                <option value="Anna DeSalvo (Cam&#x27;s mum)">Anna DeSalvo (Cam&#x27;s mum)</option>
-                <option value="Anne Wall">Anne Wall</option>
-                <option value="Anya Pickering">Anya Pickering</option>
-                <option value="Arwel Williams">Arwel Williams</option>
-                <option value="Auntie Pat">Auntie Pat</option>
-                <option value="Ben Unwin">Ben Unwin</option>
-                <option value="Buster Dickinson">Buster Dickinson</option>
-                <option value="Camilla Dickinson">Camilla Dickinson</option>
-                <option value="Carl Potter">Carl Potter</option>
-                <option value="Carrie Potter-Williams">Carrie Potter-Williams</option>
-                <option value="Claire (Sam&#x27;s partner)">Claire (Sam&#x27;s partner)</option>
-                <option value="Claire Unwin">Claire Unwin</option>
-                <option value="Daniel Doughty">Daniel Doughty</option>
-                <option value="Darcie Pickering">Darcie Pickering</option>
-                <option value="Debbie Unwin">Debbie Unwin</option>
-                <option value="Dianne Wall">Dianne Wall</option>
-                <option value="Eben Howe">Eben Howe</option>
-                <option value="Eirlys Potter">Eirlys Potter</option>
-                <option value="Ellen Smith">Ellen Smith</option>
-                <option value="Emily Cotton">Emily Cotton</option>
-                <option value="Erin Jeffries">Erin Jeffries</option>
-                <option value="Evie-mair Potter">Evie-mair Potter</option>
-                <option value="Fiona Potter">Fiona Potter</option>
-                <option value="Frank Dickinson">Frank Dickinson</option>
-                <option value="Gemma Stokes">Gemma Stokes</option>
-                <option value="Hannah Keeling">Hannah Keeling</option>
-                <option value="Hannah Macleod">Hannah Macleod</option>
-                <option value="Harper June Unwin">Harper June Unwin</option>
-                <option value="Ian Potter">Ian Potter</option>
-                <option value="Iris Potter">Iris Potter</option>
-                <option value="Jamie Unwin">Jamie Unwin</option>
-                <option value="Jane Potter">Jane Potter</option>
-                <option value="Jean Potter">Jean Potter</option>
-                <option value="Jody Smith">Jody Smith</option>
-                <option value="Joel David McAvenne">Joel David McAvenne</option>
-                <option value="John Pickering">John Pickering</option>
-                <option value="Karen Unwin">Karen Unwin</option>
-                <option value="Katherine Potter">Katherine Potter</option>
-                <option value="Katie Davies">Katie Davies</option>
-                <option value="Kyle Potter">Kyle Potter</option>
-                <option value="Lee Wall">Lee Wall</option>
-                <option value="Leonie Fiveash">Leonie Fiveash</option>
-                <option value="Lisa Potter">Lisa Potter</option>
-                <option value="Lizzie Pidd">Lizzie Pidd</option>
-                <option value="Marc Tait">Marc Tait</option>
-                <option value="Mark Potter">Mark Potter</option>
-                <option value="Matt Potter">Matt Potter</option>
-                <option value="Maxwell Potter-Williams">Maxwell Potter-Williams</option>
-                <option value="Mick Potter">Mick Potter</option>
-                <option value="Neil Perkins">Neil Perkins</option>
-                <option value="Pete Owen">Pete Owen</option>
-                <option value="Phoebe Potter">Phoebe Potter</option>
-                <option value="Ralph Bunting">Ralph Bunting</option>
-                <option value="Rich (partner)">Rich (partner)</option>
-                <option value="Richard Unwin">Richard Unwin</option>
-                <option value="Rowena Doughty">Rowena Doughty</option>
-                <option value="Rupert Bunting">Rupert Bunting</option>
-                <option value="Sally LeBrun">Sally LeBrun</option>
-                <option value="Sam Unwin">Sam Unwin</option>
-                <option value="Sarah Bunting">Sarah Bunting</option>
-                <option value="Sarah Lloyd">Sarah Lloyd</option>
-                <option value="Scott - Leonie Fiveash partner">Scott - Leonie Fiveash partner</option>
-                <option value="Sidlybob">Sidlybob</option>
-                <option value="Sioned Perkins">Sioned Perkins</option>
-                <option value="Stella Wall">Stella Wall</option>
-                <option value="Stephanie Wall">Stephanie Wall</option>
-                <option value="Steve Wall">Steve Wall</option>
-                <option value="Summer Wilson-Williams">Summer Wilson-Williams</option>
-                <option value="Thomas Tracy">Thomas Tracy</option>
-                <option value="Tilly Wynne-Thompson">Tilly Wynne-Thompson</option>
-                <option value="Tomos Potter">Tomos Potter</option>
-                <option value="Tony Potter">Tony Potter</option>
-                <option value="Tristan Pickering">Tristan Pickering</option>
-                <option value="Vikki Lloyd">Vikki Lloyd</option>
-                <option value="Wilfred Wynne-Thompson">Wilfred Wynne-Thompson</option>
-                <option value="Will Unwin">Will Unwin</option>
-                <option value="Zac Gaskell">Zac Gaskell</option>
-              </optgroup>
-              <optgroup label="Evening guests">
-                <option value="Alex Bennett">Alex Bennett</option>
-                <option value="Andy Barr">Andy Barr</option>
-                <option value="Ben Bennett">Ben Bennett</option>
-                <option value="Daniel Barr">Daniel Barr</option>
-                <option value="Jacob Barr">Jacob Barr</option>
-                <option value="John Bennett">John Bennett</option>
-                <option value="Julie Bennett">Julie Bennett</option>
-                <option value="Sarah Barr">Sarah Barr</option>
-              </optgroup>
-            </select>
+            <p><strong>Invitation:</strong> <span id="invitation-label"></span></p>
           </div>
 
-          <div id="invitation-summary" class="form-field form-field-full" hidden>
-            <p><strong>Invitation:</strong> <span id="invitation-label"></span></p>
+          <div class="form-field form-field-full">
+            <label for="respondent-name">Your name</label>
+            <select id="respondent-name" name="Respondent name" required>
+              <option value="">Choose your name…</option>
+            </select>
           </div>
 
           <div class="form-field form-field-full">
@@ -163,7 +78,7 @@
           </div>
 
           <fieldset class="form-field form-field-full">
-            <legend>Will you be attending?</legend>
+            <legend>Will anyone from this invitation be attending?</legend>
             <label class="radio-option">
               <input type="radio" name="Attending" value="Yes" required>
               <span>Joyfully accepts</span>
@@ -174,15 +89,15 @@
             </label>
           </fieldset>
 
-          <fieldset id="household-fieldset" class="form-field form-field-full" hidden>
-            <legend>Who from your invitation will attend?</legend>
-            <p class="optional">Select everyone who will be attending, including yourself.</p>
-            <div id="household-options"></div>
+          <fieldset id="guest-fieldset" class="form-field form-field-full">
+            <legend>Who will be attending?</legend>
+            <p class="optional">Select everyone who will be attending.</p>
+            <div id="guest-options"></div>
           </fieldset>
 
           <div class="form-field form-field-full">
             <label for="dietary">Dietary requirements or allergies</label>
-            <textarea id="dietary" name="Dietary requirements" rows="4" placeholder="Dietary requirements for selected guests will appear here automatically. You can edit them before submitting."></textarea>
+            <textarea id="dietary" name="Dietary requirements" rows="4" placeholder="Known requirements will appear here automatically. You can edit them before submitting."></textarea>
           </div>
 
           <div class="form-field">
@@ -211,69 +126,62 @@
   </footer>
 
   <script>
-    const guests = [{"name": "Andrea Pickering", "party": "Andrea & John", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Anya Pickering", "party": "Andrea & John", "inviteType": "Day", "personType": "Child", "age": "16", "dietary": "None"}, {"name": "Darcie Pickering", "party": "Andrea & John", "inviteType": "Day", "personType": "Child", "age": "13", "dietary": "None"}, {"name": "John Pickering", "party": "Andrea & John", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Tristan Pickering", "party": "Andrea & John", "inviteType": "Day", "personType": "Child", "age": "6", "dietary": "None"}, {"name": "Ben Unwin", "party": "Ben & Debbie", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Debbie Unwin", "party": "Ben & Debbie", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Anna DeSalvo (Cam's mum)", "party": "Cam & Buster", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Buster Dickinson", "party": "Cam & Buster", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Camilla Dickinson", "party": "Cam & Buster", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Frank Dickinson", "party": "Cam & Buster", "inviteType": "Day", "personType": "Child", "age": "4", "dietary": "None"}, {"name": "Carl Potter", "party": "Carl & Claire", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Claire Unwin", "party": "Carl & Claire", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Harper June Unwin", "party": "Carl & Claire", "inviteType": "Day", "personType": "Child", "age": "5", "dietary": "None"}, {"name": "Arwel Williams", "party": "Carrie & Arwel", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Carrie Potter-Williams", "party": "Carrie & Arwel", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Katie Davies", "party": "Carrie & Arwel", "inviteType": "Day", "personType": "Child", "age": "16", "dietary": "None"}, {"name": "Maxwell Potter-Williams", "party": "Carrie & Arwel", "inviteType": "Day", "personType": "Child", "age": "2", "dietary": "None"}, {"name": "Summer Wilson-Williams", "party": "Carrie & Arwel", "inviteType": "Day", "personType": "Child", "age": "17", "dietary": "None"}, {"name": "Daniel Doughty", "party": "Daniel & Rowena", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Rowena Doughty", "party": "Daniel & Rowena", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Ellen Smith", "party": "Ellen & Jody", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "Vegetarian"}, {"name": "Jody Smith", "party": "Ellen & Jody", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Alex Hodgkinson", "party": "Gemma & Marc", "inviteType": "Day", "personType": "Child", "age": "13", "dietary": "None"}, {"name": "Auntie Pat", "party": "Gemma & Marc", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Erin Jeffries", "party": "Gemma & Marc", "inviteType": "Day", "personType": "Child", "age": "8", "dietary": "None"}, {"name": "Gemma Stokes", "party": "Gemma & Marc", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "Vegetarian"}, {"name": "Marc Tait", "party": "Gemma & Marc", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "Crack Cocaine"}, {"name": "Ian Potter", "party": "Ian & Jane", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Jane Potter", "party": "Ian & Jane", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Alex Bennett", "party": "Julie & John", "inviteType": "Evening", "personType": "Child", "age": "", "dietary": "None"}, {"name": "Ben Bennett", "party": "Julie & John", "inviteType": "Evening", "personType": "Child", "age": "", "dietary": "None"}, {"name": "John Bennett", "party": "Julie & John", "inviteType": "Evening", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Julie Bennett", "party": "Julie & John", "inviteType": "Evening", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Karen Unwin", "party": "Karen & Richard", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Richard Unwin", "party": "Karen & Richard", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Leonie Fiveash", "party": "Leonie & Scott", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Scott - Leonie Fiveash partner", "party": "Leonie & Scott", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Fiona Potter", "party": "Mark & Fiona", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Kyle Potter", "party": "Mark & Fiona", "inviteType": "Day", "personType": "Child", "age": "15", "dietary": "None"}, {"name": "Mark Potter", "party": "Mark & Fiona", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Iris Potter", "party": "Matt & Kat", "inviteType": "Day", "personType": "Child", "age": "7", "dietary": "None"}, {"name": "Katherine Potter", "party": "Matt & Kat", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Matt Potter", "party": "Matt & Kat", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Phoebe Potter", "party": "Matt & Kat", "inviteType": "Day", "personType": "Child", "age": "10", "dietary": "None"}, {"name": "Jean Potter", "party": "Mick & Jean", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Mick Potter", "party": "Mick & Jean", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Neil Perkins", "party": "Neil & Sioned", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Sioned Perkins", "party": "Neil & Sioned", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Claire (Sam's partner)", "party": "Sam & Fam", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Eben Howe", "party": "Sam & Fam", "inviteType": "Day", "personType": "Child", "age": "", "dietary": "None"}, {"name": "Sam Unwin", "party": "Sam & Fam", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Ralph Bunting", "party": "Sarah", "inviteType": "Day", "personType": "Child", "age": "3", "dietary": "None"}, {"name": "Rupert Bunting", "party": "Sarah", "inviteType": "Day", "personType": "Child", "age": "6", "dietary": "None"}, {"name": "Sarah Bunting", "party": "Sarah", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Andy Barr", "party": "Sarah & Andy", "inviteType": "Evening", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Daniel Barr", "party": "Sarah & Andy", "inviteType": "Evening", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Jacob Barr", "party": "Sarah & Andy", "inviteType": "Evening", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Sarah Barr", "party": "Sarah & Andy", "inviteType": "Evening", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Rich (partner)", "party": "Stephanie & Rich", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Stephanie Wall", "party": "Stephanie & Rich", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Dianne Wall", "party": "Steve & Diane", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Lee Wall", "party": "Steve & Diane", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Steve Wall", "party": "Steve & Diane", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Alex Wynne-Thompson", "party": "Tilly & Alex", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Tilly Wynne-Thompson", "party": "Tilly & Alex", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Wilfred Wynne-Thompson", "party": "Tilly & Alex", "inviteType": "Day", "personType": "Child", "age": "5", "dietary": "None"}, {"name": "Evie-mair Potter", "party": "Tony & Lisa", "inviteType": "Day", "personType": "Child", "age": "13", "dietary": "None"}, {"name": "Lisa Potter", "party": "Tony & Lisa", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Tomos Potter", "party": "Tony & Lisa", "inviteType": "Day", "personType": "Child", "age": "9", "dietary": "None"}, {"name": "Tony Potter", "party": "Tony & Lisa", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Anne Wall", "party": "Anne Wall", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Eirlys Potter", "party": "Eirlys Potter", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Emily Cotton", "party": "Emily Cotton", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Hannah Keeling", "party": "Hannah Keeling", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Hannah Macleod", "party": "Hannah Macleod", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Jamie Unwin", "party": "Jamie Unwin", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Joel David McAvenne", "party": "Joel David McAvenne", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Lizzie Pidd", "party": "Lizzie Pidd", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Pete Owen", "party": "Pete Owen", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Sally LeBrun", "party": "Sally LeBrun", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Sarah Lloyd", "party": "Sarah Lloyd", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Sidlybob", "party": "Sidlybob", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Stella Wall", "party": "Stella Wall", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Thomas Tracy", "party": "Thomas Tracy", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Vikki Lloyd", "party": "Vikki Lloyd", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Will Unwin", "party": "Will Unwin", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}, {"name": "Zac Gaskell", "party": "Zac Gaskell", "inviteType": "Day", "personType": "Adult", "age": "", "dietary": "None"}];
+    const WORKER_URL = "https://YOUR-WORKER-NAME.YOUR-SUBDOMAIN.workers.dev/invite";
 
-    const guestSelect = document.getElementById("guest-name");
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("invite");
+
+    const loadingMessage = document.getElementById("loading-message");
+    const invalidInvite = document.getElementById("invalid-invite");
+    const form = document.getElementById("rsvp-form");
+    const inviteTokenInput = document.getElementById("invite-token");
     const partyInput = document.getElementById("party-name");
     const inviteTypeInput = document.getElementById("invite-type");
-    const attendingInput = document.getElementById("selected-household-guests");
-    const invitationSummary = document.getElementById("invitation-summary");
+    const selectedGuestsInput = document.getElementById("selected-guests");
     const invitationLabel = document.getElementById("invitation-label");
-    const householdFieldset = document.getElementById("household-fieldset");
-    const householdOptions = document.getElementById("household-options");
-    const attendanceRadios = document.querySelectorAll('input[name="Attending"]');
+    const respondentSelect = document.getElementById("respondent-name");
+    const guestOptions = document.getElementById("guest-options");
+    const guestFieldset = document.getElementById("guest-fieldset");
     const dietaryTextarea = document.getElementById("dietary");
-    const form = document.querySelector(".rsvp-form");
+    const attendanceRadios = document.querySelectorAll('input[name="Attending"]');
 
-    let dietaryWasManuallyEdited = false;
+    let invitation = null;
+    let dietaryWasEdited = false;
 
     dietaryTextarea.addEventListener("input", () => {
-      dietaryWasManuallyEdited = true;
+      dietaryWasEdited = true;
     });
 
-    function getSelectedGuest() {
-      return guests.find(guest => guest.name === guestSelect.value);
-    }
-
-    function getPartyGuests(selectedGuest) {
-      return guests.filter(
-        guest =>
-          guest.party === selectedGuest.party &&
-          guest.inviteType === selectedGuest.inviteType
-      );
-    }
-
-    function getCheckedGuestNames() {
-      return [...householdOptions.querySelectorAll('input[type="checkbox"]:checked')]
+    function checkedGuestNames() {
+      return [...guestOptions.querySelectorAll('input[type="checkbox"]:checked')]
         .map(input => input.value);
     }
 
-    function updateAttendingGuests() {
-      const checkedNames = getCheckedGuestNames();
-      attendingInput.value = checkedNames.length ? checkedNames.join(", ") : "None";
+    function updateSelectedGuests() {
+      const names = checkedGuestNames();
+      selectedGuestsInput.value = names.length ? names.join(", ") : "None";
     }
 
     function buildDietaryText() {
-      const checkedNames = getCheckedGuestNames();
+      const selectedNames = checkedGuestNames();
 
-      const entries = checkedNames
-        .map(name => guests.find(guest => guest.name === name))
-        .filter(Boolean)
+      const lines = invitation.guests
+        .filter(guest => selectedNames.includes(guest.name))
         .filter(guest => guest.dietary && guest.dietary.toLowerCase() !== "none")
         .map(guest => `${guest.name}: ${guest.dietary}`);
 
-      return entries.length ? entries.join("\n") : "None";
+      return lines.length ? lines.join("\n") : "None";
     }
 
-    function updateDietaryRequirements(force = false) {
-      if (!dietaryWasManuallyEdited || force) {
+    function updateDietary(force = false) {
+      if (!dietaryWasEdited || force) {
         dietaryTextarea.value = buildDietaryText();
-        dietaryWasManuallyEdited = false;
+        dietaryWasEdited = false;
       }
     }
 
-    function setGuestCheckboxesEnabled(enabled) {
-      householdOptions.querySelectorAll('input[type="checkbox"]').forEach(input => {
+    function setGuestSelectionEnabled(enabled) {
+      guestOptions.querySelectorAll('input[type="checkbox"]').forEach(input => {
         input.disabled = !enabled;
 
         if (!enabled) {
@@ -281,39 +189,28 @@
         }
       });
 
-      updateAttendingGuests();
-      updateDietaryRequirements(true);
+      guestFieldset.hidden = !enabled;
+      updateSelectedGuests();
+      updateDietary(true);
     }
 
-    function renderInvitation() {
-      const selectedGuest = getSelectedGuest();
+    function renderInvitation(data) {
+      invitation = data;
 
-      partyInput.value = "";
-      inviteTypeInput.value = "";
-      attendingInput.value = "";
-      householdOptions.innerHTML = "";
-      invitationSummary.hidden = true;
-      householdFieldset.hidden = true;
-      dietaryTextarea.value = "";
-      dietaryWasManuallyEdited = false;
+      inviteTokenInput.value = token;
+      partyInput.value = data.party;
+      inviteTypeInput.value = data.inviteType;
+      invitationLabel.textContent = `${data.party} — ${data.inviteType} invitation`;
 
-      if (!selectedGuest) return;
+      respondentSelect.innerHTML = '<option value="">Choose your name…</option>';
+      guestOptions.innerHTML = "";
 
-      const partyGuests = getPartyGuests(selectedGuest);
+      data.guests.forEach((guest, index) => {
+        const option = document.createElement("option");
+        option.value = guest.name;
+        option.textContent = guest.name;
+        respondentSelect.appendChild(option);
 
-      partyInput.value = selectedGuest.party;
-      inviteTypeInput.value = selectedGuest.inviteType;
-
-      const partyDescription =
-        partyGuests.length === 1
-          ? `${selectedGuest.name} — ${selectedGuest.inviteType} invitation`
-          : `${selectedGuest.party} — ${selectedGuest.inviteType} invitation`;
-
-      invitationLabel.textContent = partyDescription;
-      invitationSummary.hidden = false;
-      householdFieldset.hidden = false;
-
-      partyGuests.forEach((guest, index) => {
         const label = document.createElement("label");
         label.className = "radio-option";
 
@@ -321,70 +218,85 @@
         checkbox.type = "checkbox";
         checkbox.value = guest.name;
         checkbox.id = `invited-guest-${index}`;
-        checkbox.checked = guest.name === selectedGuest.name;
         checkbox.addEventListener("change", () => {
-          updateAttendingGuests();
-          updateDietaryRequirements(true);
+          updateSelectedGuests();
+          updateDietary(true);
         });
 
         const text = document.createElement("span");
-        const childDetail =
-          guest.personType === "Child"
-            ? " (child)"
-            : "";
-
-        text.textContent = guest.name + childDetail;
+        text.textContent = guest.personType === "Child"
+          ? `${guest.name} (child)`
+          : guest.name;
 
         label.appendChild(checkbox);
         label.appendChild(text);
-        householdOptions.appendChild(label);
+        guestOptions.appendChild(label);
       });
 
-      const attendanceChoice = document.querySelector('input[name="Attending"]:checked');
-      setGuestCheckboxesEnabled(!attendanceChoice || attendanceChoice.value === "Yes");
-      updateAttendingGuests();
-      updateDietaryRequirements(true);
+      loadingMessage.hidden = true;
+      form.hidden = false;
+      updateSelectedGuests();
+      updateDietary(true);
     }
 
-    guestSelect.addEventListener("change", renderInvitation);
+    function showInvalidInvite() {
+      loadingMessage.hidden = true;
+      invalidInvite.hidden = false;
+      form.hidden = true;
+    }
 
     attendanceRadios.forEach(radio => {
       radio.addEventListener("change", () => {
-        setGuestCheckboxesEnabled(radio.value === "Yes");
+        setGuestSelectionEnabled(radio.value === "Yes");
 
         if (radio.value === "No") {
-          attendingInput.value = "None";
+          selectedGuestsInput.value = "None";
           dietaryTextarea.value = "None";
-          dietaryWasManuallyEdited = false;
+          dietaryWasEdited = false;
         }
       });
     });
 
     form.addEventListener("submit", event => {
-      const selectedGuest = getSelectedGuest();
       const attendanceChoice = document.querySelector('input[name="Attending"]:checked');
 
-      if (!selectedGuest) {
+      if (attendanceChoice?.value === "Yes" && checkedGuestNames().length === 0) {
         event.preventDefault();
-        guestSelect.focus();
+        alert("Please select at least one person who will be attending.");
+        guestFieldset.scrollIntoView({ behavior: "smooth", block: "center" });
         return;
-      }
-
-      if (attendanceChoice?.value === "Yes") {
-        const checkedGuests = householdOptions.querySelectorAll('input[type="checkbox"]:checked');
-
-        if (checkedGuests.length === 0) {
-          event.preventDefault();
-          alert("Please select at least one person who will be attending.");
-          householdFieldset.scrollIntoView({ behavior: "smooth", block: "center" });
-          return;
-        }
       }
 
       if (!dietaryTextarea.value.trim()) {
         dietaryTextarea.value = "None";
       }
     });
+
+    async function loadInvitation() {
+      if (!token) {
+        showInvalidInvite();
+        return;
+      }
+
+      try {
+        const response = await fetch(`${WORKER_URL}?token=${encodeURIComponent(token)}`, {
+          headers: { "Accept": "application/json" },
+          cache: "no-store"
+        });
+
+        if (!response.ok) {
+          throw new Error("Invitation not found");
+        }
+
+        const data = await response.json();
+        renderInvitation(data);
+      } catch (error) {
+        console.error(error);
+        showInvalidInvite();
+      }
+    }
+
+    loadInvitation();
   </script>
 </body>
 </html>
