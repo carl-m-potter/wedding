@@ -12,8 +12,8 @@
   <style>
     [hidden] { display: none !important; }
 
-.invitation-page {
-  overflow-x: hidden;
+    .invitation-page {
+      overflow-x: hidden;
     }
 
     .invitation-login-hero {
@@ -35,6 +35,22 @@
     .login-card .rsvp-form {
       border-top: 0;
       padding-top: 0;
+    }
+
+    .password-visibility {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: .92rem;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .password-visibility input {
+      width: auto;
+      margin: 0;
     }
 
     .invitation-shell {
@@ -345,6 +361,10 @@
               <div class="form-field form-field-full">
                 <label for="invite-password">Wedding password</label>
                 <input id="invite-password" type="password" autocomplete="current-password" required>
+                <label class="password-visibility" for="show-password">
+                  <input id="show-password" type="checkbox">
+                  <span>Show password</span>
+                </label>
               </div>
             </div>
 
@@ -452,7 +472,7 @@
         <div id="response-panel" class="response-panel" hidden tabindex="-1" aria-live="polite">
           <h3 id="response-heading">Thank you!</h3>
           <p id="response-text"></p>
-          <p>Your response has been sent. When the D1 RSVP storage is connected, this panel will also show your saved response and allow it to be amended directly.</p>
+          <p id="response-follow-up">Your response has been sent.</p>
           <button id="edit-response-button" class="button secondary" type="button">Change this response</button>
         </div>
       </section>
@@ -570,6 +590,8 @@
     const loginForm = document.getElementById("invite-login");
     const firstNameInput = document.getElementById("first-name");
     const lastNameInput = document.getElementById("last-name");
+    const passwordInput = document.getElementById("invite-password");
+    const showPasswordToggle = document.getElementById("show-password");
     const loginStatus = document.getElementById("login-status");
     const signOutButton = document.getElementById("sign-out-button");
     const invitationNavLabel = document.getElementById("invitation-nav-label");
@@ -596,10 +618,25 @@
     const responsePanel = document.getElementById("response-panel");
     const responseHeading = document.getElementById("response-heading");
     const responseText = document.getElementById("response-text");
+    const responseFollowUp = document.getElementById("response-follow-up");
     const editResponseButton = document.getElementById("edit-response-button");
 
     let invitation = null;
     let dietaryWasEdited = false;
+
+    showPasswordToggle.addEventListener("change", () => {
+      passwordInput.type = showPasswordToggle.checked ? "text" : "password";
+    });
+
+    function thankYouFirstName(data) {
+      if (data.loginFirstName) {
+        const first = data.loginFirstName.trim().split(/\s+/)[0];
+        return first.replace(/\b[a-z]/g, letter => letter.toUpperCase());
+      }
+
+      if (data.loginDisplayName === "Auntie Pat") return "Pat";
+      return (data.loginDisplayName || "").trim().split(/\s+/)[0] || "there";
+    }
 
     function titleCaseName(value) {
       return value
@@ -773,6 +810,7 @@
         if (!response.ok) throw new Error("Login failed");
 
         const data = await response.json();
+        data.loginFirstName = firstNameInput.value.trim();
         renderInvitation(data);
         invitationView.scrollIntoView({ block: "start" });
       } catch {
@@ -790,6 +828,8 @@
       loginView.hidden = false;
       invitationNavLabel.textContent = "Your Invitation";
       loginForm.reset();
+      passwordInput.type = "password";
+      showPasswordToggle.checked = false;
       rsvpForm.reset();
       responsePanel.hidden = true;
       rsvpPanel.hidden = false;
@@ -837,12 +877,16 @@
         if (!response.ok) throw new Error("Submission failed");
 
         const confirmedNames = checkedGuestNames();
-        responseHeading.textContent = `Thank you, ${invitation.loginDisplayName}!`;
+        responseHeading.textContent = `Thank you, ${thankYouFirstName(invitation)}!`;
         responseText.textContent = attendanceChoice.value === "Yes"
           ? confirmedNames.length === 1
             ? `We've recorded that ${confirmedNames[0]} will be attending.`
             : `We've recorded that ${confirmedNames.join(", ")} will be attending.`
           : "We've recorded that nobody from this invitation will be attending.";
+
+        responseFollowUp.textContent = attendanceChoice.value === "Yes"
+          ? "Your response has been sent. We can't wait to celebrate with you!"
+          : "Your response has been sent. Thank you for letting us know.";
 
         rsvpPanel.hidden = true;
         responsePanel.hidden = false;
