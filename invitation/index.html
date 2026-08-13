@@ -418,12 +418,15 @@
         <p id="rsvp-intro">Confirm who will be joining us. You can return to this page if anything changes before the RSVP deadline.</p>
 
         <div id="rsvp-panel" class="rsvp-panel">
-          <form id="rsvp-form" class="rsvp-form" action="https://formspree.io/f/meeykknk" method="POST">
+          <form id="rsvp-form" class="rsvp-form" action="https://api.carlandclaire.co.uk/rsvp" method="POST">
             <input type="hidden" name="_subject" value="New wedding RSVP">
             <input type="hidden" id="party-name" name="Invitation party">
             <input type="hidden" id="invite-type" name="Invite type">
             <input type="hidden" id="selected-guests" name="Guests attending">
             <input type="hidden" id="login-name" name="Logged in as">
+            <input type="hidden" id="login-first-name" name="Logged in first name">
+            <input type="hidden" id="session-token" name="Session token">
+            <input type="hidden" id="submission-id" name="Submission ID">
 
             <div class="form-grid">
               <div class="form-field form-field-full">
@@ -497,6 +500,7 @@
 
   <script>
     const WORKER_LOGIN_URL = "https://api.carlandclaire.co.uk/login";
+    const WORKER_RSVP_URL = "https://api.carlandclaire.co.uk/rsvp";
     const STORAGE_KEY = "carl-claire-your-invitation-v1";
 
     const INVITE_DETAILS = {
@@ -614,6 +618,9 @@
     const partyInput = document.getElementById("party-name");
     const inviteTypeInput = document.getElementById("invite-type");
     const loginNameInput = document.getElementById("login-name");
+    const loginFirstNameInput = document.getElementById("login-first-name");
+    const sessionTokenInput = document.getElementById("session-token");
+    const submissionIdInput = document.getElementById("submission-id");
     const attendanceRadios = document.querySelectorAll('input[name="Attending"]');
     const responsePanel = document.getElementById("response-panel");
     const responseHeading = document.getElementById("response-heading");
@@ -772,6 +779,8 @@
       partyInput.value = data.party;
       inviteTypeInput.value = data.inviteType;
       loginNameInput.value = data.loginDisplayName;
+      loginFirstNameInput.value = thankYouFirstName(data);
+      sessionTokenInput.value = data.sessionToken || "";
 
       renderGuestOptions(data);
       updateSelectedGuests();
@@ -810,7 +819,9 @@
         if (!response.ok) throw new Error("Login failed");
 
         const data = await response.json();
-        data.loginFirstName = firstNameInput.value.trim();
+        if (!data.loginFirstName) {
+          data.loginFirstName = firstNameInput.value.trim();
+        }
         renderInvitation(data);
         invitationView.scrollIntoView({ block: "start" });
       } catch {
@@ -862,6 +873,10 @@
 
       if (!dietaryTextarea.value.trim()) dietaryTextarea.value = "None";
 
+      if (!submissionIdInput.value) {
+        submissionIdInput.value = crypto.randomUUID();
+      }
+
       const submitButton = rsvpForm.querySelector('button[type="submit"]');
       const originalText = submitButton.textContent;
       submitButton.disabled = true;
@@ -874,7 +889,11 @@
           headers: { "Accept": "application/json" }
         });
 
-        if (!response.ok) throw new Error("Submission failed");
+        const result = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          throw new Error(result.error || "Submission failed");
+        }
 
         const confirmedNames = checkedGuestNames();
         responseHeading.textContent = `Thank you, ${thankYouFirstName(invitation)}!`;
@@ -884,16 +903,24 @@
             : `We've recorded that ${confirmedNames.join(", ")} will be attending.`
           : "We've recorded that nobody from this invitation will be attending.";
 
-        responseFollowUp.textContent = attendanceChoice.value === "Yes"
-          ? "Your response has been sent. We can't wait to celebrate with you!"
-          : "Your response has been sent. Thank you for letting us know.";
+        if (result.confirmationEmailSent === false) {
+          responseFollowUp.textContent =
+            "Your response has been sent, but we couldn't send your confirmation email. Your RSVP itself was still received.";
+        } else {
+          responseFollowUp.textContent = attendanceChoice.value === "Yes"
+            ? "Your response has been sent. We can't wait to celebrate with you!"
+            : "Your response has been sent. Thank you for letting us know.";
+        }
 
         rsvpPanel.hidden = true;
         responsePanel.hidden = false;
         responsePanel.focus();
         responsePanel.scrollIntoView({ behavior: "smooth", block: "center" });
-      } catch {
-        alert("Your RSVP could not be sent. Please check your connection and try again. Nothing you entered has been lost.");
+      } catch (error) {
+        alert(
+          error.message ||
+          "Your RSVP could not be sent. Please check your connection and try again. Nothing you entered has been lost."
+        );
       } finally {
         submitButton.disabled = false;
         submitButton.textContent = originalText;
@@ -901,6 +928,7 @@
     });
 
     editResponseButton.addEventListener("click", () => {
+      submissionIdInput.value = "";
       responsePanel.hidden = true;
       rsvpPanel.hidden = false;
       rsvpPanel.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -909,7 +937,13 @@
     const rememberedInvitation = localStorage.getItem(STORAGE_KEY);
     if (rememberedInvitation) {
       try {
-        renderInvitation(JSON.parse(rememberedInvitation), false);
+        const savedInvitation = JSON.parse(rememberedInvitation);
+
+        if (!savedInvitation.sessionToken) {
+          throw new Error("Old invitation session");
+        }
+
+        renderInvitation(savedInvitation, false);
       } catch {
         clearRememberedInvitation();
       }
