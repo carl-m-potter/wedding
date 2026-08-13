@@ -1,4 +1,5 @@
 const PASSWORD_HASH = "492208a0cfb275cba14739f8ae07b0df5c454b493d902f68ec03d2b5c26b0238";
+const INVITATION_STORAGE_KEY = "carl-claire-your-invitation-v1";
 
 async function sha256(value) {
   const data = new TextEncoder().encode(value);
@@ -13,7 +14,72 @@ function unlockSite() {
   document.querySelector(".password-screen")?.classList.add("hidden");
 }
 
+function upgradeInvitationNav() {
+  const navLinks = document.querySelector(".nav-links");
+  if (!navLinks) return;
+
+  const hasRememberedInvitation =
+    Boolean(localStorage.getItem(INVITATION_STORAGE_KEY));
+
+  const label = hasRememberedInvitation
+    ? "View Your Plans"
+    : "Your Invitation";
+
+  let invitationLink = navLinks.querySelector(
+    'a[href="/invitation/"], a[href="invitation/"], a[href="/invitation/index.html"]'
+  );
+
+  if (!invitationLink) {
+    invitationLink = navLinks.querySelector(
+      'a[href="/rsvp/"], a[href="rsvp/"], a[href="/rsvp.html"], a[href="rsvp.html"]'
+    );
+  }
+
+  if (invitationLink) {
+    invitationLink.href = "/invitation/";
+    invitationLink.classList.add("nav-invitation-priority");
+
+    const existingLabel = invitationLink.querySelector("#invitation-nav-label");
+    if (existingLabel) {
+      existingLabel.textContent = label;
+    } else {
+      invitationLink.textContent = label;
+    }
+
+    if (window.location.pathname.startsWith("/invitation")) {
+      invitationLink.setAttribute("aria-current", "page");
+    } else if (
+      invitationLink.getAttribute("aria-current") === "page" &&
+      (
+        window.location.pathname.startsWith("/rsvp") ||
+        invitationLink.href.includes("/invitation/")
+      )
+    ) {
+      invitationLink.removeAttribute("aria-current");
+    }
+  }
+
+  if (!document.getElementById("invitation-nav-priority-style")) {
+    const style = document.createElement("style");
+    style.id = "invitation-nav-priority-style";
+    style.textContent = `
+      .nav-links .nav-invitation-priority {
+        font-weight: 600;
+      }
+
+      @media (max-width: 820px) {
+        .nav-links .nav-invitation-priority {
+          order: -1;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
+  upgradeInvitationNav();
+
   const gate = document.querySelector(".password-screen");
   if (sessionStorage.getItem("weddingSiteUnlocked") === "true") {
     gate?.classList.add("hidden");
