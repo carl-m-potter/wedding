@@ -501,6 +501,7 @@
   <script>
     const WORKER_LOGIN_URL = "https://api.carlandclaire.co.uk/login";
     const WORKER_RSVP_URL = "https://api.carlandclaire.co.uk/rsvp";
+    const WORKER_INVITATION_URL = "https://api.carlandclaire.co.uk/invitation";
     const STORAGE_KEY = "carl-claire-your-invitation-v1";
 
     const INVITE_DETAILS = {
@@ -613,7 +614,10 @@
     const rsvpForm = document.getElementById("rsvp-form");
     const guestOptions = document.getElementById("guest-options");
     const guestFieldset = document.getElementById("guest-fieldset");
+    const emailInput = document.getElementById("email");
     const dietaryTextarea = document.getElementById("dietary");
+    const phoneInput = document.getElementById("phone");
+    const messageInput = document.getElementById("message");
     const selectedGuestsInput = document.getElementById("selected-guests");
     const partyInput = document.getElementById("party-name");
     const inviteTypeInput = document.getElementById("invite-type");
@@ -750,6 +754,75 @@
       });
     }
 
+    function formatSavedDate(value) {
+      if (!value) return "";
+
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return "";
+
+      return new Intl.DateTimeFormat("en-GB", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      }).format(date);
+    }
+
+    function prefillSavedRsvp(saved) {
+      if (!saved) return;
+
+      emailInput.value = saved.email || "";
+      phoneInput.value = saved.phone || "";
+      messageInput.value = saved.message || "";
+
+      attendanceRadios.forEach(radio => {
+        radio.checked = radio.value === saved.attending;
+      });
+
+      const isAttending = saved.attending === "Yes";
+      const savedGuests = new Set(saved.guests || []);
+
+      guestOptions.querySelectorAll('input[type="checkbox"]').forEach(input => {
+        input.checked = isAttending && savedGuests.has(input.value);
+        input.disabled = !isAttending;
+      });
+
+      guestFieldset.hidden = !isAttending;
+      selectedGuestsInput.value = isAttending && savedGuests.size
+        ? [...savedGuests].join(", ")
+        : "None";
+
+      dietaryTextarea.value = saved.dietary || "None";
+      dietaryWasEdited = true;
+    }
+
+    function showSavedRsvp(saved) {
+      if (!saved) return;
+
+      prefillSavedRsvp(saved);
+
+      if (saved.attending === "Yes") {
+        const names = saved.guests || [];
+        responseHeading.textContent = "You're attending";
+        responseText.textContent = names.length === 1
+          ? `${names[0]} is confirmed for the wedding.`
+          : `${names.join(", ")} are confirmed for the wedding.`;
+        responseFollowUp.textContent =
+          `Your RSVP is saved${saved.updatedAt ? ` · Last updated ${formatSavedDate(saved.updatedAt)}` : ""}.`;
+      } else {
+        responseHeading.textContent = "Response received";
+        responseText.textContent =
+          "You've let us know that nobody from this invitation will be attending.";
+        responseFollowUp.textContent =
+          `Your RSVP is saved${saved.updatedAt ? ` · Last updated ${formatSavedDate(saved.updatedAt)}` : ""}.`;
+      }
+
+      editResponseButton.textContent = "Update RSVP";
+      rsvpPanel.hidden = true;
+      responsePanel.hidden = false;
+    }
+
     function renderInvitation(data, shouldRemember = true) {
       invitation = data;
       const details = INVITE_DETAILS[data.inviteType] || INVITE_DETAILS.Day;
@@ -785,6 +858,24 @@
       renderGuestOptions(data);
       updateSelectedGuests();
       updateDietary(true);
+
+      if (data.rsvp) {
+        showSavedRsvp(data.rsvp);
+      } else {
+        rsvpForm.reset();
+        partyInput.value = data.party;
+        inviteTypeInput.value = data.inviteType;
+        loginNameInput.value = data.loginDisplayName;
+        loginFirstNameInput.value = thankYouFirstName(data);
+        sessionTokenInput.value = data.sessionToken || "";
+        submissionIdInput.value = "";
+        renderGuestOptions(data);
+        updateSelectedGuests();
+        updateDietary(true);
+        responsePanel.hidden = true;
+        rsvpPanel.hidden = false;
+        editResponseButton.textContent = "Change this response";
+      }
 
       loginView.hidden = true;
       invitationView.hidden = false;
@@ -895,8 +986,15 @@
           throw new Error(result.error || "Submission failed");
         }
 
+        if (result.rsvp) {
+          invitation.rsvp = result.rsvp;
+          rememberInvitation(invitation);
+        }
+
         const confirmedNames = checkedGuestNames();
-        responseHeading.textContent = `Thank you, ${thankYouFirstName(invitation)}!`;
+        responseHeading.textContent = result.isUpdate
+          ? `Thanks, ${thankYouFirstName(invitation)} — your RSVP has been updated!`
+          : `Thank you, ${thankYouFirstName(invitation)}!`;
         responseText.textContent = attendanceChoice.value === "Yes"
           ? confirmedNames.length === 1
             ? `We've recorded that ${confirmedNames[0]} will be attending.`
@@ -905,7 +1003,11 @@
 
         if (result.confirmationEmailSent === false) {
           responseFollowUp.textContent =
-            "Your response has been sent, but we couldn't send your confirmation email. Your RSVP itself was still received.";
+            "Your RSVP is saved, but we couldn't send your confirmation email. You do not need to submit it again.";
+        } else if (result.isUpdate) {
+          responseFollowUp.textContent = attendanceChoice.value === "Yes"
+            ? "Your updated response is saved. We can't wait to celebrate with you!"
+            : "Your updated response is saved. Thank you for letting us know.";
         } else {
           responseFollowUp.textContent = attendanceChoice.value === "Yes"
             ? "Your response has been sent. We can't wait to celebrate with you!"
@@ -929,25 +1031,66 @@
 
     editResponseButton.addEventListener("click", () => {
       submissionIdInput.value = "";
+
+      if (invitation?.rsvp) {
+        prefillSavedRsvp(invitation.rsvp);
+      }
+
       responsePanel.hidden = true;
       rsvpPanel.hidden = false;
       rsvpPanel.scrollIntoView({ behavior: "smooth", block: "start" });
     });
 
-    const rememberedInvitation = localStorage.getItem(STORAGE_KEY);
-    if (rememberedInvitation) {
+    async function restoreRememberedInvitation() {
+      const rememberedInvitation = localStorage.getItem(STORAGE_KEY);
+      if (!rememberedInvitation) return;
+
+      let savedInvitation;
+
       try {
-        const savedInvitation = JSON.parse(rememberedInvitation);
+        savedInvitation = JSON.parse(rememberedInvitation);
 
         if (!savedInvitation.sessionToken) {
           throw new Error("Old invitation session");
         }
-
-        renderInvitation(savedInvitation, false);
       } catch {
         clearRememberedInvitation();
+        return;
+      }
+
+      try {
+        const response = await fetch(WORKER_INVITATION_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          cache: "no-store",
+          body: JSON.stringify({
+            sessionToken: savedInvitation.sessionToken
+          })
+        });
+
+        if (response.status === 401) {
+          clearRememberedInvitation();
+          return;
+        }
+
+        if (!response.ok) {
+          throw new Error("Could not refresh invitation");
+        }
+
+        const refreshedInvitation = await response.json();
+        renderInvitation(refreshedInvitation, false);
+        rememberInvitation(refreshedInvitation);
+      } catch {
+        // If the network is temporarily unavailable, the remembered invitation
+        // can still be shown. The next successful visit will refresh from D1.
+        renderInvitation(savedInvitation, false);
       }
     }
+
+    restoreRememberedInvitation();
   </script>
 </body>
 </html>
