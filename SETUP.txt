@@ -1,0 +1,32 @@
+D1 RSVP UPDATE
+
+Files:
+- worker.js
+- invitation/index.html
+- schema.sql (optional reference only)
+
+What changed:
+- D1 is now the source of truth for RSVP responses.
+- The Worker auto-creates rsvp_responses and rsvp_history if they do not exist.
+- Each invitation has one current RSVP row in rsvp_responses.
+- Every first response/amendment is also appended to rsvp_history.
+- Login returns the saved response from D1.
+- A remembered login refreshes the saved response from D1 automatically.
+- "Update RSVP" pre-populates the current saved response.
+- Formspree remains best-effort backup storage only.
+- Resend continues to send the guest confirmation and admin notification.
+
+Before deploying:
+Make sure wedding1 still has a D1 binding named exactly DB pointing to your wedding D1 database.
+
+Deployment order:
+1. Replace the Worker code with worker.js and deploy.
+2. Replace /invitation/index.html and let the site deploy.
+3. Log into Your Invitation.
+4. Submit one test RSVP.
+5. Reload the page. The saved status should still be shown.
+6. Click Update RSVP, change something, submit, then reload again.
+
+D1 tables can be checked in Cloudflare D1:
+- rsvp_responses = current response per invitation
+- rsvp_history = append-only response/amendment history
