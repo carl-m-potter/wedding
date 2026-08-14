@@ -115,3 +115,102 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+
+
+/* ------------------------------------------------------------------
+   Wedding-site motion and page transitions
+   ------------------------------------------------------------------ */
+function setupScrollMotion() {
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const revealTargets = document.querySelectorAll(
+    '.section > :not(.photo-grid), .detail-card, .hotel-card, .travel-card, .faq-item, .gift-placeholder, .invitation-card, .plan-card, .dashboard-section, .guest-greeting'
+  );
+  const imageTargets = document.querySelectorAll('.photo-card img, main img');
+
+  revealTargets.forEach(element => element.classList.add('scroll-reveal'));
+  imageTargets.forEach(element => element.classList.add('image-dissolve'));
+
+  if (reduceMotion || !('IntersectionObserver' in window)) {
+    document.querySelectorAll('.scroll-reveal, .image-dissolve').forEach(element => {
+      element.classList.add('is-visible');
+    });
+    return;
+  }
+
+  const revealObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+      }
+    });
+  }, {
+    rootMargin: '0px 0px -8% 0px',
+    threshold: 0.10
+  });
+
+  const imageObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      entry.target.classList.toggle('is-visible', entry.isIntersecting);
+    });
+  }, {
+    rootMargin: '-8% 0px -8% 0px',
+    threshold: 0.14
+  });
+
+  revealTargets.forEach(element => revealObserver.observe(element));
+  imageTargets.forEach(element => imageObserver.observe(element));
+
+  const hero = document.querySelector('.hero, .page-hero');
+  if (hero) {
+    const updateHero = () => {
+      const rect = hero.getBoundingClientRect();
+      hero.classList.toggle('is-past', rect.bottom < window.innerHeight * 0.58);
+    };
+    updateHero();
+    window.addEventListener('scroll', updateHero, { passive: true });
+  }
+}
+
+function setupPageTransitions() {
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.body.classList.add('page-ready');
+
+  window.addEventListener('pageshow', () => {
+    document.body.classList.remove('page-leaving');
+    document.body.classList.add('page-ready');
+  });
+
+  if (reduceMotion) return;
+
+  document.addEventListener('click', event => {
+    const link = event.target.closest('a[href]');
+    if (!link || event.defaultPrevented) return;
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    if (link.target && link.target !== '_self') return;
+    if (link.hasAttribute('download')) return;
+
+    const rawHref = link.getAttribute('href');
+    if (!rawHref || rawHref.startsWith('#') || rawHref.startsWith('mailto:') || rawHref.startsWith('tel:') || rawHref.startsWith('javascript:')) return;
+
+    let destination;
+    try {
+      destination = new URL(link.href, window.location.href);
+    } catch {
+      return;
+    }
+
+    if (destination.origin !== window.location.origin) return;
+    if (destination.href === window.location.href) return;
+
+    event.preventDefault();
+    document.body.classList.add('page-leaving');
+    window.setTimeout(() => {
+      window.location.href = destination.href;
+    }, 260);
+  });
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  setupScrollMotion();
+  setupPageTransitions();
+});
