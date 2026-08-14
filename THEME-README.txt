@@ -1,30 +1,47 @@
-CARL & CLAIRE — WILDFLOWER THEME, REVISION 2
+CARL & CLAIRE — ILLUSTRATED WILDFLOWER THEME
 
-CURRENT DIRECTION
-- Crisp white background across every page.
-- Existing floral border/image assignments are left as they were; they have not been redesigned.
-- Previous blush/lilac/sage/peach section fills have been removed; sections are white.
-- Floral border assets themselves have NOT been redesigned in this revision.
+Current direction
+-----------------
+Every live page uses the same illustrated meadow background supplied on
+14 August 2026. The previous page-specific hero/background artwork has been
+removed.
 
-MOTION
-- Content softly fades and moves into place as it enters the viewport.
-- Photographs dissolve in with opacity + blur and dissolve back out as they leave the viewport.
-- The floral hero treatment softens/dissolves as it scrolls away.
-- Internal page links fade the current page out before the next page loads.
-- Modern browsers also use cross-document View Transitions where supported.
-- prefers-reduced-motion is respected.
+Site-wide background
+--------------------
+images/theme/wildflower-meadow-background.jpg
 
-COLOUR PALETTE
-- White: #FFFFFF — all page backgrounds and content surfaces
-- Charcoal: #4F4B43 — main text
-- Berry: #B83A6A — primary accent/buttons/links
-- Fuchsia: #E23D7A
-- Coral: #E9723D
-- Mustard: #D9B13B
-- Sage: #AFC8BB
-- Lilac: #D8C1D9
-- Peach: #F2B39A
+Colour palette
+--------------
+Taken from the second supplied illustration:
 
-FLORAL ASSETS
-The existing files remain in /images/backgrounds/.
-The existing page-to-image assignments are unchanged. Do not rename/delete these assets yet; the floral-border direction can be replaced later once the final examples are chosen.
+Pigeon charcoal   #52555A  Main dark text
+Pigeon slate      #767981  Secondary text
+Red flower        #D4574C  Primary buttons/links/highlights
+Pink flower       #CB7C86  Secondary accent
+Golden yellow     #E5BB60  Warm highlight/notice tint
+Teal flower       #359C99  Focus accent
+Leaf green        #486554  Borders/details
+Soft sage         #798678  Supporting neutral
+Butterfly blue    #7F9FC9  Supporting accent
+White             #FFFFFF  Cards/header/readability
+
+Favicon
+-------
+favicon.ico
+favicon-32x32.png
+favicon-16x16.png
+apple-touch-icon.png
+images/theme/pigeon-flower-favicon-512.png
+
+The favicon is cropped from the pigeon standing on the red flower in the
+second supplied illustration.
+
+Motion
+------
+Existing scroll-dissolve animation for photographs is retained.
+Existing internal page fade/blur transition is retained.
+Reduced-motion accessibility support is retained.
+
+RSVP
+----
+No RSVP, D1, login, Formspree, or Resend logic was changed.

@@ -160,15 +160,7 @@ function setupScrollMotion() {
   revealTargets.forEach(element => revealObserver.observe(element));
   imageTargets.forEach(element => imageObserver.observe(element));
 
-  const hero = document.querySelector('.hero, .page-hero');
-  if (hero) {
-    const updateHero = () => {
-      const rect = hero.getBoundingClientRect();
-      hero.classList.toggle('is-past', rect.bottom < window.innerHeight * 0.58);
-    };
-    updateHero();
-    window.addEventListener('scroll', updateHero, { passive: true });
-  }
+
 }
 
 function setupPageTransitions() {
