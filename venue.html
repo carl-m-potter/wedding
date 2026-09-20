@@ -1,30 +1,74 @@
+```html
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <script>document.documentElement.classList.add('has-js');</script>
+
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#ffffff">
-  <meta name="description" content="Claire and Carl's wedding — 1 May 2027">
+
+  <meta
+    name="description"
+    content="Claire and Carl's wedding — 1 May 2027"
+  >
+
   <title>Venue &amp; Travel | Claire & Carl</title>
+
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
   <link rel="stylesheet" href="/styles.css">
   <script src="/script.js" defer></script>
+
+  <style>
+    /*
+     * Page-specific styling for the venue photograph.
+     * Keeps the image within the site's content width
+     * and prevents horizontal scrolling.
+     */
+
+    .venue-photo {
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto 36px;
+      overflow: hidden;
+    }
+
+    .venue-photo img {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+    }
+  </style>
 </head>
 
 <body class="theme-venue">
 
+  <!-- Password screen -->
   <div class="password-screen">
     <div class="password-card">
+
       <p class="eyebrow">Claire & Carl</p>
+
       <h1>Welcome</h1>
-      <p>Please enter the wedding password to continue.</p>
+
+      <p>
+        Please enter the wedding password to continue.
+      </p>
 
       <form class="password-form">
-        <label class="hidden" for="site-password">Password</label>
+
+        <label
+          class="hidden"
+          for="site-password"
+        >
+          Password
+        </label>
+
         <input
           id="site-password"
           type="password"
@@ -33,84 +77,171 @@
           required
           autofocus
         >
-        <button type="submit">Enter</button>
-        <p class="password-error" aria-live="polite"></p>
+
+        <button type="submit">
+          Enter
+        </button>
+
+        <p
+          class="password-error"
+          aria-live="polite"
+        ></p>
+
       </form>
+
     </div>
   </div>
 
-  <header class="site-header">
-    <nav class="nav" aria-label="Primary navigation">
 
-      <a class="brand" href="/">C & C</a>
+  <!-- Navigation -->
+  <header class="site-header">
+
+    <nav
+      class="nav"
+      aria-label="Primary navigation"
+    >
+
+      <a
+        class="brand"
+        href="/"
+      >
+        C & C
+      </a>
 
       <button
         class="menu-button"
         type="button"
-        aria-expanded="false">
+        aria-expanded="false"
+      >
         Menu
       </button>
 
       <div class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="venue.html" aria-current="page">Venue &amp; Travel</a>
-        <a href="on-the-day.html">On The Day</a>
-        <a href="accommodation.html">Accommodation</a>
-        <a href="gifts.html">Gifts</a>
-        <a href="faq.html">FAQ</a>
-        <a href="/invitation/">Your Invitation</a>
+
+        <a href="index.html">
+          Home
+        </a>
+
+        <a
+          href="venue.html"
+          aria-current="page"
+        >
+          Venue &amp; Travel
+        </a>
+
+        <a href="on-the-day.html">
+          On The Day
+        </a>
+
+        <a href="accommodation.html">
+          Accommodation
+        </a>
+
+        <a href="gifts.html">
+          Gifts
+        </a>
+
+        <a href="faq.html">
+          FAQ
+        </a>
+
+        <a href="/invitation/">
+          Your Invitation
+        </a>
+
       </div>
 
     </nav>
+
   </header>
+
 
   <main>
 
+    <!-- Page heading -->
     <section class="page-hero">
-      <p class="eyebrow">The day</p>
-      <h1>Venue &amp; Travel</h1>
+
+      <p class="eyebrow">
+        The day
+      </p>
+
+      <h1>
+        Venue &amp; Travel
+      </h1>
+
       <p>
         The ceremony and celebrations will take place at
         The Fox &amp; Goose, Pudding Pie Hill, Chesterfield.
       </p>
+
     </section>
 
 
-    <!-- Venue photograph -->
-
+    <!-- Venue photograph and details -->
     <section class="section section-surface surface-ivory">
 
       <div class="venue-photo">
+
         <img
           src="/images/fox-1.jpg"
-          alt="The Fox & Goose wedding venue"
+          alt="The Fox &amp; Goose wedding venue"
         >
+
       </div>
+
 
       <div class="details-grid">
 
         <article class="detail-card">
-          <p class="eyebrow">Date</p>
-          <h2>Saturday 1 May 2027</h2>
+
+          <p class="eyebrow">
+            Date
+          </p>
+
+          <h2>
+            Saturday 1 May 2027
+          </h2>
+
         </article>
 
-        <article class="detail-card">
-          <p class="eyebrow">Ceremony</p>
-          <h2>2:00pm</h2>
-          <p>Please arrive from 1:00pm and be seated in good time.</p>
-        </article>
 
         <article class="detail-card">
-          <p class="eyebrow">Location</p>
-          <h2>The Fox &amp; Goose</h2>
+
+          <p class="eyebrow">
+            Ceremony
+          </p>
+
+          <h2>
+            2:00pm
+          </h2>
+
+          <p>
+            Please arrive from 1:00pm and be seated in good time.
+          </p>
+
+        </article>
+
+
+        <article class="detail-card">
+
+          <p class="eyebrow">
+            Location
+          </p>
+
+          <h2>
+            The Fox &amp; Goose
+          </h2>
+
           <p>
             Pudding Pie Hill<br>
             Chesterfield<br>
             S42 7JJ
           </p>
+
         </article>
 
       </div>
+
 
       <a
         class="map-link"
@@ -124,57 +255,115 @@
     </section>
 
 
+    <!-- Order of the day -->
     <section class="section narrow section-surface surface-sage">
 
-      <p class="eyebrow">Order of the day</p>
-      <h2 class="section-title">Key timings</h2>
+      <p class="eyebrow">
+        Order of the day
+      </p>
+
+      <h2 class="section-title">
+        Key timings
+      </h2>
+
 
       <div class="timeline">
 
         <div class="timeline-item">
-          <div class="timeline-time">1:00pm</div>
-          <div>Guest arrival</div>
+
+          <div class="timeline-time">
+            1:00pm
+          </div>
+
+          <div>
+            Guest arrival
+          </div>
+
         </div>
 
-        <div class="timeline-item">
-          <div class="timeline-time">2:00pm</div>
-          <div>Wedding ceremony</div>
-        </div>
-
-        <div class="timeline-item">
-          <div class="timeline-time">2:30pm</div>
-          <div>Drinks, photographs and alpaca petting</div>
-        </div>
-
-        <div class="timeline-item">
-          <div class="timeline-time">4:00pm</div>
-          <div>Tapas served</div>
-        </div>
 
         <div class="timeline-item">
 
+          <div class="timeline-time">
+            2:00pm
+          </div>
+
+          <div>
+            Wedding ceremony
+          </div>
+
+        </div>
+
+
+        <div class="timeline-item">
+
+          <div class="timeline-time">
+            2:30pm
+          </div>
+
+          <div>
+            Drinks, photographs and alpaca petting
+          </div>
+
+        </div>
+
+
+        <div class="timeline-item">
+
+          <div class="timeline-time">
+            4:00pm
+          </div>
+
+          <div>
+            Tapas served
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- Dress code -->
     <section class="section narrow section-surface surface-blush">
 
-      <p class="eyebrow">What to wear</p>
-      <h2 class="section-title">Dress code</h2>
+      <p class="eyebrow">
+        What to wear
+      </p>
 
-      <p class="lead">Smart wedding attire.</p>
+      <h2 class="section-title">
+        Dress code
+      </h2>
+
+      <p class="lead">
+        Smart wedding attire.
+      </p>
 
       <p>
         Weather permitting, we will be outdoors. Peak District weather
         can be unpredictable, so choose footwear you can comfortably wear
-        on grass and bring an extra layer if the forecast is cool. You've been to weddings before, you know the craic.
+        on grass and bring an extra layer if the forecast is cool.
+        You've been to weddings before, you know the craic.
       </p>
+
     </section>
 
   </main>
 
+
   <footer class="site-footer">
+
     <p class="footer-script">
       We can't wait to celebrate with you
     </p>
-    <p>Claire & Carl · 1 May 2027</p>
+
+    <p>
+      Claire &amp; Carl · 1 May 2027
+    </p>
+
   </footer>
 
 </body>
 </html>
+```
