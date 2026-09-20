@@ -1,4 +1,4 @@
-const PASSWORD_HASH = "492208a0cfb275cba14739f8ae07b0df5c454b493d902f68ec03d2b5c26b0238";
+const PASSWORD_HASH = "4914135a0ad16ece63185c2c2be51e66273c267e62e693f8713affaf0a00fa2e";
 const INVITATION_STORAGE_KEY = "carl-claire-your-invitation-v1";
 
 async function sha256(value) {
