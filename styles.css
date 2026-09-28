@@ -664,7 +664,7 @@ body::before {
   z-index: -2;
   pointer-events: none;
   background-color: #fff;
-  background-image: url("/images/theme/wildflower-meadow-background.jpg");
+  background-image: url("/images/theme/wildflower-meadow-background.png");
   background-repeat: no-repeat;
   background-position: center bottom;
   background-size: cover;
