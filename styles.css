@@ -1,237 +1,1176 @@
-/* ================================================================
-   TYPOGRAPHY TEST — FRAUNCES + MANROPE
-   ================================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Allura&family=Cormorant+Garamond:wght@400;500;600&display=swap');
 
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Manrope:wght@400;500;600;700&display=swap');
+:root {
+  --paper: #ffffff;
+  --paper-light: #ffffff;
+  --ink: #52555a;
+  --muted: #767981;
+  --line: rgba(72, 101, 84, .24);
+  --soft: #dfe7e6;
+  --accent: #d4574c;
+  --accent-bright: #cb7c86;
+  --coral: #da534c;
+  --gold: #e5bb60;
+  --sage: #798678;
+  --teal: #359c99;
+  --leaf: #486554;
+  --blue: #7f9fc9;
+  --max-width: 1120px;
+}
 
+* { box-sizing: border-box; }
 
-/* ------------------------------------------------
-   BODY
-   ------------------------------------------------ */
+html { scroll-behavior: smooth; }
 
 body {
-  font-family: "Manrope", Arial, sans-serif;
-  font-size: 18px;
-  line-height: 1.65;
+  margin: 0;
+  background: var(--paper-light);
+  color: var(--ink);
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 20px;
+  line-height: 1.55;
 }
 
+a { color: inherit; }
 
-/* ------------------------------------------------
-   MAIN HEADINGS
-   ------------------------------------------------ */
-
-h1,
-h2,
-h3,
-h4,
-.display,
-.names,
-.section-title,
-.page-hero h1,
-.password-card h1,
-.detail-card h2,
-.hotel-card h2,
-.travel-card h2,
-.gift-placeholder h3,
-.entertainment-content h2 {
-  font-family: "Fraunces", Georgia, serif;
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(255, 253, 249, .95);
+  border-bottom: 1px solid rgba(23, 23, 23, .12);
+  backdrop-filter: blur(10px);
 }
 
+.nav {
+  width: min(var(--max-width), calc(100% - 32px));
+  margin: 0 auto;
+  min-height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
 
-/* ------------------------------------------------
-   HOME PAGE NAMES
-   ------------------------------------------------ */
+.brand {
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: .16em;
+  font-size: 1rem;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: .13em;
+  font-size: .82rem;
+  padding: 4px 0;
+  border-bottom: 1px solid transparent;
+}
+
+.nav-links a:hover,
+.nav-links a[aria-current="page"] {
+  border-bottom-color: var(--ink);
+}
+
+.menu-button {
+  display: none;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+}
+
+.hero {
+  min-height: calc(100vh - 72px);
+  display: grid;
+  place-items: center;
+  padding: 56px 20px;
+}
+
+.hero-card {
+  width: min(760px, 100%);
+  text-align: center;
+  position: relative;
+  padding: 56px 44px 60px;
+}
+
+.hero-card::before,
+.hero-card::after {
+  content: "";
+  position: absolute;
+  width: 90px;
+  height: 1px;
+  background: var(--ink);
+  top: 50%;
+}
+
+.hero-card::before { left: -20px; }
+.hero-card::after { right: -20px; }
+
+.kicker {
+  text-transform: uppercase;
+  letter-spacing: .24em;
+  font-size: .78rem;
+  margin: 0 0 22px;
+}
 
 .display {
-  font-family: "Fraunces", Georgia, serif;
-  font-weight: 500;
-  text-transform: none;
-  letter-spacing: -0.025em;
-  line-height: .9;
+  margin: 0;
+  font-size: clamp(4.5rem, 13vw, 8.5rem);
+  line-height: .8;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: .08em;
 }
 
-
-/* The word "and" between Carl and Claire */
-
 .script {
-  font-family: "Fraunces", Georgia, serif;
-  font-style: italic;
+  display: block;
+  font-family: "Allura", cursive;
+  font-size: clamp(3.5rem, 9vw, 6.2rem);
+  line-height: .8;
   font-weight: 400;
+  margin: 18px 0 10px;
   text-transform: none;
   letter-spacing: 0;
 }
 
-
-/* ------------------------------------------------
-   PAGE TITLES
-   ------------------------------------------------ */
-
-.page-hero h1 {
-  font-family: "Fraunces", Georgia, serif;
-  font-weight: 500;
-  text-transform: none;
-  letter-spacing: -.025em;
-  line-height: .95;
-}
-
-
-/* ------------------------------------------------
-   SECTION TITLES
-   ------------------------------------------------ */
-
-.section-title {
-  font-family: "Fraunces", Georgia, serif;
-  font-weight: 500;
-  letter-spacing: -.02em;
-}
-
-
-/* ------------------------------------------------
-   CARD TITLES
-   ------------------------------------------------ */
-
-.detail-card h2,
-.hotel-card h2,
-.travel-card h2,
-.entertainment-content h2 {
-  font-family: "Fraunces", Georgia, serif;
-  font-weight: 500;
-  letter-spacing: -.015em;
-}
-
-
-/* ------------------------------------------------
-   NAVIGATION
-   ------------------------------------------------ */
-
-.brand,
-.nav-links,
-.menu-button {
-  font-family: "Manrope", Arial, sans-serif;
-}
-
-.brand {
-  font-weight: 700;
-}
-
-.nav-links a {
-  font-weight: 600;
-  letter-spacing: .09em;
-  font-size: .75rem;
-}
-
-
-/* ------------------------------------------------
-   SMALL LABELS
-   ------------------------------------------------ */
-
-.eyebrow,
-.kicker,
-.date,
-.timeline-time {
-  font-family: "Manrope", Arial, sans-serif;
-  font-weight: 600;
-}
-
-.eyebrow,
-.kicker {
-  letter-spacing: .16em;
-}
-
-
-/* ------------------------------------------------
-   BUTTONS
-   ------------------------------------------------ */
-
-.button,
-.map-link,
-.submit-button,
-.password-form button {
-  font-family: "Manrope", Arial, sans-serif;
-  font-weight: 600;
-}
-
-
-/* ------------------------------------------------
-   FORMS
-   ------------------------------------------------ */
-
-input,
-textarea,
-select,
-button {
-  font-family: "Manrope", Arial, sans-serif;
-}
-
-
-/* ------------------------------------------------
-   HANDWRITTEN ELEMENTS
-   Previously Allura
-   ------------------------------------------------ */
-
-.scroll-note,
-.footer-script {
-  font-family: "Fraunces", Georgia, serif;
-  font-style: italic;
+.names {
+  margin: 30px 0 6px;
+  font-size: clamp(2rem, 5vw, 3.6rem);
+  text-transform: uppercase;
+  letter-spacing: .12em;
   font-weight: 400;
+}
+
+.date {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: .18em;
+  font-size: 1.2rem;
 }
 
 .scroll-note {
-  font-size: 1.8rem;
+  margin-top: 40px;
+  font-family: "Allura", cursive;
+  font-size: 2rem;
 }
 
-.footer-script {
+.page-hero {
+  padding: 110px 20px 70px;
+  text-align: center;
+  border-bottom: 1px solid var(--line);
+}
+
+.page-hero h1 {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  font-weight: 400;
+  font-size: clamp(3.2rem, 9vw, 6.5rem);
+  line-height: 1;
+}
+
+.page-hero p {
+  margin: 22px auto 0;
+  max-width: 680px;
+  color: var(--muted);
+}
+
+.section {
+  width: min(var(--max-width), calc(100% - 36px));
+  margin: 0 auto;
+  padding: 80px 0;
+}
+
+.section.narrow {
+  width: min(760px, calc(100% - 36px));
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  text-transform: uppercase;
+  letter-spacing: .2em;
+  font-size: .78rem;
+}
+
+.section-title {
+  margin: 0 0 24px;
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  line-height: 1;
+  font-weight: 400;
+}
+
+.lead {
+  font-size: 1.28rem;
+  color: var(--muted);
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  margin-top: 42px;
+}
+
+.detail-card,
+.hotel-card {
+  border: 1px solid var(--line);
+  padding: 30px;
+  background: rgba(255,255,255,.35);
+}
+
+.detail-card h2,
+.hotel-card h2 {
+  margin: 0 0 8px;
+  font-weight: 500;
   font-size: 1.65rem;
 }
 
+.detail-card p,
+.hotel-card p {
+  margin: 0;
+  color: var(--muted);
+}
 
-/* ------------------------------------------------
-   LEAD COPY
-   ------------------------------------------------ */
+.timeline {
+  display: grid;
+  gap: 0;
+  margin-top: 42px;
+  border-top: 1px solid var(--line);
+}
 
-.lead {
-  font-family: "Manrope", Arial, sans-serif;
+.timeline-item {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 28px;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.timeline-time {
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  font-size: .9rem;
+}
+
+.map-link,
+.button {
+  display: inline-block;
+  margin-top: 24px;
+  border: 1px solid var(--ink);
+  padding: 11px 20px;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  font-size: .8rem;
+  transition: .2s ease;
+}
+
+.map-link:hover,
+.button:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.hotel-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  margin-top: 38px;
+}
+
+.hotel-meta {
+  margin-top: 18px !important;
+  font-size: .95rem;
+}
+
+.notice {
+  margin-top: 40px;
+  padding: 22px 24px;
+  background: var(--soft);
+  border-left: 2px solid var(--accent);
+}
+
+.faq-list {
+  border-top: 1px solid var(--line);
+  margin-top: 40px;
+}
+
+.faq-item {
+  border-bottom: 1px solid var(--line);
+}
+
+.faq-question {
+  width: 100%;
+  text-align: left;
+  border: 0;
+  background: transparent;
+  padding: 24px 0;
+  font: inherit;
+  font-size: 1.35rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.faq-answer {
+  display: none;
+  padding: 0 0 24px;
+  color: var(--muted);
+}
+
+.faq-item.open .faq-answer { display: block; }
+.faq-icon { transition: transform .2s ease; }
+.faq-item.open .faq-icon { transform: rotate(45deg); }
+
+.site-footer {
+  border-top: 1px solid var(--line);
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.site-footer p {
+  margin: 0;
+}
+
+.footer-script {
+  font-family: "Allura", cursive;
+  font-size: 2rem;
+}
+
+.password-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  background: var(--paper);
+  padding: 20px;
+}
+
+.password-card {
+  width: min(480px, 100%);
+  text-align: center;
+  border: 1px solid var(--line);
+  padding: 44px 34px;
+}
+
+.password-card h1 {
+  margin: 0 0 8px;
+  font-size: 2.4rem;
   font-weight: 400;
-  line-height: 1.65;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+}
+
+.password-card p {
+  margin: 0 0 26px;
+  color: var(--muted);
+}
+
+.password-form {
+  display: grid;
+  gap: 12px;
+}
+
+.password-form input {
+  width: 100%;
+  border: 1px solid var(--ink);
+  background: transparent;
+  padding: 13px 14px;
+  font: inherit;
+  font-size: 1rem;
+}
+
+.password-form button {
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+  padding: 13px 14px;
+  font: inherit;
+  text-transform: uppercase;
+  letter-spacing: .15em;
+  cursor: pointer;
+}
+
+.password-error {
+  min-height: 1.5em;
+  color: #8c2f2f !important;
+  margin: 8px 0 0 !important;
+}
+
+.hidden { display: none !important; }
+
+@media (max-width: 820px) {
+  .menu-button { display: block; }
+  .nav-links {
+    position: absolute;
+    top: 72px;
+    left: 0;
+    right: 0;
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    background: var(--paper);
+    border-bottom: 1px solid var(--line);
+    padding: 10px 20px 18px;
+  }
+  .nav-links.open { display: flex; }
+  .nav-links a { width: 100%; padding: 12px 0; }
+  .details-grid,
+  .hotel-grid { grid-template-columns: 1fr; }
+  .hero-card::before,
+  .hero-card::after { display: none; }
+}
+
+@media (max-width: 560px) {
+  body { font-size: 18px; }
+  .hero-card { padding: 34px 8px; }
+  .timeline-item {
+    grid-template-columns: 1fr;
+    gap: 5px;
+  }
 }
 
 
-/* ------------------------------------------------
-   FAQ
-   ------------------------------------------------ */
+.rsvp-form {
+  border-top: 1px solid var(--line);
+  padding-top: 38px;
+}
 
-.faq-question {
-  font-family: "Fraunces", Georgia, serif;
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 26px 22px;
+}
+
+.form-field {
+  display: grid;
+  gap: 8px;
+}
+
+.form-field-full {
+  grid-column: 1 / -1;
+}
+
+.form-field label,
+.form-field legend {
+  font-size: 1.08rem;
+}
+
+.form-field input,
+.form-field textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 0;
+  background: rgba(255,255,255,.45);
+  color: var(--ink);
+  padding: 13px 14px;
+  font: inherit;
+  font-size: 1rem;
+}
+
+.form-field input:focus,
+.form-field textarea:focus {
+  outline: 1px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.form-field textarea {
+  resize: vertical;
+}
+
+.form-field fieldset,
+fieldset.form-field {
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: fit-content;
+  cursor: pointer;
+}
+
+.radio-option input {
+  width: auto;
+  accent-color: var(--ink);
+}
+
+.optional {
+  color: var(--muted);
+  font-size: .9rem;
+}
+
+.submit-button {
+  margin-top: 32px;
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+  padding: 14px 24px;
+  font: inherit;
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  font-size: .82rem;
+  cursor: pointer;
+}
+
+.submit-button:hover {
+  background: transparent;
+  color: var(--ink);
+}
+
+@media (max-width: 620px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-field {
+    grid-column: 1 / -1;
+  }
+}
+
+
+.section-heading-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 32px;
+  margin-bottom: 32px;
+}
+
+.gallery-intro {
+  max-width: 430px;
+  color: var(--muted);
+}
+
+.photo-grid {
+    column-count: 3;
+    column-gap: 20px;
+    width: 100%;
+}
+
+.photo-card {
+    display: inline-block;
+    width: 100%;
+    margin: 0 0 20px;
+    break-inside: avoid;
+}
+
+.photo-card img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--line);
+}
+
+@media (max-width: 900px) {
+    .photo-grid {
+        column-count: 2;
+    }
+}
+
+@media (max-width: 600px) {
+    .photo-grid {
+        column-count: 1;
+    }
+}
+
+.travel-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px;
+  margin-top: 36px;
+}
+
+.travel-card {
+  border: 1px solid var(--line);
+  padding: 30px;
+}
+
+.travel-card h2 {
+  margin: 0 0 10px;
+  font-size: 1.65rem;
   font-weight: 500;
 }
 
+.travel-card p {
+  color: var(--muted);
+}
 
-/* ------------------------------------------------
-   PHOTO CAPTIONS
-   ------------------------------------------------ */
+.gift-placeholder {
+  margin-top: 42px;
+  padding: 34px;
+  border: 1px solid var(--line);
+  text-align: center;
+  background: var(--soft);
+}
 
-.photo-caption {
-  font-family: "Manrope", Arial, sans-serif;
-  font-size: .85rem;
+.gift-placeholder h3 {
+  margin: 0 0 8px;
+  font-size: 2rem;
+  font-weight: 400;
+}
+
+@media (max-width: 760px) {
+  .section-heading-row {
+    display: block;
+  }
+
+  .photo-grid,
+  .travel-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ================================================================
+   Illustrated wildflower theme — August 2026
+   One shared background, pigeon-flower palette, no hero imagery
+   ================================================================ */
+
+body {
+  position: relative;
+  isolation: isolate;
+  background: #fff;
+  color: var(--ink);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background-color: #fff;
+  background-image: url("/images/theme/wildflower-meadow-background.jpg");
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-size: cover;
+}
+
+.site-header {
+  background: rgba(255, 255, 255, .96);
+  border-bottom-color: rgba(82, 85, 90, .15);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+.brand {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.nav-links a:hover,
+.nav-links a[aria-current="page"] {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.hero,
+.page-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: visible;
+  background: transparent;
+}
+
+.hero::before,
+.hero::after,
+.page-hero::before,
+.page-hero::after {
+  content: none !important;
+  display: none !important;
+}
+
+.page-hero {
+  border-bottom-color: rgba(82, 85, 90, .12);
+}
+
+.hero-card {
+  background: rgba(255, 255, 255, .90);
+  border: 1px solid rgba(82, 85, 90, .15);
+  box-shadow: 0 20px 60px rgba(82, 85, 90, .08);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+.hero-card::before,
+.hero-card::after {
+  background: var(--accent);
+}
+
+.kicker,
+.eyebrow,
+.script,
+.footer-script,
+.scroll-note {
+  color: var(--accent);
+}
+
+.page-hero p {
+  color: var(--ink);
+  text-shadow: 0 1px 12px rgba(255, 255, 255, .95);
+}
+
+.section-surface,
+.surface-ivory,
+.surface-blush,
+.surface-lilac,
+.surface-sage,
+.surface-peach,
+.surface-gold {
+  --section-bg: rgba(255, 255, 255, .91);
+  background: rgba(255, 255, 255, .91);
+  box-shadow: none;
+  clip-path: none;
+  border-radius: 2px;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+
+.detail-card,
+.hotel-card,
+.travel-card,
+.gift-placeholder,
+.login-card,
+.invitation-card,
+.plan-card,
+.rsvp-panel {
+  background: rgba(255, 255, 255, .95);
+  border-color: rgba(72, 101, 84, .22);
+  box-shadow: 0 12px 32px rgba(82, 85, 90, .055);
+}
+
+.notice,
+.response-panel {
+  background: rgba(229, 187, 96, .15);
+  border-left-color: var(--accent);
+}
+
+.map-link,
+.button,
+.submit-button,
+.password-form button {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #fff;
+}
+
+.map-link:hover,
+.button:hover,
+.submit-button:hover,
+.password-form button:hover {
+  background: #fff;
+  color: var(--accent);
+}
+
+.text-button {
+  color: var(--accent);
+}
+
+.form-field input,
+.form-field textarea,
+.password-form input {
+  background: rgba(255, 255, 255, .97);
+  border-color: rgba(72, 101, 84, .32);
+}
+
+.form-field input:focus,
+.form-field textarea:focus,
+.password-form input:focus {
+  outline-color: var(--teal);
+}
+
+.radio-option input,
+.password-visibility input {
+  accent-color: var(--accent);
+}
+
+.faq-question:hover {
+  color: var(--accent);
+}
+
+.site-footer {
+  background: rgba(255, 255, 255, .94);
+  border-top-color: rgba(72, 101, 84, .18);
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+}
+
+.password-screen {
+  background: rgba(255, 255, 255, .78);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+}
+
+.password-card {
+  background: rgba(255, 255, 255, .96);
+  border-color: rgba(72, 101, 84, .22);
+  box-shadow: 0 20px 60px rgba(82, 85, 90, .08);
+}
+
+body.theme-invitation main {
+  min-height: calc(100vh - 72px);
+  background: transparent;
+}
+
+body.theme-invitation .page-hero {
+  background: transparent;
+}
+
+body.theme-invitation .dashboard-section {
+  padding: 42px clamp(22px, 4vw, 42px);
+  background: rgba(255, 255, 255, .94);
+  border: 1px solid rgba(72, 101, 84, .18);
+  box-shadow: 0 12px 32px rgba(82, 85, 90, .045);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+
+body.theme-invitation .dashboard-section + .dashboard-section {
+  margin-top: 28px;
+  border-top: 1px solid rgba(72, 101, 84, .18);
+}
+
+body.theme-invitation .guest-greeting {
+  padding: 12px 18px;
+  background: rgba(255, 255, 255, .93);
+  border: 1px solid rgba(72, 101, 84, .16);
+}
+
+@media (max-width: 820px) {
+  .nav-links {
+    background: rgba(255, 255, 255, .99);
+  }
+
+  body::before {
+    background-size: auto 100%;
+    background-position: center bottom;
+  }
+
+  .section-surface,
+  .surface-ivory,
+  .surface-blush,
+  .surface-lilac,
+  .surface-sage,
+  .surface-peach,
+  .surface-gold {
+    background: rgba(255, 255, 255, .94);
+  }
+}
+
+/* ---------------------------------------------------------------
+   Motion: dissolve/reveal as content moves through the viewport
+   --------------------------------------------------------------- */
+.scroll-reveal,
+.image-dissolve {
+  will-change: opacity, transform, filter;
+  transition:
+    opacity .78s cubic-bezier(.2,.7,.2,1),
+    transform .9s cubic-bezier(.2,.7,.2,1),
+    filter .85s ease;
+}
+
+.has-js .scroll-reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  filter: blur(4px);
+}
+
+.has-js .scroll-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+.has-js .image-dissolve {
+  opacity: .08;
+  transform: translateY(26px) scale(.985);
+  filter: blur(13px) saturate(.82);
+}
+
+.has-js .image-dissolve.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0) saturate(1);
+}
+
+/* ---------------------------------------------------------------
+   Page-to-page fade transition. JavaScript provides the fallback;
+   browsers with cross-document View Transitions get an even smoother fade.
+   --------------------------------------------------------------- */
+body {
+  transition: opacity .30s ease, filter .30s ease;
+}
+
+.has-js body:not(.page-ready) {
+  opacity: 0;
+}
+
+.has-js body.page-ready {
+  opacity: 1;
+  filter: none;
+}
+
+.has-js body.page-leaving {
+  opacity: 0;
+  filter: blur(3px);
+  pointer-events: none;
+}
+
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root) {
+  animation: wedding-page-out .28s ease both;
+}
+
+::view-transition-new(root) {
+  animation: wedding-page-in .38s ease both;
+}
+
+@keyframes wedding-page-out {
+  to { opacity: 0; filter: blur(3px); }
+}
+
+@keyframes wedding-page-in {
+  from { opacity: 0; filter: blur(3px); }
+  to { opacity: 1; filter: none; }
+}
+
+@media (max-width: 820px) {
+  .nav-links {
+    background: rgba(255, 255, 255, .99);
+  }
+
+  .hero::before,
+  .page-hero::before {
+    background-position: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  body,
+  .scroll-reveal,
+  .image-dissolve,
+  .hero::before,
+  .page-hero::before {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .has-js body:not(.page-ready),
+  .has-js body.page-leaving,
+  .has-js .scroll-reveal,
+  .has-js .image-dissolve {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .site-header,
+  .hero-card {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
 }
 
 
-/* ------------------------------------------------
-   MOBILE
-   ------------------------------------------------ */
 
-@media (max-width: 560px) {
+/* -------------------------------------------------------
+   PREZOLA LIVE GIFT LIST
+   ------------------------------------------------------- */
 
-  body {
-    font-size: 17px;
+.prezola-section {
+  width: min(1500px, calc(100% - 2rem));
+  margin-inline: auto;
+}
+
+.prezola-header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 1.25rem;
+}
+
+.prezola-header > div {
+  max-width: 760px;
+}
+
+.prezola-frame-wrap {
+  width: 100%;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid rgba(52, 74, 65, .18);
+  border-radius: 18px;
+  box-shadow: 0 12px 34px rgba(43, 54, 55, .08);
+}
+
+.prezola-frame {
+  display: block;
+  width: 100%;
+  height: 1450px;
+  border: 0;
+  background: #fff;
+}
+
+.prezola-fallback {
+  margin-top: .9rem;
+  text-align: center;
+  font-size: .95rem;
+}
+
+.prezola-fallback a {
+  font-weight: 700;
+}
+
+@media (max-width: 820px) {
+  .prezola-section {
+    width: min(100% - 1rem, 1500px);
   }
 
-  .display {
-    line-height: .95;
+  .prezola-header {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 1rem;
   }
 
-  .page-hero h1 {
-    line-height: 1;
+  .prezola-header .button {
+    align-self: flex-start;
   }
 
+  .prezola-frame-wrap {
+    border-radius: 12px;
+  }
+
+  .prezola-frame {
+    height: 1250px;
+  }
+}
+
+
+/* Gallery captions
+   Empty captions remain invisible, so captions can be added photo-by-photo. */
+.photo-card {
+  background: rgba(255, 255, 255, .96);
+}
+
+.photo-caption {
+  margin: 0;
+  padding: 11px 13px 12px;
+  border: 1px solid var(--line);
+  border-top: 0;
+  color: var(--muted);
+  background: rgba(255, 255, 255, .97);
+  font-size: .94rem;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.photo-caption:empty {
+  display: none;
+}
+
+.photo-card:has(.photo-caption:not(:empty)) img {
+  border-bottom: 0;
+}
+
+@media (max-width: 600px) {
+  .photo-caption {
+    padding: 10px 12px 11px;
+    font-size: .9rem;
+  }
+}
+
+
+/* On The Day – Entertainment */
+
+.entertainment-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px;
+  margin-top: 34px;
+}
+
+.entertainment-card {
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+}
+
+.entertainment-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+.entertainment-content {
+  padding: 26px;
+}
+
+.entertainment-content h2 {
+  margin-top: 4px;
+}
+
+.entertainment-times {
+  margin-top: 22px;
+  font-weight: 700;
+}
+
+.social-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 22px;
+}
+
+.social-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.social-link:hover {
+  text-decoration: underline;
+}
+
+.social-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+@media (max-width: 760px) {
+  .entertainment-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .entertainment-content {
+    padding: 22px;
+  }
 }
