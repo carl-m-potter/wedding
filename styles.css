@@ -1183,3 +1183,8 @@ body {
     padding: 22px;
   }
 }
+
+.page-hero .eyebrow,
+.page-hero .kicker {
+  color: var(--accent);
+}
