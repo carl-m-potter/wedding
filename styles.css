@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Allura&family=Cormorant+Garamond:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Manrope:wght@400;500;600;700&display=swap');
 
 :root {
   --paper: #ffffff;
@@ -26,7 +26,7 @@ body {
   margin: 0;
   background: var(--paper-light);
   color: var(--ink);
-  font-family: "Cormorant Garamond", Georgia, serif;
+  font-family: "Manrope", Arial, sans-serif;
   font-size: 20px;
   line-height: 1.55;
 }
@@ -124,6 +124,7 @@ a { color: inherit; }
 }
 
 .display {
+  font-family: "Fraunces", Georgia, serif;
   margin: 0;
   font-size: clamp(4.5rem, 13vw, 8.5rem);
   line-height: .8;
@@ -134,7 +135,7 @@ a { color: inherit; }
 
 .script {
   display: block;
-  font-family: "Allura", cursive;
+  font-family: "Fraunces", Georgia, serif;
   font-size: clamp(3.5rem, 9vw, 6.2rem);
   line-height: .8;
   font-weight: 400;
@@ -144,6 +145,7 @@ a { color: inherit; }
 }
 
 .names {
+  font-family: "Fraunces", Georgia, serif;
   margin: 30px 0 6px;
   font-size: clamp(2rem, 5vw, 3.6rem);
   text-transform: uppercase;
@@ -160,7 +162,7 @@ a { color: inherit; }
 
 .scroll-note {
   margin-top: 40px;
-  font-family: "Allura", cursive;
+  font-family: "Fraunces", Georgia, serif;
   font-size: 2rem;
 }
 
@@ -171,6 +173,7 @@ a { color: inherit; }
 }
 
 .page-hero h1 {
+  font-family: "Fraunces", Georgia, serif;
   margin: 0;
   text-transform: uppercase;
   letter-spacing: .12em;
@@ -203,6 +206,7 @@ a { color: inherit; }
 }
 
 .section-title {
+  font-family: "Fraunces", Georgia, serif;
   margin: 0 0 24px;
   font-size: clamp(2.2rem, 5vw, 4rem);
   line-height: 1;
@@ -230,6 +234,7 @@ a { color: inherit; }
 
 .detail-card h2,
 .hotel-card h2 {
+  font-family: "Fraunces", Georgia, serif;
   margin: 0 0 8px;
   font-weight: 500;
   font-size: 1.65rem;
@@ -344,7 +349,7 @@ a { color: inherit; }
 }
 
 .footer-script {
-  font-family: "Allura", cursive;
+  font-family: "Fraunces", Georgia, serif;
   font-size: 2rem;
 }
 
@@ -366,6 +371,7 @@ a { color: inherit; }
 }
 
 .password-card h1 {
+  font-family: "Fraunces", Georgia, serif;
   margin: 0 0 8px;
   font-size: 2.4rem;
   font-weight: 400;
@@ -603,6 +609,7 @@ fieldset.form-field {
 }
 
 .travel-card h2 {
+  font-family: "Fraunces", Georgia, serif;
   margin: 0 0 10px;
   font-size: 1.65rem;
   font-weight: 500;
@@ -621,6 +628,7 @@ fieldset.form-field {
 }
 
 .gift-placeholder h3 {
+  font-family: "Fraunces", Georgia, serif;
   margin: 0 0 8px;
   font-size: 2rem;
   font-weight: 400;
@@ -1131,6 +1139,7 @@ body {
 }
 
 .entertainment-content h2 {
+  font-family: "Fraunces", Georgia, serif;
   margin-top: 4px;
 }
 
