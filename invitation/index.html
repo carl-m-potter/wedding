@@ -7,15 +7,19 @@
   <meta name="description" content="Your invitation to Claire and Carl's wedding — 1 May 2027">
   <meta name="theme-color" content="#ffffff">
   <title>Your Invitation | Claire & Carl</title>
+
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
   <link rel="stylesheet" href="/styles.css">
   <script src="/script.js" defer></script>
 
   <style>
-    [hidden] { display: none !important; }
+    [hidden] {
+      display: none !important;
+    }
 
     .invitation-page {
       overflow-x: hidden;
@@ -107,8 +111,13 @@
       top: 34px;
     }
 
-    .invitation-card::before { left: 34px; }
-    .invitation-card::after { right: 34px; }
+    .invitation-card::before {
+      left: 34px;
+    }
+
+    .invitation-card::after {
+      right: 34px;
+    }
 
     .invitation-owner-label {
       margin: 0 0 14px;
@@ -119,6 +128,7 @@
 
     .invitation-party {
       margin: 0;
+      font-family: "Playfair Display", Georgia, serif;
       font-size: clamp(2.6rem, 8vw, 5.4rem);
       line-height: .95;
       font-weight: 400;
@@ -126,10 +136,12 @@
 
     .invitation-script {
       margin: 14px 0 12px;
-      font-family: "Allura", cursive;
+      font-family: "Playfair Display", Georgia, serif;
       font-size: clamp(2.6rem, 7vw, 4.6rem);
       line-height: 1;
       font-weight: 400;
+      font-style: italic;
+      color: var(--accent);
     }
 
     .invite-type-pill {
@@ -193,6 +205,7 @@
 
     .dashboard-section h2 {
       margin: 0 0 12px;
+      font-family: "Playfair Display", Georgia, serif;
       font-size: clamp(2.1rem, 5vw, 3.4rem);
       line-height: 1;
       font-weight: 400;
@@ -245,6 +258,7 @@
 
     .response-panel h3 {
       margin: 0 0 10px;
+      font-family: "Playfair Display", Georgia, serif;
       font-size: 2rem;
       font-weight: 400;
     }
@@ -307,8 +321,13 @@
         top: 24px;
       }
 
-      .invitation-card::before { left: 20px; }
-      .invitation-card::after { right: 20px; }
+      .invitation-card::before {
+        left: 20px;
+      }
+
+      .invitation-card::after {
+        right: 20px;
+      }
 
       .guest-list li {
         flex-direction: column;
@@ -317,8 +336,13 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
-      *, *::before, *::after {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
         animation-duration: .01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: .01ms !important;
@@ -326,204 +350,550 @@
     }
   </style>
 </head>
+
 <body class="invitation-page theme-invitation">
+
   <header class="site-header">
     <nav class="nav" aria-label="Primary navigation">
+
       <a class="brand" href="/">C & C</a>
-      <button class="menu-button" type="button" aria-expanded="false" aria-controls="primary-navigation">Menu</button>
+
+      <button
+        class="menu-button"
+        type="button"
+        aria-expanded="false"
+        aria-controls="primary-navigation">
+        Menu
+      </button>
+
       <div class="nav-links" id="primary-navigation">
         <a href="/">Home</a>
-        <a class="nav-invitation-priority" href="/invitation/" aria-current="page"><span id="invitation-nav-label">Your Invitation</span></a>
+
+        <a
+          class="nav-invitation-priority"
+          href="/invitation/"
+          aria-current="page">
+          <span id="invitation-nav-label">Your Invitation</span>
+        </a>
+
         <a href="/venue.html">Venue</a>
         <a href="/accommodation.html">Accommodation</a>
         <a href="/gifts.html">Gifts</a>
         <a href="/faq.html">FAQ</a>
       </div>
+
     </nav>
   </header>
 
   <main>
+
     <div id="login-view">
+
       <section class="page-hero invitation-login-hero">
         <p class="eyebrow">Claire & Carl · 1 May 2027</p>
         <h1>Your Invitation</h1>
-        <p>Enter your name and the wedding password to view the invitation created for you.</p>
+        <p>
+          Enter your name and the wedding password to view the invitation
+          created for you.
+        </p>
       </section>
 
       <section class="invitation-login-wrap">
+
         <div class="login-card">
+
           <form id="invite-login" class="rsvp-form">
+
             <div class="form-grid">
+
               <div class="form-field">
                 <label for="first-name">First name</label>
-                <input id="first-name" type="text" autocomplete="given-name" required>
+                <input
+                  id="first-name"
+                  type="text"
+                  autocomplete="given-name"
+                  required>
               </div>
 
               <div class="form-field">
                 <label for="last-name">Last name</label>
-                <input id="last-name" type="text" autocomplete="family-name" required>
+                <input
+                  id="last-name"
+                  type="text"
+                  autocomplete="family-name"
+                  required>
               </div>
 
               <div class="form-field form-field-full">
+
                 <label for="invite-password">Wedding password</label>
-                <input id="invite-password" type="password" autocomplete="current-password" required>
-                <label class="password-visibility" for="show-password">
-                  <input id="show-password" type="checkbox">
+
+                <input
+                  id="invite-password"
+                  type="password"
+                  autocomplete="current-password"
+                  required>
+
+                <label
+                  class="password-visibility"
+                  for="show-password">
+
+                  <input
+                    id="show-password"
+                    type="checkbox">
+
                   <span>Show password</span>
                 </label>
+
               </div>
+
             </div>
 
-            <button class="submit-button" type="submit">View my invitation</button>
-            <p id="login-status" class="password-error" aria-live="polite"></p>
+            <button
+              class="submit-button"
+              type="submit">
+              View my invitation
+            </button>
+
+            <p
+              id="login-status"
+              class="password-error"
+              aria-live="polite">
+            </p>
+
           </form>
+
         </div>
+
       </section>
+
     </div>
 
-    <section id="invitation-view" class="invitation-shell" hidden>
+
+    <section
+      id="invitation-view"
+      class="invitation-shell"
+      hidden>
+
       <div class="guest-greeting">
+
         <p id="welcome-text"></p>
-        <button id="sign-out-button" type="button" class="text-button">Not you? Sign out</button>
+
+        <button
+          id="sign-out-button"
+          type="button"
+          class="text-button">
+          Not you? Sign out
+        </button>
+
       </div>
 
-      <article class="invitation-card" aria-labelledby="invitation-party">
-        <p class="invitation-owner-label">This invitation belongs to</p>
-        <h1 id="invitation-party" class="invitation-party"></h1>
-        <p class="invitation-script">you're invited</p>
-        <span id="invite-type-pill" class="invite-type-pill"></span>
-        <p id="invitation-copy" class="invitation-copy"></p>
-        <p class="invitation-date">Saturday · 1 May · 2027</p>
+
+      <article
+        class="invitation-card"
+        aria-labelledby="invitation-party">
+
+        <p class="invitation-owner-label">
+          This invitation belongs to
+        </p>
+
+        <h1
+          id="invitation-party"
+          class="invitation-party">
+        </h1>
+
+        <p class="invitation-script">
+          you're invited
+        </p>
+
+        <span
+          id="invite-type-pill"
+          class="invite-type-pill">
+        </span>
+
+        <p
+          id="invitation-copy"
+          class="invitation-copy">
+        </p>
+
+        <p class="invitation-date">
+          Saturday · 1 May · 2027
+        </p>
+
       </article>
 
-      <div class="plans-grid" aria-label="Your wedding plans">
+
+      <div
+        class="plans-grid"
+        aria-label="Your wedding plans">
+
         <div class="plan-card">
           <p>Your invitation</p>
           <strong id="plan-invite-type"></strong>
         </div>
+
         <div class="plan-card">
           <p>Please arrive</p>
           <strong id="plan-arrival"></strong>
         </div>
+
         <div class="plan-card">
           <p>People invited</p>
           <strong id="plan-guest-count"></strong>
         </div>
+
       </div>
-<br/>
-      <section class="dashboard-section" aria-labelledby="included-heading">
-        <p class="eyebrow">Your party</p>
-        <h2 id="included-heading">Who is included</h2>
-        <p>These are the people covered by this invitation.</p>
-        <ul id="invited-guest-list" class="guest-list"></ul>
+
+
+      <br>
+
+
+      <section
+        class="dashboard-section"
+        aria-labelledby="included-heading">
+
+        <p class="eyebrow">
+          Your party
+        </p>
+
+        <h2 id="included-heading">
+          Who is included
+        </h2>
+
+        <p>
+          These are the people covered by this invitation.
+        </p>
+
+        <ul
+          id="invited-guest-list"
+          class="guest-list">
+        </ul>
+
       </section>
 
-      <section class="dashboard-section" aria-labelledby="rsvp-heading">
-        <p class="eyebrow">Your response</p>
-        <h2 id="rsvp-heading">RSVP</h2>
-        <p id="rsvp-intro">Please confirm who from your party will be joining us to celebrate by 1st February 2027. Change of plans? No worries at all - you’re welcome to pop back to this page and update your details anytime before the deadline.</p>
 
-        <div id="rsvp-panel" class="rsvp-panel">
-          <form id="rsvp-form" class="rsvp-form" action="https://api.carlandclaire.co.uk/rsvp" method="POST">
-            <input type="hidden" name="_subject" value="New wedding RSVP">
-            <input type="hidden" id="party-name" name="Invitation party">
-            <input type="hidden" id="invite-type" name="Invite type">
-            <input type="hidden" id="selected-guests" name="Guests attending">
-            <input type="hidden" id="login-name" name="Logged in as">
-            <input type="hidden" id="login-first-name" name="Logged in first name">
-            <input type="hidden" id="session-token" name="Session token">
-            <input type="hidden" id="submission-id" name="Submission ID">
+      <section
+        class="dashboard-section"
+        aria-labelledby="rsvp-heading">
+
+        <p class="eyebrow">
+          Your response
+        </p>
+
+        <h2 id="rsvp-heading">
+          RSVP
+        </h2>
+
+        <p id="rsvp-intro">
+          Please confirm who from your party will be joining us to celebrate
+          by 1st February 2027. Change of plans? No worries at all - you’re
+          welcome to pop back to this page and update your details anytime
+          before the deadline.
+        </p>
+
+
+        <div
+          id="rsvp-panel"
+          class="rsvp-panel">
+
+          <form
+            id="rsvp-form"
+            class="rsvp-form"
+            action="https://api.carlandclaire.co.uk/rsvp"
+            method="POST">
+
+            <input
+              type="hidden"
+              name="_subject"
+              value="New wedding RSVP">
+
+            <input
+              type="hidden"
+              id="party-name"
+              name="Invitation party">
+
+            <input
+              type="hidden"
+              id="invite-type"
+              name="Invite type">
+
+            <input
+              type="hidden"
+              id="selected-guests"
+              name="Guests attending">
+
+            <input
+              type="hidden"
+              id="login-name"
+              name="Logged in as">
+
+            <input
+              type="hidden"
+              id="login-first-name"
+              name="Logged in first name">
+
+            <input
+              type="hidden"
+              id="session-token"
+              name="Session token">
+
+            <input
+              type="hidden"
+              id="submission-id"
+              name="Submission ID">
+
 
             <div class="form-grid">
+
               <div class="form-field form-field-full">
-                <label for="email">Email address</label>
-                <input id="email" name="Email" type="email" autocomplete="email" required>
+
+                <label for="email">
+                  Email address
+                </label>
+
+                <input
+                  id="email"
+                  name="Email"
+                  type="email"
+                  autocomplete="email"
+                  required>
+
               </div>
+
 
               <fieldset class="form-field form-field-full">
-                <legend>Please confirm your attendance</legend>
+
+                <legend>
+                  Please confirm your attendance
+                </legend>
+
                 <label class="radio-option">
-                  <input type="radio" name="Attending" value="Yes" required>
+
+                  <input
+                    type="radio"
+                    name="Attending"
+                    value="Yes"
+                    required>
+
                   <span>Attending</span>
+
                 </label>
+
                 <label class="radio-option">
-                  <input type="radio" name="Attending" value="No" required>
+
+                  <input
+                    type="radio"
+                    name="Attending"
+                    value="No"
+                    required>
+
                   <span>Not attending</span>
+
                 </label>
+
               </fieldset>
 
-              <fieldset id="guest-fieldset" class="form-field form-field-full">
-                <legend>Who is this RSVP for?</legend>
-                <p class="optional">Please select everyone you are confirming for.</p>
+
+              <fieldset
+                id="guest-fieldset"
+                class="form-field form-field-full">
+
+                <legend>
+                  Who is this RSVP for?
+                </legend>
+
+                <p class="optional">
+                  Please select everyone you are confirming for.
+                </p>
+
                 <div id="guest-options"></div>
+
               </fieldset>
+
 
               <div class="form-field form-field-full">
-                <label for="dietary">Dietary requirements or allergies</label>
-                <textarea id="dietary" name="Dietary requirements" rows="4" placeholder="Known requirements will appear here automatically. You can edit them before submitting."></textarea>
+
+                <label for="dietary">
+                  Dietary requirements or allergies
+                </label>
+
+                <textarea
+                  id="dietary"
+                  name="Dietary requirements"
+                  rows="4"
+                  placeholder="Known requirements will appear here automatically. You can edit them before submitting."></textarea>
+
               </div>
+
 
               <div class="form-field">
-                <label for="phone">Phone number <span class="optional">(optional)</span></label>
-                <input id="phone" name="Phone number" type="tel" autocomplete="tel">
+
+                <label for="phone">
+                  Phone number
+                  <span class="optional">(optional)</span>
+                </label>
+
+                <input
+                  id="phone"
+                  name="Phone number"
+                  type="tel"
+                  autocomplete="tel">
+
               </div>
+
 
               <div class="form-field form-field-full">
-                <label for="message">Message for Claire and Carl <span class="optional">(optional)</span></label>
-                <textarea id="message" name="Message" rows="4"></textarea>
+
+                <label for="message">
+                  Message for Claire and Carl
+                  <span class="optional">(optional)</span>
+                </label>
+
+                <textarea
+                  id="message"
+                  name="Message"
+                  rows="4"></textarea>
+
               </div>
+
             </div>
 
-            <button class="submit-button" type="submit">Send RSVP</button>
+
+            <button
+              class="submit-button"
+              type="submit">
+              Send RSVP
+            </button>
+
           </form>
+
         </div>
 
-        <div id="response-panel" class="response-panel" hidden tabindex="-1" aria-live="polite">
-          <h3 id="response-heading">Thank you!</h3>
+
+        <div
+          id="response-panel"
+          class="response-panel"
+          hidden
+          tabindex="-1"
+          aria-live="polite">
+
+          <h3 id="response-heading">
+            Thank you!
+          </h3>
+
           <p id="response-text"></p>
-          <p id="response-follow-up">Your response has been sent.</p>
-          <button id="edit-response-button" class="button secondary" type="button">Change this response</button>
+
+          <p id="response-follow-up">
+            Your response has been sent.
+          </p>
+
+          <button
+            id="edit-response-button"
+            class="button secondary"
+            type="button">
+            Change this response
+          </button>
+
         </div>
+
       </section>
 
-      <section class="dashboard-section" aria-labelledby="useful-heading">
-        <p class="eyebrow">Useful information</p>
-        <h2 id="useful-heading">Plan your day</h2>
-        <p>Everything else you need is still available across the wedding website.</p>
+
+      <section
+        class="dashboard-section"
+        aria-labelledby="useful-heading">
+
+        <p class="eyebrow">
+          Useful information
+        </p>
+
+        <h2 id="useful-heading">
+          Plan your day
+        </h2>
+
+        <p>
+          Everything else you need is still available across the wedding
+          website.
+        </p>
+
         <div class="action-row">
-          <a class="button" href="/on-the-day.html">On the day</a>
-          <a class="button" href="/venue.html">Venue & Travel</a>
-          <a class="button" href="/faq.html">FAQs</a>
+
+          <a
+            class="button"
+            href="/on-the-day.html">
+            On the day
+          </a>
+
+          <a
+            class="button"
+            href="/venue.html">
+            Venue & Travel
+          </a>
+
+          <a
+            class="button"
+            href="/faq.html">
+            FAQs
+          </a>
+
         </div>
+
       </section>
+
     </section>
+
   </main>
 
+
   <footer class="site-footer">
-    <p class="footer-script">We can't wait to celebrate with you</p>
-    <p>Claire & Carl · 1 May 2027</p>
+
+    <p class="footer-script">
+      We can't wait to celebrate with you
+    </p>
+
+    <p>
+      Claire & Carl · 1 May 2027
+    </p>
+
   </footer>
 
+
   <script>
-    const WORKER_LOGIN_URL = "https://api.carlandclaire.co.uk/login";
-    const WORKER_RSVP_URL = "https://api.carlandclaire.co.uk/rsvp";
-    const WORKER_INVITATION_URL = "https://api.carlandclaire.co.uk/invitation";
-    const STORAGE_KEY = "carl-claire-your-invitation-v1";
+
+    const WORKER_LOGIN_URL =
+      "https://api.carlandclaire.co.uk/login";
+
+    const WORKER_RSVP_URL =
+      "https://api.carlandclaire.co.uk/rsvp";
+
+    const WORKER_INVITATION_URL =
+      "https://api.carlandclaire.co.uk/invitation";
+
+    const STORAGE_KEY =
+      "carl-claire-your-invitation-v1";
+
 
     const INVITE_DETAILS = {
+
       Day: {
         label: "Day invitation",
         arrival: "1:00–1:30 PM",
-        copy: "We would love you to join us for the ceremony and celebrate with us throughout the day and evening."
+        copy:
+          "We would love you to join us for the ceremony and celebrate with us throughout the day and evening."
       },
+
       Evening: {
         label: "Evening invitation",
         arrival: "7:30–8:00 PM",
-        copy: "We would love you to join us for the evening celebration, with music, food and plenty of dancing."
+        copy:
+          "We would love you to join us for the evening celebration, with music, food and plenty of dancing."
       }
+
     };
 
+
     const UNIQUE_FIRST_NAMES = {
+
       "andrea": "pickering",
       "anya": "pickering",
       "darcie": "pickering",
@@ -594,509 +964,1475 @@
       "vikki": "lloyd",
       "will": "unwin",
       "zac": "gaskell"
+
     };
 
-    const loginView = document.getElementById("login-view");
-    const invitationView = document.getElementById("invitation-view");
-    const loginForm = document.getElementById("invite-login");
-    const firstNameInput = document.getElementById("first-name");
-    const lastNameInput = document.getElementById("last-name");
-    const passwordInput = document.getElementById("invite-password");
-    const showPasswordToggle = document.getElementById("show-password");
-    const loginStatus = document.getElementById("login-status");
-    const signOutButton = document.getElementById("sign-out-button");
-    const invitationNavLabel = document.getElementById("invitation-nav-label");
 
-    const partyHeading = document.getElementById("invitation-party");
-    const inviteTypePill = document.getElementById("invite-type-pill");
-    const invitationCopy = document.getElementById("invitation-copy");
-    const welcomeText = document.getElementById("welcome-text");
-    const planInviteType = document.getElementById("plan-invite-type");
-    const planArrival = document.getElementById("plan-arrival");
-    const planGuestCount = document.getElementById("plan-guest-count");
-    const invitedGuestList = document.getElementById("invited-guest-list");
+    const loginView =
+      document.getElementById("login-view");
 
-    const rsvpPanel = document.getElementById("rsvp-panel");
-    const rsvpForm = document.getElementById("rsvp-form");
-    const guestOptions = document.getElementById("guest-options");
-    const guestFieldset = document.getElementById("guest-fieldset");
-    const emailInput = document.getElementById("email");
-    const dietaryTextarea = document.getElementById("dietary");
-    const phoneInput = document.getElementById("phone");
-    const messageInput = document.getElementById("message");
-    const selectedGuestsInput = document.getElementById("selected-guests");
-    const partyInput = document.getElementById("party-name");
-    const inviteTypeInput = document.getElementById("invite-type");
-    const loginNameInput = document.getElementById("login-name");
-    const loginFirstNameInput = document.getElementById("login-first-name");
-    const sessionTokenInput = document.getElementById("session-token");
-    const submissionIdInput = document.getElementById("submission-id");
-    const attendanceRadios = document.querySelectorAll('input[name="Attending"]');
-    const responsePanel = document.getElementById("response-panel");
-    const responseHeading = document.getElementById("response-heading");
-    const responseText = document.getElementById("response-text");
-    const responseFollowUp = document.getElementById("response-follow-up");
-    const editResponseButton = document.getElementById("edit-response-button");
+    const invitationView =
+      document.getElementById("invitation-view");
+
+    const loginForm =
+      document.getElementById("invite-login");
+
+    const firstNameInput =
+      document.getElementById("first-name");
+
+    const lastNameInput =
+      document.getElementById("last-name");
+
+    const passwordInput =
+      document.getElementById("invite-password");
+
+    const showPasswordToggle =
+      document.getElementById("show-password");
+
+    const loginStatus =
+      document.getElementById("login-status");
+
+    const signOutButton =
+      document.getElementById("sign-out-button");
+
+    const invitationNavLabel =
+      document.getElementById("invitation-nav-label");
+
+
+    const partyHeading =
+      document.getElementById("invitation-party");
+
+    const inviteTypePill =
+      document.getElementById("invite-type-pill");
+
+    const invitationCopy =
+      document.getElementById("invitation-copy");
+
+    const welcomeText =
+      document.getElementById("welcome-text");
+
+    const planInviteType =
+      document.getElementById("plan-invite-type");
+
+    const planArrival =
+      document.getElementById("plan-arrival");
+
+    const planGuestCount =
+      document.getElementById("plan-guest-count");
+
+    const invitedGuestList =
+      document.getElementById("invited-guest-list");
+
+
+    const rsvpPanel =
+      document.getElementById("rsvp-panel");
+
+    const rsvpForm =
+      document.getElementById("rsvp-form");
+
+    const guestOptions =
+      document.getElementById("guest-options");
+
+    const guestFieldset =
+      document.getElementById("guest-fieldset");
+
+    const emailInput =
+      document.getElementById("email");
+
+    const dietaryTextarea =
+      document.getElementById("dietary");
+
+    const phoneInput =
+      document.getElementById("phone");
+
+    const messageInput =
+      document.getElementById("message");
+
+    const selectedGuestsInput =
+      document.getElementById("selected-guests");
+
+    const partyInput =
+      document.getElementById("party-name");
+
+    const inviteTypeInput =
+      document.getElementById("invite-type");
+
+    const loginNameInput =
+      document.getElementById("login-name");
+
+    const loginFirstNameInput =
+      document.getElementById("login-first-name");
+
+    const sessionTokenInput =
+      document.getElementById("session-token");
+
+    const submissionIdInput =
+      document.getElementById("submission-id");
+
+    const attendanceRadios =
+      document.querySelectorAll(
+        'input[name="Attending"]'
+      );
+
+    const responsePanel =
+      document.getElementById("response-panel");
+
+    const responseHeading =
+      document.getElementById("response-heading");
+
+    const responseText =
+      document.getElementById("response-text");
+
+    const responseFollowUp =
+      document.getElementById("response-follow-up");
+
+    const editResponseButton =
+      document.getElementById("edit-response-button");
+
 
     let invitation = null;
     let dietaryWasEdited = false;
 
-    showPasswordToggle.addEventListener("change", () => {
-      passwordInput.type = showPasswordToggle.checked ? "text" : "password";
-    });
+
+    showPasswordToggle.addEventListener(
+      "change",
+      () => {
+
+        passwordInput.type =
+          showPasswordToggle.checked
+            ? "text"
+            : "password";
+
+      }
+    );
+
 
     function thankYouFirstName(data) {
+
       if (data.loginFirstName) {
-        const first = data.loginFirstName.trim().split(/\s+/)[0];
-        return first.replace(/\b[a-z]/g, letter => letter.toUpperCase());
+
+        const first =
+          data.loginFirstName
+            .trim()
+            .split(/\s+/)[0];
+
+        return first.replace(
+          /\b[a-z]/g,
+          letter => letter.toUpperCase()
+        );
+
       }
 
-      if (data.loginDisplayName === "Auntie Pat") return "Pat";
-      return (data.loginDisplayName || "").trim().split(/\s+/)[0] || "there";
+      if (
+        data.loginDisplayName ===
+        "Auntie Pat"
+      ) {
+        return "Pat";
+      }
+
+      return (
+        data.loginDisplayName || ""
+      )
+        .trim()
+        .split(/\s+/)[0] || "there";
+
     }
+
 
     function titleCaseName(value) {
+
       return value
         .split("-")
-        .map(part => part ? part[0].toUpperCase() + part.slice(1) : part)
+        .map(
+          part =>
+            part
+              ? part[0].toUpperCase() +
+                part.slice(1)
+              : part
+        )
         .join("-");
+
     }
+
 
     function autofillLastName() {
-      const firstName = firstNameInput.value.trim().toLowerCase();
-      const uniqueLastName = UNIQUE_FIRST_NAMES[firstName];
+
+      const firstName =
+        firstNameInput.value
+          .trim()
+          .toLowerCase();
+
+      const uniqueLastName =
+        UNIQUE_FIRST_NAMES[firstName];
+
 
       if (uniqueLastName) {
-        lastNameInput.value = titleCaseName(uniqueLastName);
-        lastNameInput.dataset.autofilled = "true";
-      } else if (lastNameInput.dataset.autofilled === "true") {
+
+        lastNameInput.value =
+          titleCaseName(
+            uniqueLastName
+          );
+
+        lastNameInput.dataset.autofilled =
+          "true";
+
+      } else if (
+        lastNameInput.dataset.autofilled ===
+        "true"
+      ) {
+
         lastNameInput.value = "";
-        lastNameInput.dataset.autofilled = "false";
+
+        lastNameInput.dataset.autofilled =
+          "false";
+
       }
+
     }
 
-    firstNameInput.addEventListener("input", autofillLastName);
-    firstNameInput.addEventListener("change", autofillLastName);
-    lastNameInput.addEventListener("input", () => {
-      lastNameInput.dataset.autofilled = "false";
-    });
+
+    firstNameInput.addEventListener(
+      "input",
+      autofillLastName
+    );
+
+    firstNameInput.addEventListener(
+      "change",
+      autofillLastName
+    );
+
+    lastNameInput.addEventListener(
+      "input",
+      () => {
+
+        lastNameInput.dataset.autofilled =
+          "false";
+
+      }
+    );
+
 
     function rememberInvitation(data) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(data)
+      );
+
     }
+
 
     function clearRememberedInvitation() {
-      localStorage.removeItem(STORAGE_KEY);
+
+      localStorage.removeItem(
+        STORAGE_KEY
+      );
+
     }
+
 
     function checkedGuestNames() {
-      return [...guestOptions.querySelectorAll('input[type="checkbox"]:checked')]
+
+      return [
+        ...guestOptions.querySelectorAll(
+          'input[type="checkbox"]:checked'
+        )
+      ]
         .map(input => input.value);
+
     }
+
 
     function updateSelectedGuests() {
-      const names = checkedGuestNames();
-      selectedGuestsInput.value = names.length ? names.join(", ") : "None";
+
+      const names =
+        checkedGuestNames();
+
+      selectedGuestsInput.value =
+        names.length
+          ? names.join(", ")
+          : "None";
+
     }
+
 
     function buildDietaryText() {
-      const selectedNames = checkedGuestNames();
-      const lines = invitation.guests
-        .filter(guest => selectedNames.includes(guest.name))
-        .filter(guest => guest.dietary && guest.dietary.toLowerCase() !== "none")
-        .map(guest => `${guest.dietary} — ${guest.name}`);
 
-      return lines.length ? lines.join("\n") : "None";
-    }
+      const selectedNames =
+        checkedGuestNames();
 
-    function updateDietary(force = false) {
-      if (!dietaryWasEdited || force) {
-        dietaryTextarea.value = buildDietaryText();
-        dietaryWasEdited = false;
-      }
-    }
+      const lines =
+        invitation.guests
 
-    dietaryTextarea.addEventListener("input", () => {
-      dietaryWasEdited = true;
-    });
+          .filter(
+            guest =>
+              selectedNames.includes(
+                guest.name
+              )
+          )
 
-    function setGuestSelectionEnabled(enabled) {
-      guestOptions.querySelectorAll('input[type="checkbox"]').forEach(input => {
-        input.disabled = !enabled;
-        if (!enabled) input.checked = false;
-      });
+          .filter(
+            guest =>
+              guest.dietary &&
+              guest.dietary.toLowerCase() !==
+                "none"
+          )
 
-      guestFieldset.hidden = !enabled;
-      updateSelectedGuests();
-      updateDietary(true);
-    }
+          .map(
+            guest =>
+              `${guest.dietary} — ${guest.name}`
+          );
 
-    function renderGuestOptions(data) {
-      guestOptions.innerHTML = "";
 
-      data.guests.forEach((guest, index) => {
-        const label = document.createElement("label");
-        label.className = "radio-option";
-
-        const checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.value = guest.name;
-        checkbox.id = `invited-guest-${index}`;
-        checkbox.checked = guest.name === data.loginDisplayName;
-
-        checkbox.addEventListener("change", () => {
-          updateSelectedGuests();
-          updateDietary(true);
-        });
-
-        const text = document.createElement("span");
-        text.textContent = guest.personType === "Child"
-          ? `${guest.name} (child)`
-          : guest.name;
-
-        label.appendChild(checkbox);
-        label.appendChild(text);
-        guestOptions.appendChild(label);
-      });
-    }
-
-    function formatSavedDate(value) {
-      if (!value) return "";
-
-      const date = new Date(value);
-      if (Number.isNaN(date.getTime())) return "";
-
-      return new Intl.DateTimeFormat("en-GB", {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit"
-      }).format(date);
-    }
-
-    function prefillSavedRsvp(saved) {
-      if (!saved) return;
-
-      emailInput.value = saved.email || "";
-      phoneInput.value = saved.phone || "";
-      messageInput.value = saved.message || "";
-
-      attendanceRadios.forEach(radio => {
-        radio.checked = radio.value === saved.attending;
-      });
-
-      const isAttending = saved.attending === "Yes";
-      const savedGuests = new Set(saved.guests || []);
-
-      guestOptions.querySelectorAll('input[type="checkbox"]').forEach(input => {
-        input.checked = isAttending && savedGuests.has(input.value);
-        input.disabled = !isAttending;
-      });
-
-      guestFieldset.hidden = !isAttending;
-      selectedGuestsInput.value = isAttending && savedGuests.size
-        ? [...savedGuests].join(", ")
+      return lines.length
+        ? lines.join("\n")
         : "None";
 
-      dietaryTextarea.value = saved.dietary || "None";
-      dietaryWasEdited = true;
     }
 
-    function showSavedRsvp(saved) {
-      if (!saved) return;
 
-      prefillSavedRsvp(saved);
+    function updateDietary(
+      force = false
+    ) {
 
-      if (saved.attending === "Yes") {
-        const names = saved.guests || [];
-        responseHeading.textContent = "You're attending";
-        responseText.textContent = names.length === 1
-          ? `${names[0]} is confirmed for the wedding.`
-          : `${names.join(", ")} are confirmed for the wedding.`;
-        responseFollowUp.textContent =
-          `Your RSVP is saved${saved.updatedAt ? ` · Last updated ${formatSavedDate(saved.updatedAt)}` : ""}.`;
-      } else {
-        responseHeading.textContent = "Response received";
-        responseText.textContent =
-          "You've let us know that nobody from this invitation will be attending.";
-        responseFollowUp.textContent =
-          `Your RSVP is saved${saved.updatedAt ? ` · Last updated ${formatSavedDate(saved.updatedAt)}` : ""}.`;
+      if (
+        !dietaryWasEdited ||
+        force
+      ) {
+
+        dietaryTextarea.value =
+          buildDietaryText();
+
+        dietaryWasEdited =
+          false;
+
       }
 
-      editResponseButton.textContent = "Update RSVP";
-      rsvpPanel.hidden = true;
-      responsePanel.hidden = false;
     }
 
-    function renderInvitation(data, shouldRemember = true) {
-      invitation = data;
-      const details = INVITE_DETAILS[data.inviteType] || INVITE_DETAILS.Day;
-      const guestCount = data.guests.length;
 
-      welcomeText.textContent = `Welcome, ${data.loginDisplayName}. This is your personal wedding page.`;
-      partyHeading.textContent = data.party;
-      inviteTypePill.textContent = details.label;
-      invitationCopy.textContent = details.copy;
-      planInviteType.textContent = details.label;
-      planArrival.textContent = details.arrival;
-      planGuestCount.textContent = `${guestCount} ${guestCount === 1 ? "person" : "people"}`;
-      invitationNavLabel.textContent = "View Your Plans";
+    dietaryTextarea.addEventListener(
+      "input",
+      () => {
 
-      invitedGuestList.innerHTML = "";
-      data.guests.forEach(guest => {
-        const item = document.createElement("li");
-        const name = document.createElement("span");
-        const type = document.createElement("span");
-        name.textContent = guest.name;
-        type.textContent = guest.personType === "Child" ? "Child" : "Adult";
-        item.appendChild(name);
-        item.appendChild(type);
-        invitedGuestList.appendChild(item);
-      });
+        dietaryWasEdited =
+          true;
 
-      partyInput.value = data.party;
-      inviteTypeInput.value = data.inviteType;
-      loginNameInput.value = data.loginDisplayName;
-      loginFirstNameInput.value = thankYouFirstName(data);
-      sessionTokenInput.value = data.sessionToken || "";
+      }
+    );
 
-      renderGuestOptions(data);
+
+    function setGuestSelectionEnabled(
+      enabled
+    ) {
+
+      guestOptions
+        .querySelectorAll(
+          'input[type="checkbox"]'
+        )
+        .forEach(input => {
+
+          input.disabled =
+            !enabled;
+
+          if (!enabled) {
+            input.checked = false;
+          }
+
+        });
+
+
+      guestFieldset.hidden =
+        !enabled;
+
       updateSelectedGuests();
       updateDietary(true);
 
-      if (data.rsvp) {
-        showSavedRsvp(data.rsvp);
-      } else {
-        rsvpForm.reset();
-        partyInput.value = data.party;
-        inviteTypeInput.value = data.inviteType;
-        loginNameInput.value = data.loginDisplayName;
-        loginFirstNameInput.value = thankYouFirstName(data);
-        sessionTokenInput.value = data.sessionToken || "";
-        submissionIdInput.value = "";
-        renderGuestOptions(data);
-        updateSelectedGuests();
-        updateDietary(true);
-        responsePanel.hidden = true;
-        rsvpPanel.hidden = false;
-        editResponseButton.textContent = "Change this response";
-      }
-
-      loginView.hidden = true;
-      invitationView.hidden = false;
-
-      if (shouldRemember) rememberInvitation(data);
     }
 
-    loginForm.addEventListener("submit", async event => {
-      event.preventDefault();
-      loginStatus.textContent = "";
 
-      const submitButton = loginForm.querySelector('button[type="submit"]');
-      const originalText = submitButton.textContent;
-      submitButton.disabled = true;
-      submitButton.textContent = "Finding your invitation…";
+    function renderGuestOptions(data) {
 
-      try {
-        const response = await fetch(WORKER_LOGIN_URL, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-          },
-          cache: "no-store",
-          body: JSON.stringify({
-            firstName: firstNameInput.value,
-            lastName: lastNameInput.value,
-            password: document.getElementById("invite-password").value
-          })
-        });
+      guestOptions.innerHTML =
+        "";
 
-        if (!response.ok) throw new Error("Login failed");
 
-        const data = await response.json();
-        if (!data.loginFirstName) {
-          data.loginFirstName = firstNameInput.value.trim();
+      data.guests.forEach(
+        (guest, index) => {
+
+          const label =
+            document.createElement(
+              "label"
+            );
+
+          label.className =
+            "radio-option";
+
+
+          const checkbox =
+            document.createElement(
+              "input"
+            );
+
+          checkbox.type =
+            "checkbox";
+
+          checkbox.value =
+            guest.name;
+
+          checkbox.id =
+            `invited-guest-${index}`;
+
+          checkbox.checked =
+            guest.name ===
+            data.loginDisplayName;
+
+
+          checkbox.addEventListener(
+            "change",
+            () => {
+
+              updateSelectedGuests();
+              updateDietary(true);
+
+            }
+          );
+
+
+          const text =
+            document.createElement(
+              "span"
+            );
+
+          text.textContent =
+            guest.personType ===
+            "Child"
+
+              ? `${guest.name} (child)`
+
+              : guest.name;
+
+
+          label.appendChild(
+            checkbox
+          );
+
+          label.appendChild(
+            text
+          );
+
+          guestOptions.appendChild(
+            label
+          );
+
         }
-        renderInvitation(data);
-        invitationView.scrollIntoView({ block: "start" });
-      } catch {
-        loginStatus.textContent = "We couldn't find a matching invitation. Check the spelling of your first and last name and make sure the wedding password is exactly right.";
-      } finally {
-        submitButton.disabled = false;
-        submitButton.textContent = originalText;
+      );
+
+    }
+
+
+    function formatSavedDate(value) {
+
+      if (!value) {
+        return "";
       }
-    });
 
-    signOutButton.addEventListener("click", () => {
-      clearRememberedInvitation();
-      invitation = null;
-      invitationView.hidden = true;
-      loginView.hidden = false;
-      invitationNavLabel.textContent = "Your Invitation";
-      loginForm.reset();
-      passwordInput.type = "password";
-      showPasswordToggle.checked = false;
-      rsvpForm.reset();
-      responsePanel.hidden = true;
-      rsvpPanel.hidden = false;
-      lastNameInput.dataset.autofilled = "false";
-      firstNameInput.focus();
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    });
 
-    attendanceRadios.forEach(radio => {
-      radio.addEventListener("change", () => {
-        setGuestSelectionEnabled(radio.value === "Yes");
-        if (radio.value === "No") {
-          selectedGuestsInput.value = "None";
-          dietaryTextarea.value = "None";
-          dietaryWasEdited = false;
+      const date =
+        new Date(value);
+
+
+      if (
+        Number.isNaN(
+          date.getTime()
+        )
+      ) {
+        return "";
+      }
+
+
+      return new Intl.DateTimeFormat(
+        "en-GB",
+        {
+
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit"
+
         }
-      });
-    });
+      ).format(date);
 
-    rsvpForm.addEventListener("submit", async event => {
-      event.preventDefault();
+    }
 
-      const attendanceChoice = document.querySelector('input[name="Attending"]:checked');
 
-      if (attendanceChoice?.value === "Yes" && checkedGuestNames().length === 0) {
-        alert("Please select at least one person you are confirming for.");
-        guestFieldset.scrollIntoView({ behavior: "smooth", block: "center" });
+    function prefillSavedRsvp(saved) {
+
+      if (!saved) {
         return;
       }
 
-      if (!dietaryTextarea.value.trim()) dietaryTextarea.value = "None";
 
-      if (!submissionIdInput.value) {
-        submissionIdInput.value = crypto.randomUUID();
-      }
+      emailInput.value =
+        saved.email || "";
 
-      const submitButton = rsvpForm.querySelector('button[type="submit"]');
-      const originalText = submitButton.textContent;
-      submitButton.disabled = true;
-      submitButton.textContent = "Sending RSVP…";
+      phoneInput.value =
+        saved.phone || "";
 
-      try {
-        const response = await fetch(rsvpForm.action, {
-          method: "POST",
-          body: new FormData(rsvpForm),
-          headers: { "Accept": "application/json" }
+      messageInput.value =
+        saved.message || "";
+
+
+      attendanceRadios.forEach(
+        radio => {
+
+          radio.checked =
+            radio.value ===
+            saved.attending;
+
+        }
+      );
+
+
+      const isAttending =
+        saved.attending === "Yes";
+
+      const savedGuests =
+        new Set(
+          saved.guests || []
+        );
+
+
+      guestOptions
+        .querySelectorAll(
+          'input[type="checkbox"]'
+        )
+        .forEach(input => {
+
+          input.checked =
+            isAttending &&
+            savedGuests.has(
+              input.value
+            );
+
+          input.disabled =
+            !isAttending;
+
         });
 
-        const result = await response.json().catch(() => ({}));
 
-        if (!response.ok) {
-          throw new Error(result.error || "Submission failed");
+      guestFieldset.hidden =
+        !isAttending;
+
+
+      selectedGuestsInput.value =
+        isAttending &&
+        savedGuests.size
+
+          ? [
+              ...savedGuests
+            ].join(", ")
+
+          : "None";
+
+
+      dietaryTextarea.value =
+        saved.dietary ||
+        "None";
+
+      dietaryWasEdited =
+        true;
+
+    }
+
+
+    function showSavedRsvp(saved) {
+
+      if (!saved) {
+        return;
+      }
+
+
+      prefillSavedRsvp(
+        saved
+      );
+
+
+      if (
+        saved.attending ===
+        "Yes"
+      ) {
+
+        const names =
+          saved.guests || [];
+
+
+        responseHeading.textContent =
+          "You're attending";
+
+
+        responseText.textContent =
+          names.length === 1
+
+            ? `${names[0]} is confirmed for the wedding.`
+
+            : `${names.join(", ")} are confirmed for the wedding.`;
+
+
+        responseFollowUp.textContent =
+          `Your RSVP is saved${
+            saved.updatedAt
+              ? ` · Last updated ${formatSavedDate(saved.updatedAt)}`
+              : ""
+          }.`;
+
+      } else {
+
+        responseHeading.textContent =
+          "Response received";
+
+
+        responseText.textContent =
+          "You've let us know that nobody from this invitation will be attending.";
+
+
+        responseFollowUp.textContent =
+          `Your RSVP is saved${
+            saved.updatedAt
+              ? ` · Last updated ${formatSavedDate(saved.updatedAt)}`
+              : ""
+          }.`;
+
+      }
+
+
+      editResponseButton.textContent =
+        "Update RSVP";
+
+      rsvpPanel.hidden =
+        true;
+
+      responsePanel.hidden =
+        false;
+
+    }
+
+
+    function renderInvitation(
+      data,
+      shouldRemember = true
+    ) {
+
+      invitation =
+        data;
+
+
+      const details =
+        INVITE_DETAILS[
+          data.inviteType
+        ] ||
+        INVITE_DETAILS.Day;
+
+
+      const guestCount =
+        data.guests.length;
+
+
+      welcomeText.textContent =
+        `Welcome, ${data.loginDisplayName}. This is your personal wedding page.`;
+
+
+      partyHeading.textContent =
+        data.party;
+
+
+      inviteTypePill.textContent =
+        details.label;
+
+
+      invitationCopy.textContent =
+        details.copy;
+
+
+      planInviteType.textContent =
+        details.label;
+
+
+      planArrival.textContent =
+        details.arrival;
+
+
+      planGuestCount.textContent =
+        `${guestCount} ${
+          guestCount === 1
+            ? "person"
+            : "people"
+        }`;
+
+
+      invitationNavLabel.textContent =
+        "View Your Plans";
+
+
+      invitedGuestList.innerHTML =
+        "";
+
+
+      data.guests.forEach(
+        guest => {
+
+          const item =
+            document.createElement(
+              "li"
+            );
+
+          const name =
+            document.createElement(
+              "span"
+            );
+
+          const type =
+            document.createElement(
+              "span"
+            );
+
+
+          name.textContent =
+            guest.name;
+
+
+          type.textContent =
+            guest.personType ===
+            "Child"
+
+              ? "Child"
+
+              : "Adult";
+
+
+          item.appendChild(
+            name
+          );
+
+          item.appendChild(
+            type
+          );
+
+          invitedGuestList.appendChild(
+            item
+          );
+
         }
+      );
 
-        if (result.rsvp) {
-          invitation.rsvp = result.rsvp;
-          rememberInvitation(invitation);
-        }
 
-        const confirmedNames = checkedGuestNames();
-        responseHeading.textContent = result.isUpdate
-          ? `Thanks, ${thankYouFirstName(invitation)} — your RSVP has been updated!`
-          : `Thank you, ${thankYouFirstName(invitation)}!`;
-        responseText.textContent = attendanceChoice.value === "Yes"
-          ? confirmedNames.length === 1
-            ? `We've recorded that ${confirmedNames[0]} will be attending.`
-            : `We've recorded that ${confirmedNames.join(", ")} will be attending.`
-          : "We've recorded that nobody from this invitation will be attending.";
+      partyInput.value =
+        data.party;
 
-        if (result.confirmationEmailSent === false) {
-          responseFollowUp.textContent =
-            "Your RSVP is saved, but we couldn't send your confirmation email. You do not need to submit it again.";
-        } else if (result.isUpdate) {
-          responseFollowUp.textContent = attendanceChoice.value === "Yes"
-            ? "Your updated response is saved. We can't wait to celebrate with you!"
-            : "Your updated response is saved. Thank you for letting us know.";
-        } else {
-          responseFollowUp.textContent = attendanceChoice.value === "Yes"
-            ? "Your response has been sent. We can't wait to celebrate with you!"
-            : "Your response has been sent. Thank you for letting us know.";
-        }
+      inviteTypeInput.value =
+        data.inviteType;
 
-        rsvpPanel.hidden = true;
-        responsePanel.hidden = false;
-        responsePanel.focus();
-        responsePanel.scrollIntoView({ behavior: "smooth", block: "center" });
-      } catch (error) {
-        alert(
-          error.message ||
-          "Your RSVP could not be sent. Please check your connection and try again. Nothing you entered has been lost."
+      loginNameInput.value =
+        data.loginDisplayName;
+
+      loginFirstNameInput.value =
+        thankYouFirstName(data);
+
+      sessionTokenInput.value =
+        data.sessionToken || "";
+
+
+      renderGuestOptions(
+        data
+      );
+
+      updateSelectedGuests();
+
+      updateDietary(true);
+
+
+      if (data.rsvp) {
+
+        showSavedRsvp(
+          data.rsvp
         );
-      } finally {
-        submitButton.disabled = false;
-        submitButton.textContent = originalText;
+
+      } else {
+
+        rsvpForm.reset();
+
+
+        partyInput.value =
+          data.party;
+
+        inviteTypeInput.value =
+          data.inviteType;
+
+        loginNameInput.value =
+          data.loginDisplayName;
+
+        loginFirstNameInput.value =
+          thankYouFirstName(data);
+
+        sessionTokenInput.value =
+          data.sessionToken || "";
+
+        submissionIdInput.value =
+          "";
+
+
+        renderGuestOptions(
+          data
+        );
+
+        updateSelectedGuests();
+
+        updateDietary(true);
+
+
+        responsePanel.hidden =
+          true;
+
+        rsvpPanel.hidden =
+          false;
+
+        editResponseButton.textContent =
+          "Change this response";
+
       }
-    });
 
-    editResponseButton.addEventListener("click", () => {
-      submissionIdInput.value = "";
 
-      if (invitation?.rsvp) {
-        prefillSavedRsvp(invitation.rsvp);
+      loginView.hidden =
+        true;
+
+      invitationView.hidden =
+        false;
+
+
+      if (shouldRemember) {
+
+        rememberInvitation(
+          data
+        );
+
       }
 
-      responsePanel.hidden = true;
-      rsvpPanel.hidden = false;
-      rsvpPanel.scrollIntoView({ behavior: "smooth", block: "start" });
-    });
+    }
+
+
+    loginForm.addEventListener(
+      "submit",
+      async event => {
+
+        event.preventDefault();
+
+
+        loginStatus.textContent =
+          "";
+
+
+        const submitButton =
+          loginForm.querySelector(
+            'button[type="submit"]'
+          );
+
+
+        const originalText =
+          submitButton.textContent;
+
+
+        submitButton.disabled =
+          true;
+
+
+        submitButton.textContent =
+          "Finding your invitation…";
+
+
+        try {
+
+          const response =
+            await fetch(
+              WORKER_LOGIN_URL,
+              {
+
+                method: "POST",
+
+                headers: {
+
+                  "Content-Type":
+                    "application/json",
+
+                  "Accept":
+                    "application/json"
+
+                },
+
+                cache:
+                  "no-store",
+
+                body:
+                  JSON.stringify({
+
+                    firstName:
+                      firstNameInput.value,
+
+                    lastName:
+                      lastNameInput.value,
+
+                    password:
+                      document.getElementById(
+                        "invite-password"
+                      ).value
+
+                  })
+
+              }
+            );
+
+
+          if (!response.ok) {
+
+            throw new Error(
+              "Login failed"
+            );
+
+          }
+
+
+          const data =
+            await response.json();
+
+
+          if (!data.loginFirstName) {
+
+            data.loginFirstName =
+              firstNameInput.value.trim();
+
+          }
+
+
+          renderInvitation(
+            data
+          );
+
+
+          invitationView.scrollIntoView({
+            block: "start"
+          });
+
+
+        } catch {
+
+          loginStatus.textContent =
+            "We couldn't find a matching invitation. Check the spelling of your first and last name and make sure the wedding password is exactly right.";
+
+
+        } finally {
+
+          submitButton.disabled =
+            false;
+
+          submitButton.textContent =
+            originalText;
+
+        }
+
+      }
+    );
+
+
+    signOutButton.addEventListener(
+      "click",
+      () => {
+
+        clearRememberedInvitation();
+
+
+        invitation =
+          null;
+
+
+        invitationView.hidden =
+          true;
+
+        loginView.hidden =
+          false;
+
+
+        invitationNavLabel.textContent =
+          "Your Invitation";
+
+
+        loginForm.reset();
+
+
+        passwordInput.type =
+          "password";
+
+
+        showPasswordToggle.checked =
+          false;
+
+
+        rsvpForm.reset();
+
+
+        responsePanel.hidden =
+          true;
+
+        rsvpPanel.hidden =
+          false;
+
+
+        lastNameInput.dataset.autofilled =
+          "false";
+
+
+        firstNameInput.focus();
+
+
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth"
+        });
+
+      }
+    );
+
+
+    attendanceRadios.forEach(
+      radio => {
+
+        radio.addEventListener(
+          "change",
+          () => {
+
+            setGuestSelectionEnabled(
+              radio.value ===
+              "Yes"
+            );
+
+
+            if (
+              radio.value ===
+              "No"
+            ) {
+
+              selectedGuestsInput.value =
+                "None";
+
+              dietaryTextarea.value =
+                "None";
+
+              dietaryWasEdited =
+                false;
+
+            }
+
+          }
+        );
+
+      }
+    );
+
+
+    rsvpForm.addEventListener(
+      "submit",
+      async event => {
+
+        event.preventDefault();
+
+
+        const attendanceChoice =
+          document.querySelector(
+            'input[name="Attending"]:checked'
+          );
+
+
+        if (
+          attendanceChoice?.value ===
+          "Yes" &&
+          checkedGuestNames().length === 0
+        ) {
+
+          alert(
+            "Please select at least one person you are confirming for."
+          );
+
+
+          guestFieldset.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+          });
+
+
+          return;
+
+        }
+
+
+        if (
+          !dietaryTextarea.value.trim()
+        ) {
+
+          dietaryTextarea.value =
+            "None";
+
+        }
+
+
+        if (
+          !submissionIdInput.value
+        ) {
+
+          submissionIdInput.value =
+            crypto.randomUUID();
+
+        }
+
+
+        const submitButton =
+          rsvpForm.querySelector(
+            'button[type="submit"]'
+          );
+
+
+        const originalText =
+          submitButton.textContent;
+
+
+        submitButton.disabled =
+          true;
+
+
+        submitButton.textContent =
+          "Sending RSVP…";
+
+
+        try {
+
+          const response =
+            await fetch(
+              rsvpForm.action,
+              {
+
+                method:
+                  "POST",
+
+                body:
+                  new FormData(
+                    rsvpForm
+                  ),
+
+                headers: {
+                  "Accept":
+                    "application/json"
+                }
+
+              }
+            );
+
+
+          const result =
+            await response
+              .json()
+              .catch(
+                () => ({})
+              );
+
+
+          if (!response.ok) {
+
+            throw new Error(
+              result.error ||
+              "Submission failed"
+            );
+
+          }
+
+
+          if (result.rsvp) {
+
+            invitation.rsvp =
+              result.rsvp;
+
+
+            rememberInvitation(
+              invitation
+            );
+
+          }
+
+
+          const confirmedNames =
+            checkedGuestNames();
+
+
+          responseHeading.textContent =
+            result.isUpdate
+
+              ? `Thanks, ${thankYouFirstName(invitation)} — your RSVP has been updated!`
+
+              : `Thank you, ${thankYouFirstName(invitation)}!`;
+
+
+          responseText.textContent =
+            attendanceChoice.value ===
+            "Yes"
+
+              ? confirmedNames.length === 1
+
+                ? `We've recorded that ${confirmedNames[0]} will be attending.`
+
+                : `We've recorded that ${confirmedNames.join(", ")} will be attending.`
+
+              : "We've recorded that nobody from this invitation will be attending.";
+
+
+          if (
+            result.confirmationEmailSent ===
+            false
+          ) {
+
+            responseFollowUp.textContent =
+              "Your RSVP is saved, but we couldn't send your confirmation email. You do not need to submit it again.";
+
+          } else if (
+            result.isUpdate
+          ) {
+
+            responseFollowUp.textContent =
+              attendanceChoice.value ===
+              "Yes"
+
+                ? "Your updated response is saved. We can't wait to celebrate with you!"
+
+                : "Your updated response is saved. Thank you for letting us know.";
+
+          } else {
+
+            responseFollowUp.textContent =
+              attendanceChoice.value ===
+              "Yes"
+
+                ? "Your response has been sent. We can't wait to celebrate with you!"
+
+                : "Your response has been sent. Thank you for letting us know.";
+
+          }
+
+
+          rsvpPanel.hidden =
+            true;
+
+          responsePanel.hidden =
+            false;
+
+
+          responsePanel.focus();
+
+
+          responsePanel.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+          });
+
+
+        } catch (error) {
+
+          alert(
+            error.message ||
+            "Your RSVP could not be sent. Please check your connection and try again. Nothing you entered has been lost."
+          );
+
+
+        } finally {
+
+          submitButton.disabled =
+            false;
+
+          submitButton.textContent =
+            originalText;
+
+        }
+
+      }
+    );
+
+
+    editResponseButton.addEventListener(
+      "click",
+      () => {
+
+        submissionIdInput.value =
+          "";
+
+
+        if (
+          invitation?.rsvp
+        ) {
+
+          prefillSavedRsvp(
+            invitation.rsvp
+          );
+
+        }
+
+
+        responsePanel.hidden =
+          true;
+
+        rsvpPanel.hidden =
+          false;
+
+
+        rsvpPanel.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+
+      }
+    );
+
 
     async function restoreRememberedInvitation() {
-      const rememberedInvitation = localStorage.getItem(STORAGE_KEY);
-      if (!rememberedInvitation) return;
+
+      const rememberedInvitation =
+        localStorage.getItem(
+          STORAGE_KEY
+        );
+
+
+      if (!rememberedInvitation) {
+        return;
+      }
+
 
       let savedInvitation;
 
-      try {
-        savedInvitation = JSON.parse(rememberedInvitation);
 
-        if (!savedInvitation.sessionToken) {
-          throw new Error("Old invitation session");
+      try {
+
+        savedInvitation =
+          JSON.parse(
+            rememberedInvitation
+          );
+
+
+        if (
+          !savedInvitation.sessionToken
+        ) {
+
+          throw new Error(
+            "Old invitation session"
+          );
+
         }
+
+
       } catch {
+
         clearRememberedInvitation();
+
         return;
+
       }
 
-      try {
-        const response = await fetch(WORKER_INVITATION_URL, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-          },
-          cache: "no-store",
-          body: JSON.stringify({
-            sessionToken: savedInvitation.sessionToken
-          })
-        });
 
-        if (response.status === 401) {
+      try {
+
+        const response =
+          await fetch(
+            WORKER_INVITATION_URL,
+            {
+
+              method:
+                "POST",
+
+              headers: {
+
+                "Content-Type":
+                  "application/json",
+
+                "Accept":
+                  "application/json"
+
+              },
+
+              cache:
+                "no-store",
+
+              body:
+                JSON.stringify({
+
+                  sessionToken:
+                    savedInvitation.sessionToken
+
+                })
+
+            }
+          );
+
+
+        if (
+          response.status ===
+          401
+        ) {
+
           clearRememberedInvitation();
+
           return;
+
         }
+
 
         if (!response.ok) {
-          throw new Error("Could not refresh invitation");
+
+          throw new Error(
+            "Could not refresh invitation"
+          );
+
         }
 
-        const refreshedInvitation = await response.json();
-        renderInvitation(refreshedInvitation, false);
-        rememberInvitation(refreshedInvitation);
+
+        const refreshedInvitation =
+          await response.json();
+
+
+        renderInvitation(
+          refreshedInvitation,
+          false
+        );
+
+
+        rememberInvitation(
+          refreshedInvitation
+        );
+
+
       } catch {
-        // If the network is temporarily unavailable, the remembered invitation
-        // can still be shown. The next successful visit will refresh from D1.
-        renderInvitation(savedInvitation, false);
+
+        /*
+         * If the network is temporarily unavailable,
+         * show the remembered invitation.
+         * The next successful visit will refresh from D1.
+         */
+
+        renderInvitation(
+          savedInvitation,
+          false
+        );
+
       }
+
     }
 
+
     restoreRememberedInvitation();
+
   </script>
+
 </body>
 </html>
