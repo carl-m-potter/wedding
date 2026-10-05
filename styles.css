@@ -1188,3 +1188,7 @@ body {
 .page-hero .kicker {
   color: var(--accent);
 }
+
+.faq-section {
+  padding-top: 0;
+}
