@@ -3,8 +3,8 @@
 :root {
   --paper: #ffffff;
   --paper-light: #ffffff;
-  --ink: #52555a;
-  --muted: #767981;
+  --ink: #000000;
+  --muted: #000000;
   --line: rgba(72, 101, 84, .24);
   --soft: #dfe7e6;
   --accent: #359c99;
