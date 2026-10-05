@@ -124,7 +124,7 @@ a { color: inherit; }
 }
 
 .display {
-  font-family: "Bebas Neue", Georgia, serif;
+  font-family: "DM Serif Display", Georgia, serif;
   margin: 0;
   font-size: clamp(4.5rem, 13vw, 8.5rem);
   line-height: .8;
@@ -135,7 +135,7 @@ a { color: inherit; }
 
 .script {
   display: block;
-  font-family: "Bebas Neue", Georgia, serif;
+  font-family: "DM Serif Display", Georgia, serif;
   font-size: clamp(3.5rem, 9vw, 6.2rem);
   line-height: .8;
   font-weight: 400;
@@ -145,7 +145,7 @@ a { color: inherit; }
 }
 
 .names {
-  font-family: "Bebas Neue", Georgia, serif;
+  font-family: "DM Serif Display", Georgia, serif;
   margin: 30px 0 6px;
   font-size: clamp(2rem, 5vw, 3.6rem);
   text-transform: uppercase;
@@ -162,7 +162,7 @@ a { color: inherit; }
 
 .scroll-note {
   margin-top: 40px;
-  font-family: "Bebas Neue", Georgia, serif;
+  font-family: "DM Serif Display", Georgia, serif;
   font-size: 2rem;
 }
 
@@ -173,7 +173,7 @@ a { color: inherit; }
 }
 
 .page-hero h1 {
-  font-family: "Bebas Neue", Georgia, serif;
+  font-family: "DM Serif Display", Georgia, serif;
   margin: 0;
   text-transform: uppercase;
   letter-spacing: .12em;
@@ -206,7 +206,7 @@ a { color: inherit; }
 }
 
 .section-title {
-  font-family: "Bebas Neue", Georgia, serif;
+  font-family: "DM Serif Display", Georgia, serif;
   margin: 0 0 24px;
   font-size: clamp(2.2rem, 5vw, 4rem);
   line-height: 1;
@@ -234,7 +234,7 @@ a { color: inherit; }
 
 .detail-card h2,
 .hotel-card h2 {
-  font-family: "Bebas Neue", Georgia, serif;
+  font-family: "DM Serif Display", Georgia, serif;
   margin: 0 0 8px;
   font-weight: 500;
   font-size: 1.65rem;
@@ -349,7 +349,7 @@ a { color: inherit; }
 }
 
 .footer-script {
-  font-family: "Bebas Neue", Georgia, serif;
+  font-family: "DM Serif Display", Georgia, serif;
   font-size: 2rem;
 }
 
@@ -371,7 +371,7 @@ a { color: inherit; }
 }
 
 .password-card h1 {
-  font-family: "Bebas Neue", Georgia, serif;
+  font-family: "DM Serif Display", Georgia, serif;
   margin: 0 0 8px;
   font-size: 2.4rem;
   font-weight: 400;
@@ -609,7 +609,7 @@ fieldset.form-field {
 }
 
 .travel-card h2 {
-  font-family: "Bebas Neue", Georgia, serif;
+  font-family: "DM Serif Display", Georgia, serif;
   margin: 0 0 10px;
   font-size: 1.65rem;
   font-weight: 500;
@@ -628,7 +628,7 @@ fieldset.form-field {
 }
 
 .gift-placeholder h3 {
-  font-family: "Bebas Neue", Georgia, serif;
+  font-family: "DM Serif Display", Georgia, serif;
   margin: 0 0 8px;
   font-size: 2rem;
   font-weight: 400;
@@ -1139,7 +1139,7 @@ body {
 }
 
 .entertainment-content h2 {
-  font-family: "Bebas Neue", Georgia, serif;
+  font-family: "DM Serif Display", Georgia, serif;
   margin-top: 4px;
 }
 
