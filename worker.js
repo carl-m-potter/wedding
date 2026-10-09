@@ -1042,11 +1042,16 @@ let rsvpSchemaReadyPromise = null;
 
 export default {
   async fetch(request, env) {
+    const url = new URL(request.url);
+
+    // Standalone wedding photo uploads: intentionally independent of RSVP login.
+    if (url.pathname === "/photos/session" || url.pathname === "/photos/upload") {
+      return handlePhotoRequest(request, env, url);
+    }
+
     if (request.method === "OPTIONS") {
       return new Response(null, { status: 204, headers: corsHeaders() });
     }
-
-    const url = new URL(request.url);
 
     if (url.pathname === "/login" || url.pathname === "/api/login") {
       return handleLogin(request, env, url);
@@ -1927,4 +1932,225 @@ function jsonResponse(data, status) {
       ...corsHeaders()
     }
   });
+}
+
+
+// -----------------------------------------------------------------------------
+// Private wedding photo dropbox. No public list/read routes are exposed.
+// Required Worker bindings:
+//   R2 bucket: PHOTOS_BUCKET
+//   D1 database: DB (already used for RSVP)
+//   Secret: PHOTO_UPLOAD_SECRET (long, random; separate from RSVP session secret)
+//   Secret: TURNSTILE_SECRET_KEY (Cloudflare Turnstile secret)
+// -----------------------------------------------------------------------------
+const PHOTO_ALLOWED_ORIGINS = new Set([
+  "https://carlandclaire.co.uk",
+  "https://www.carlandclaire.co.uk"
+]);
+const PHOTO_MAX_BYTES = 15 * 1024 * 1024;
+const PHOTO_MAX_PER_SESSION = 100;
+const PHOTO_SESSION_SECONDS = 30 * 60;
+
+function photoCorsHeaders(origin) {
+  return {
+    "Access-Control-Allow-Origin": origin,
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Authorization, Content-Type, X-Guest-Name, X-Photo-Filename",
+    "Access-Control-Max-Age": "3600",
+    "Vary": "Origin",
+    "Cache-Control": "no-store",
+    "X-Content-Type-Options": "nosniff"
+  };
+}
+
+function photoJson(data, status, origin) {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: { ...photoCorsHeaders(origin), "Content-Type": "application/json; charset=utf-8" }
+  });
+}
+
+async function handlePhotoRequest(request, env, url) {
+  const origin = request.headers.get("Origin") || "";
+  if (!PHOTO_ALLOWED_ORIGINS.has(origin)) {
+    return new Response("Forbidden", { status: 403, headers: { "Cache-Control": "no-store" } });
+  }
+  if (request.method === "OPTIONS") {
+    return new Response(null, { status: 204, headers: photoCorsHeaders(origin) });
+  }
+  if (request.method !== "POST") {
+    return photoJson({ error: "Method not allowed" }, 405, origin);
+  }
+  if (!env.PHOTOS_BUCKET || !env.DB || !env.PHOTO_UPLOAD_SECRET || !env.TURNSTILE_SECRET_KEY) {
+    return photoJson({ error: "Photo uploads are not configured yet." }, 503, origin);
+  }
+  if (url.pathname === "/photos/session") return createPhotoSession(request, env, origin);
+  return uploadWeddingPhoto(request, env, origin);
+}
+
+async function ensurePhotoSchema(env) {
+  await env.DB.prepare(`
+    CREATE TABLE IF NOT EXISTS photo_upload_sessions (
+      id TEXT PRIMARY KEY,
+      expires_at INTEGER NOT NULL,
+      upload_count INTEGER NOT NULL DEFAULT 0
+    )
+  `).run();
+}
+
+async function createPhotoSession(request, env, origin) {
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return photoJson({ error: "Invalid request." }, 400, origin);
+  }
+  const challenge = String(body?.turnstileToken || "");
+  if (!challenge || challenge.length > 4096) {
+    return photoJson({ error: "Please complete the security check." }, 400, origin);
+  }
+  let verification;
+  try {
+    const payload = new FormData();
+    payload.set("secret", env.TURNSTILE_SECRET_KEY);
+    payload.set("response", challenge);
+    const ip = request.headers.get("CF-Connecting-IP");
+    if (ip) payload.set("remoteip", ip);
+    const response = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+      method: "POST", body: payload
+    });
+    if (!response.ok) throw new Error("Turnstile unavailable");
+    verification = await response.json();
+  } catch (error) {
+    console.error("Photo Turnstile verification failed", error);
+    return photoJson({ error: "Security check unavailable. Please try again." }, 503, origin);
+  }
+  const expectedHostname = new URL(origin).hostname;
+  if (!verification.success || verification.hostname !== expectedHostname) {
+    return photoJson({ error: "Security check failed. Please try again." }, 403, origin);
+  }
+  const id = crypto.randomUUID();
+  const exp = Math.floor(Date.now() / 1000) + PHOTO_SESSION_SECONDS;
+  try {
+    await ensurePhotoSchema(env);
+    await env.DB.prepare(
+      "INSERT INTO photo_upload_sessions (id, expires_at, upload_count) VALUES (?, ?, 0)"
+    ).bind(id, exp).run();
+    const token = await createSessionToken({ type: "photo", id, exp }, env.PHOTO_UPLOAD_SECRET);
+    return photoJson({ ok: true, token, expiresAt: exp, maxBytes: PHOTO_MAX_BYTES }, 200, origin);
+  } catch (error) {
+    console.error("Could not create photo session", error);
+    return photoJson({ error: "Could not start an upload. Please try again." }, 503, origin);
+  }
+}
+
+function detectPhotoType(bytes) {
+  if (bytes.length >= 3 && bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff) {
+    return { ext: "jpg", mime: "image/jpeg" };
+  }
+  if (bytes.length >= 8 && [137,80,78,71,13,10,26,10].every((b, i) => bytes[i] === b)) {
+    return { ext: "png", mime: "image/png" };
+  }
+  if (bytes.length >= 12 &&
+      String.fromCharCode(...bytes.slice(0, 4)) === "RIFF" &&
+      String.fromCharCode(...bytes.slice(8, 12)) === "WEBP") {
+    return { ext: "webp", mime: "image/webp" };
+  }
+  if (bytes.length >= 12 && String.fromCharCode(...bytes.slice(4, 8)) === "ftyp") {
+    const brand = String.fromCharCode(...bytes.slice(8, 12));
+    if (["heic", "heix", "hevc", "hevx", "heim", "heis"].includes(brand)) {
+      return { ext: "heic", mime: "image/heic" };
+    }
+    if (["mif1", "msf1"].includes(brand)) {
+      return { ext: "heif", mime: "image/heif" };
+    }
+  }
+  return null;
+}
+
+async function readPhotoBody(request) {
+  if (!request.body) return new Uint8Array(0);
+  const reader = request.body.getReader();
+  const chunks = [];
+  let total = 0;
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      total += value.byteLength;
+      if (total > PHOTO_MAX_BYTES) {
+        await reader.cancel();
+        return null;
+      }
+      chunks.push(value);
+    }
+  } finally {
+    reader.releaseLock();
+  }
+  const bytes = new Uint8Array(total);
+  let offset = 0;
+  for (const chunk of chunks) {
+    bytes.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+  return bytes;
+}
+
+async function uploadWeddingPhoto(request, env, origin) {
+  const bearer = request.headers.get("Authorization") || "";
+  const match = /^Bearer (\S+)$/.exec(bearer);
+  if (!match) return photoJson({ error: "Upload session missing. Please try again." }, 401, origin);
+  const session = await verifySessionToken(match[1], env.PHOTO_UPLOAD_SECRET);
+  if (!session || session.type !== "photo" || typeof session.id !== "string") {
+    return photoJson({ error: "Upload session expired. Please try again." }, 401, origin);
+  }
+  const contentLength = Number(request.headers.get("Content-Length"));
+  if (Number.isFinite(contentLength) && contentLength > PHOTO_MAX_BYTES) {
+    return photoJson({ error: "This photo is larger than 15 MB." }, 413, origin);
+  }
+  let bytes;
+  try {
+    bytes = await readPhotoBody(request);
+  } catch {
+    return photoJson({ error: "Could not read this photo." }, 400, origin);
+  }
+  if (!bytes || !bytes.length || bytes.length > PHOTO_MAX_BYTES) {
+    return photoJson({ error: "Photos must be between 1 byte and 15 MB." }, 413, origin);
+  }
+  const photoType = detectPhotoType(bytes);
+  if (!photoType) {
+    return photoJson({ error: "Please upload a JPEG, PNG, WebP or HEIC/HEIF photo." }, 415, origin);
+  }
+  const guestName = String(request.headers.get("X-Guest-Name") || "").trim().slice(0, 80)
+    .replace(/[\r\n\u0000-\u001f]/g, "");
+  let originalName = "photo";
+  try {
+    originalName = decodeURIComponent(request.headers.get("X-Photo-Filename") || "photo")
+      .replace(/[\\/\r\n\u0000-\u001f]/g, "_").slice(0, 120);
+  } catch { /* Keep the default filename */ }
+  const now = Math.floor(Date.now() / 1000);
+  try {
+    // Atomic per-session cap: prevents an unbounded number of uploads with one token.
+    const update = await env.DB.prepare(`
+      UPDATE photo_upload_sessions SET upload_count = upload_count + 1
+      WHERE id = ? AND expires_at > ? AND upload_count < ?
+    `).bind(session.id, now, PHOTO_MAX_PER_SESSION).run();
+    if (!update.meta || update.meta.changes !== 1) {
+      return photoJson({ error: "Upload limit reached or session expired. Refresh the page to continue." }, 429, origin);
+    }
+    const date = new Date();
+    const key = `wedding-2027/${date.toISOString().slice(0, 10)}/${crypto.randomUUID()}.${photoType.ext}`;
+    await env.PHOTOS_BUCKET.put(key, bytes, {
+      httpMetadata: { contentType: photoType.mime },
+      customMetadata: {
+        guestName,
+        originalName,
+        uploadedAt: date.toISOString()
+      }
+    });
+    return photoJson({ ok: true, filename: originalName }, 201, origin);
+  } catch (error) {
+    console.error("Private photo upload failed", error);
+    return photoJson({ error: "Upload failed. Please retry this photo." }, 503, origin);
+  }
 }
