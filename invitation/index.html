@@ -1,4 +1,4 @@
-
+HTML
 <!doctype html>
 <html lang="en">
 <head>
@@ -127,37 +127,37 @@
       font-size: .74rem;
     }
 
- .invitation-party {
-  margin: 0;
-  font-family: "Bebas Neue", Impact, sans-serif;
-  font-size: clamp(2.6rem, 8vw, 5.4rem);
-  line-height: .95;
-  font-weight: 400;
-  text-transform: uppercase;
-}
+    .invitation-party {
+      margin: 0;
+      font-family: "Bebas Neue", Impact, sans-serif;
+      font-size: clamp(2.6rem, 8vw, 5.4rem);
+      line-height: .95;
+      font-weight: 400;
+      text-transform: uppercase;
+    }
 
-   .invitation-script {
-  margin: 14px 0 12px;
-  font-family: "DM Serif Display", Georgia, serif;
-  font-size: clamp(2.6rem, 7vw, 4.6rem);
-  line-height: 1;
-  font-weight: 400;
-  font-style: italic;
-  color: var(--accent);
-}
-  
-   .invite-type-pill {
-  display: inline-block;
-  margin-top: 22px;
-  background: var(--accent);
-  color: #ffffff;
-  border: 1px solid var(--accent);
-  padding: 11px 20px 10px;
-  text-transform: uppercase;
-  letter-spacing: .14em;
-  font-size: .86rem;
-  font-weight: 600;
-}
+    .invitation-script {
+      margin: 14px 0 12px;
+      font-family: "DM Serif Display", Georgia, serif;
+      font-size: clamp(2.6rem, 7vw, 4.6rem);
+      line-height: 1;
+      font-weight: 400;
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .invite-type-pill {
+      display: inline-block;
+      margin-top: 22px;
+      background: var(--accent);
+      color: #ffffff;
+      border: 1px solid var(--accent);
+      padding: 11px 20px 10px;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      font-size: .86rem;
+      font-weight: 600;
+    }
 
     .invitation-copy {
       max-width: 620px;
@@ -206,6 +206,13 @@
     .dashboard-section + .dashboard-section {
       margin-top: 56px;
       border-top: 1px solid var(--line);
+    }
+
+    /* Put saved RSVP status ahead of invitation details. */
+    .invitation-shell.rsvp-first #rsvp-section {
+      padding-top: 12px;
+      margin-top: 0;
+      border-top: 0;
     }
 
     .dashboard-section h2 {
@@ -299,6 +306,16 @@
       font-weight: 600;
     }
 
+    /* Guests who declined only see their invitation and saved RSVP. */
+    body.invitation-declined .site-header {
+      display: none !important;
+    }
+
+    body.invitation-declined #rsvp-panel,
+    body.invitation-declined #continue-page-button {
+      display: none !important;
+    }
+
     @media (max-width: 820px) {
       .plans-grid {
         grid-template-columns: 1fr;
@@ -353,18 +370,19 @@
         transition-duration: .01ms !important;
       }
     }
-    /* Invitation page typography */
-.invitation-page {
-  font-family: "DM Sans", Arial, sans-serif;
-}
 
-.invitation-page .page-hero h1,
-.invitation-page .invitation-party,
-.invitation-page .invitation-script,
-.invitation-page .dashboard-section h2,
-.invitation-page .response-panel h3 {
-  font-family: "DM Serif Display", Georgia, serif;
-}
+    /* Invitation page typography */
+    .invitation-page {
+      font-family: "DM Sans", Arial, sans-serif;
+    }
+
+    .invitation-page .page-hero h1,
+    .invitation-page .invitation-party,
+    .invitation-page .invitation-script,
+    .invitation-page .dashboard-section h2,
+    .invitation-page .response-panel h3 {
+      font-family: "DM Serif Display", Georgia, serif;
+    }
   </style>
 </head>
 
@@ -590,6 +608,7 @@
 
 
       <section
+        id="rsvp-section"
         class="dashboard-section"
         aria-labelledby="rsvp-heading">
 
@@ -909,7 +928,7 @@
 
     function returnAfterRsvpIfAppropriate(data) {
       const destination = requestedReturnPath();
-      if (!destination || !data?.rsvp) return false;
+      if (!destination || !data?.rsvp || data.rsvp.attending === "No") return false;
       window.location.replace(destination);
       return true;
     }
@@ -1142,11 +1161,39 @@
       continuePageButton.href = requestedPage;
     }
 
+    const rsvpSection = document.getElementById("rsvp-section");
+    const invitationCard = invitationView.querySelector(".invitation-card");
+    const usefulSection = document.getElementById("useful-heading").closest(".dashboard-section");
+
+    function placeRsvpSectionFirst(hasResponded) {
+      invitationView.classList.toggle("rsvp-first", Boolean(hasResponded));
+      if (hasResponded) {
+        // Keep the welcome/sign-out controls first, then the RSVP status.
+        invitationView.insertBefore(rsvpSection, invitationCard);
+      } else {
+        // Keep the original invitation-first layout for guests yet to RSVP.
+        invitationView.insertBefore(rsvpSection, usefulSection);
+      }
+    }
+
+
+    // Declined parties can review their saved response, but cannot browse
+    // the other pages or amend their RSVP. The Worker also enforces the lock.
+    function applyDeclinedPageRestriction(data) {
+      const declined = data?.rsvp?.attending === "No";
+      document.body.classList.toggle("invitation-declined", declined);
+      usefulSection.hidden = declined;
+      continuePageButton.hidden = declined || !requestedPage;
+      if (declined) {
+        editResponseButton.hidden = true;
+        rsvpPanel.hidden = true;
+      }
+    }
 
     let invitation = null;
     let dietaryWasEdited = false;
 
-
+    JavaScript
     showPasswordToggle.addEventListener(
       "change",
       () => {
@@ -1667,7 +1714,7 @@
       editResponseButton.hidden = declined;
       rsvpIntro.textContent = declined
         ? "You have declined this invitation. This response is final. If your circumstances change, please contact Claire or Carl directly."
-        : originalRsvpIntro;
+        : "Your RSVP is saved. If your plans change, you can update your response below.";
 
       rsvpPanel.hidden =
         true;
@@ -1687,6 +1734,8 @@
 
       invitation =
         data;
+
+      placeRsvpSectionFirst(Boolean(data.rsvp));
 
 
       const details =
@@ -1872,6 +1921,8 @@
       invitationView.hidden =
         false;
 
+      applyDeclinedPageRestriction(data);
+
 
       if (shouldRemember) {
 
@@ -2007,7 +2058,7 @@
       }
     );
 
-
+    JavaScript
     signOutButton.addEventListener(
       "click",
       () => {
@@ -2017,6 +2068,10 @@
 
         invitation =
           null;
+
+        document.body.classList.remove("invitation-declined");
+        usefulSection.hidden = false;
+        placeRsvpSectionFirst(false);
 
 
         invitationView.hidden =
@@ -2299,6 +2354,11 @@
           responsePanel.hidden =
             false;
 
+          placeRsvpSectionFirst(true);
+          applyDeclinedPageRestriction(invitation);
+          if (attendanceChoice.value === "Yes") {
+            rsvpIntro.textContent = "Your RSVP is saved. If your plans change, you can update your response below.";
+          }
 
           responsePanel.focus();
 
