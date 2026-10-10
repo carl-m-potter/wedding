@@ -1,9 +1,11 @@
+
 const PASSWORD_HASH = "4914135a0ad16ece63185c2c2be51e66273c267e62e693f8713affaf0a00fa2e";
 const INVITATION_STORAGE_KEY = "carl-claire-your-invitation-v1";
 
 async function sha256(value) {
   const data = new TextEncoder().encode(value);
   const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+
   return Array.from(new Uint8Array(hashBuffer))
     .map(byte => byte.toString(16).padStart(2, "0"))
     .join("");
@@ -13,6 +15,10 @@ function unlockSite() {
   sessionStorage.setItem("weddingSiteUnlocked", "true");
   document.querySelector(".password-screen")?.classList.add("hidden");
 }
+
+/* ------------------------------------------------------------------
+   Personalised invitation navigation
+   ------------------------------------------------------------------ */
 
 function upgradeInvitationNav() {
   const navLinks = document.querySelector(".nav-links");
@@ -39,7 +45,10 @@ function upgradeInvitationNav() {
     invitationLink.href = "/invitation/";
     invitationLink.classList.add("nav-invitation-priority");
 
-    const existingLabel = invitationLink.querySelector("#invitation-nav-label");
+    const existingLabel = invitationLink.querySelector(
+      "#invitation-nav-label"
+    );
+
     if (existingLabel) {
       existingLabel.textContent = label;
     } else {
@@ -62,6 +71,7 @@ function upgradeInvitationNav() {
   if (!document.getElementById("invitation-nav-priority-style")) {
     const style = document.createElement("style");
     style.id = "invitation-nav-priority-style";
+
     style.textContent = `
       .nav-links .nav-invitation-priority {
         font-weight: 600;
@@ -73,23 +83,128 @@ function upgradeInvitationNav() {
         }
       }
     `;
+
     document.head.appendChild(style);
   }
 }
 
+/* ------------------------------------------------------------------
+   Homepage RSVP button
+
+   Checks the guest's actual RSVP status through the existing
+   Cloudflare invitation API.
+
+   Accepted RSVP = button hidden
+   Declined RSVP = button hidden
+   No RSVP = button visible
+   No remembered login = button visible
+   ------------------------------------------------------------------ */
+
+async function setupHomeRsvpButton() {
+  const button = document.getElementById("home-rsvp-button");
+
+  // Only runs on pages containing the homepage RSVP button.
+  if (!button) return;
+
+  let savedInvitation = null;
+
+  try {
+    const storedData = localStorage.getItem(
+      INVITATION_STORAGE_KEY
+    );
+
+    if (storedData) {
+      savedInvitation = JSON.parse(storedData);
+    }
+  } catch {
+    savedInvitation = null;
+  }
+
+  // No remembered guest: show the RSVP button.
+  if (!savedInvitation?.sessionToken) {
+    button.hidden = false;
+    return;
+  }
+
+  // Use the last known response while checking the live database.
+  button.hidden = Boolean(savedInvitation.rsvp);
+
+  try {
+    const response = await fetch(
+      "https://api.carlandclaire.co.uk/invitation",
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+
+        cache: "no-store",
+
+        body: JSON.stringify({
+          sessionToken: savedInvitation.sessionToken
+        })
+      }
+    );
+
+    // Session has expired or is no longer valid.
+    if (response.status === 401) {
+      button.hidden = false;
+      return;
+    }
+
+    if (!response.ok) {
+      throw new Error("Could not check RSVP status");
+    }
+
+    const invitation = await response.json();
+
+    // An RSVP object means the guest has responded,
+    // whether they accepted or declined.
+    button.hidden = Boolean(invitation.rsvp);
+
+    // Keep the remembered invitation in sync with the database.
+    if (invitation.sessionToken) {
+      localStorage.setItem(
+        INVITATION_STORAGE_KEY,
+        JSON.stringify(invitation)
+      );
+    }
+
+  } catch (error) {
+    // If the API is unavailable, use the last known RSVP status.
+    button.hidden = Boolean(savedInvitation.rsvp);
+  }
+}
+
+/* ------------------------------------------------------------------
+   Password protection, navigation and FAQs
+   ------------------------------------------------------------------ */
+
 document.addEventListener("DOMContentLoaded", () => {
+
   upgradeInvitationNav();
 
+  // NEW: Show or hide the homepage RSVP button.
+  setupHomeRsvpButton();
+
   const gate = document.querySelector(".password-screen");
-  if (sessionStorage.getItem("weddingSiteUnlocked") === "true") {
+
+  if (
+    sessionStorage.getItem("weddingSiteUnlocked") === "true"
+  ) {
     gate?.classList.add("hidden");
   }
 
   const form = document.querySelector(".password-form");
+
   form?.addEventListener("submit", async (event) => {
     event.preventDefault();
+
     const input = form.querySelector("input");
     const error = document.querySelector(".password-error");
+
     const attemptedHash = await sha256(input.value);
 
     if (attemptedHash === PASSWORD_HASH) {
@@ -102,91 +217,155 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const menuButton = document.querySelector(".menu-button");
   const navLinks = document.querySelector(".nav-links");
+
   menuButton?.addEventListener("click", () => {
     const open = navLinks.classList.toggle("open");
-    menuButton.setAttribute("aria-expanded", String(open));
+
+    menuButton.setAttribute(
+      "aria-expanded",
+      String(open)
+    );
   });
 
   document.querySelectorAll(".faq-question").forEach(button => {
     button.addEventListener("click", () => {
       const item = button.closest(".faq-item");
       const open = item.classList.toggle("open");
-      button.setAttribute("aria-expanded", String(open));
+
+      button.setAttribute(
+        "aria-expanded",
+        String(open)
+      );
     });
   });
-});
 
+});
 
 /* ------------------------------------------------------------------
    Wedding-site motion and page transitions
    ------------------------------------------------------------------ */
+
 function setupScrollMotion() {
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const reduceMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+
   const revealTargets = document.querySelectorAll(
-    '.section > :not(.photo-grid), .detail-card, .hotel-card, .travel-card, .faq-item, .gift-placeholder, .invitation-card, .plan-card, .dashboard-section, .guest-greeting'
+    ".section > :not(.photo-grid), .detail-card, .hotel-card, .travel-card, .faq-item, .gift-placeholder, .invitation-card, .plan-card, .dashboard-section, .guest-greeting"
   );
-  const imageTargets = document.querySelectorAll('.photo-card img, main img');
 
-  revealTargets.forEach(element => element.classList.add('scroll-reveal'));
-  imageTargets.forEach(element => element.classList.add('image-dissolve'));
+  const imageTargets = document.querySelectorAll(
+    ".photo-card img, main img"
+  );
 
-  if (reduceMotion || !('IntersectionObserver' in window)) {
-    document.querySelectorAll('.scroll-reveal, .image-dissolve').forEach(element => {
-      element.classList.add('is-visible');
+  revealTargets.forEach(element => {
+    element.classList.add("scroll-reveal");
+  });
+
+  imageTargets.forEach(element => {
+    element.classList.add("image-dissolve");
+  });
+
+  if (
+    reduceMotion ||
+    !("IntersectionObserver" in window)
+  ) {
+    document.querySelectorAll(
+      ".scroll-reveal, .image-dissolve"
+    ).forEach(element => {
+      element.classList.add("is-visible");
     });
+
     return;
   }
 
   const revealObserver = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible');
+        entry.target.classList.add("is-visible");
       }
     });
   }, {
-    rootMargin: '0px 0px -8% 0px',
+    rootMargin: "0px 0px -8% 0px",
     threshold: 0.10
   });
 
   const imageObserver = new IntersectionObserver(entries => {
     entries.forEach(entry => {
-      entry.target.classList.toggle('is-visible', entry.isIntersecting);
+      entry.target.classList.toggle(
+        "is-visible",
+        entry.isIntersecting
+      );
     });
   }, {
-    rootMargin: '-8% 0px -8% 0px',
+    rootMargin: "-8% 0px -8% 0px",
     threshold: 0.14
   });
 
-  revealTargets.forEach(element => revealObserver.observe(element));
-  imageTargets.forEach(element => imageObserver.observe(element));
+  revealTargets.forEach(element => {
+    revealObserver.observe(element);
+  });
 
-
+  imageTargets.forEach(element => {
+    imageObserver.observe(element);
+  });
 }
 
-function setupPageTransitions() {
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  document.body.classList.add('page-ready');
+/* ------------------------------------------------------------------
+   Page transitions
+   ------------------------------------------------------------------ */
 
-  window.addEventListener('pageshow', () => {
-    document.body.classList.remove('page-leaving');
-    document.body.classList.add('page-ready');
+function setupPageTransitions() {
+  const reduceMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+
+  document.body.classList.add("page-ready");
+
+  window.addEventListener("pageshow", () => {
+    document.body.classList.remove("page-leaving");
+    document.body.classList.add("page-ready");
   });
 
   if (reduceMotion) return;
 
-  document.addEventListener('click', event => {
-    const link = event.target.closest('a[href]');
-    if (!link || event.defaultPrevented) return;
-    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-    if (link.target && link.target !== '_self') return;
-    if (link.hasAttribute('download')) return;
+  document.addEventListener("click", event => {
+    const link = event.target.closest("a[href]");
 
-    const rawHref = link.getAttribute('href');
-    if (!rawHref || rawHref.startsWith('#') || rawHref.startsWith('mailto:') || rawHref.startsWith('tel:') || rawHref.startsWith('javascript:')) return;
+    if (!link || event.defaultPrevented) return;
+
+    if (
+      event.button !== 0 ||
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey
+    ) {
+      return;
+    }
+
+    if (link.target && link.target !== "_self") return;
+    if (link.hasAttribute("download")) return;
+
+    const rawHref = link.getAttribute("href");
+
+    if (
+      !rawHref ||
+      rawHref.startsWith("#") ||
+      rawHref.startsWith("mailto:") ||
+      rawHref.startsWith("tel:") ||
+      rawHref.startsWith("javascript:")
+    ) {
+      return;
+    }
 
     let destination;
+
     try {
-      destination = new URL(link.href, window.location.href);
+      destination = new URL(
+        link.href,
+        window.location.href
+      );
     } catch {
       return;
     }
@@ -195,14 +374,20 @@ function setupPageTransitions() {
     if (destination.href === window.location.href) return;
 
     event.preventDefault();
-    document.body.classList.add('page-leaving');
+
+    document.body.classList.add("page-leaving");
+
     window.setTimeout(() => {
       window.location.href = destination.href;
     }, 260);
   });
 }
 
-window.addEventListener('DOMContentLoaded', () => {
+/* ------------------------------------------------------------------
+   Initialise motion and page transitions
+   ------------------------------------------------------------------ */
+
+window.addEventListener("DOMContentLoaded", () => {
   setupScrollMotion();
   setupPageTransitions();
 });
