@@ -1229,3 +1229,15 @@ body {
 .home-rsvp-button[hidden] {
   display: none !important;
 }
+
+/* Append these rules to the END of your existing styles.css.
+   Do not replace the rest of your stylesheet. */
+html.guest-auth-pending body {
+  visibility: hidden !important;
+}
+
+/* The old site-wide password screen is superseded by the guest login. */
+.password-screen {
+  display: none !important;
+}
+
