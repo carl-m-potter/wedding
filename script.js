@@ -1,19 +1,89 @@
-
-const PASSWORD_HASH = "4914135a0ad16ece63185c2c2be51e66273c267e62e693f8713affaf0a00fa2e";
+/* Guest access is shared by every website page.
+   Login and RSVP details are always checked with the Cloudflare Worker. */
 const INVITATION_STORAGE_KEY = "carl-claire-your-invitation-v1";
+const INVITATION_API = "https://api.carlandclaire.co.uk/invitation";
+const IS_INVITATION_PAGE = window.location.pathname.startsWith("/invitation");
 
-async function sha256(value) {
-  const data = new TextEncoder().encode(value);
-  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+// Hide the old password screen if any other HTML page still contains it.
+const accessStyles = document.createElement("style");
+accessStyles.textContent = `
+  .password-screen { display: none !important; }
+  html.guest-auth-pending body { visibility: hidden !important; }
+`;
+document.head.appendChild(accessStyles);
 
-  return Array.from(new Uint8Array(hashBuffer))
-    .map(byte => byte.toString(16).padStart(2, "0"))
-    .join("");
+function invitationLoginUrl() {
+  const original = window.location.pathname + window.location.search + window.location.hash;
+  return "/invitation/?next=" + encodeURIComponent(original);
 }
 
-function unlockSite() {
-  sessionStorage.setItem("weddingSiteUnlocked", "true");
-  document.querySelector(".password-screen")?.classList.add("hidden");
+function showGuestCheckError() {
+  // Never grant access using an old RSVP if D1 cannot be checked.
+  document.body.replaceChildren();
+  const panel = document.createElement("main");
+  panel.style.cssText = "max-width:520px;margin:12vh auto;padding:32px;text-align:center;font-family:Arial,sans-serif";
+  const title = document.createElement("h1");
+  title.textContent = "We couldn't check your invitation";
+  const message = document.createElement("p");
+  message.textContent = "Please check your connection and try again. Your RSVP has not been changed.";
+  const retry = document.createElement("button");
+  retry.type = "button";
+  retry.textContent = "Try again";
+  retry.style.cssText = "padding:12px 24px;cursor:pointer";
+  retry.addEventListener("click", () => window.location.reload());
+  panel.append(title, message, retry);
+  document.body.append(panel);
+  document.documentElement.classList.remove("guest-auth-pending");
+}
+
+async function checkGuestAccess() {
+  let saved = null;
+  try {
+    saved = JSON.parse(localStorage.getItem(INVITATION_STORAGE_KEY) || "null");
+  } catch {
+    localStorage.removeItem(INVITATION_STORAGE_KEY);
+  }
+
+  if (!saved?.sessionToken) {
+    window.location.replace(invitationLoginUrl());
+    return;
+  }
+
+  try {
+    const response = await fetch(INVITATION_API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Accept": "application/json" },
+      cache: "no-store",
+      body: JSON.stringify({ sessionToken: saved.sessionToken })
+    });
+
+    if (response.status === 401) {
+      localStorage.removeItem(INVITATION_STORAGE_KEY);
+      window.location.replace(invitationLoginUrl());
+      return;
+    }
+    if (!response.ok) throw new Error("Invitation check unavailable");
+
+    const fresh = await response.json();
+    if (!fresh.sessionToken) throw new Error("Missing session token");
+    localStorage.setItem(INVITATION_STORAGE_KEY, JSON.stringify(fresh));
+
+    if (!fresh.rsvp) {
+      window.location.replace(invitationLoginUrl());
+      return;
+    }
+
+    // Accepted and declined RSVPs both count as completed.
+    document.documentElement.classList.remove("guest-auth-pending");
+    upgradeInvitationNav();
+  } catch {
+    showGuestCheckError();
+  }
+}
+
+if (!IS_INVITATION_PAGE) {
+  document.documentElement.classList.add("guest-auth-pending");
+  checkGuestAccess();
 }
 
 /* ------------------------------------------------------------------
@@ -88,98 +158,15 @@ function upgradeInvitationNav() {
   }
 }
 
-/* ------------------------------------------------------------------
-   Homepage RSVP button
-
-   Checks the guest's actual RSVP status through the existing
-   Cloudflare invitation API.
-
-   Accepted RSVP = button hidden
-   Declined RSVP = button hidden
-   No RSVP = button visible
-   No remembered login = button visible
-   ------------------------------------------------------------------ */
-
-async function setupHomeRsvpButton() {
+/* A guest who has not responded is redirected to their invitation,
+   so the old homepage RSVP button is no longer needed. */
+function setupHomeRsvpButton() {
   const button = document.getElementById("home-rsvp-button");
-
-  // Only runs on pages containing the homepage RSVP button.
-  if (!button) return;
-
-  let savedInvitation = null;
-
-  try {
-    const storedData = localStorage.getItem(
-      INVITATION_STORAGE_KEY
-    );
-
-    if (storedData) {
-      savedInvitation = JSON.parse(storedData);
-    }
-  } catch {
-    savedInvitation = null;
-  }
-
-  // No remembered guest: show the RSVP button.
-  if (!savedInvitation?.sessionToken) {
-    button.hidden = false;
-    return;
-  }
-
-  // Use the last known response while checking the live database.
-  button.hidden = Boolean(savedInvitation.rsvp);
-
-  try {
-    const response = await fetch(
-      "https://api.carlandclaire.co.uk/invitation",
-      {
-        method: "POST",
-
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json"
-        },
-
-        cache: "no-store",
-
-        body: JSON.stringify({
-          sessionToken: savedInvitation.sessionToken
-        })
-      }
-    );
-
-    // Session has expired or is no longer valid.
-    if (response.status === 401) {
-      button.hidden = false;
-      return;
-    }
-
-    if (!response.ok) {
-      throw new Error("Could not check RSVP status");
-    }
-
-    const invitation = await response.json();
-
-    // An RSVP object means the guest has responded,
-    // whether they accepted or declined.
-    button.hidden = Boolean(invitation.rsvp);
-
-    // Keep the remembered invitation in sync with the database.
-    if (invitation.sessionToken) {
-      localStorage.setItem(
-        INVITATION_STORAGE_KEY,
-        JSON.stringify(invitation)
-      );
-    }
-
-  } catch (error) {
-    // If the API is unavailable, use the last known RSVP status.
-    button.hidden = Boolean(savedInvitation.rsvp);
-  }
+  if (button) button.hidden = true;
 }
 
 /* ------------------------------------------------------------------
-   Password protection, navigation and FAQs
+   Navigation and FAQs
    ------------------------------------------------------------------ */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -188,32 +175,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // NEW: Show or hide the homepage RSVP button.
   setupHomeRsvpButton();
-
-  const gate = document.querySelector(".password-screen");
-
-  if (
-    sessionStorage.getItem("weddingSiteUnlocked") === "true"
-  ) {
-    gate?.classList.add("hidden");
-  }
-
-  const form = document.querySelector(".password-form");
-
-  form?.addEventListener("submit", async (event) => {
-    event.preventDefault();
-
-    const input = form.querySelector("input");
-    const error = document.querySelector(".password-error");
-
-    const attemptedHash = await sha256(input.value);
-
-    if (attemptedHash === PASSWORD_HASH) {
-      unlockSite();
-    } else {
-      error.textContent = "That password is not correct.";
-      input.select();
-    }
-  });
 
   const menuButton = document.querySelector(".menu-button");
   const navLinks = document.querySelector(".nav-links");
