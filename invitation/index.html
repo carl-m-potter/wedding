@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -803,6 +804,10 @@
             Your response has been sent.
           </p>
 
+          <a id="continue-page-button" class="button secondary" href="/" hidden>
+            Continue to the page you requested
+          </a>
+
           <button
             id="edit-response-button"
             class="button secondary"
@@ -887,6 +892,27 @@
 
     const STORAGE_KEY =
       "carl-claire-your-invitation-v1";
+
+    // Only accept a same-site return destination supplied by the access gate.
+    function requestedReturnPath() {
+      const raw = new URLSearchParams(window.location.search).get("next");
+      if (!raw || !raw.startsWith("/") || raw.startsWith("//")) return null;
+      try {
+        const url = new URL(raw, window.location.origin);
+        if (url.origin !== window.location.origin ||
+            url.pathname.startsWith("/invitation")) return null;
+        return url.pathname + url.search + url.hash;
+      } catch {
+        return null;
+      }
+    }
+
+    function returnAfterRsvpIfAppropriate(data) {
+      const destination = requestedReturnPath();
+      if (!destination || !data?.rsvp) return false;
+      window.location.replace(destination);
+      return true;
+    }
 
 
     const INVITE_DETAILS = {
@@ -1043,6 +1069,9 @@
     const rsvpPanel =
       document.getElementById("rsvp-panel");
 
+    const rsvpIntro = document.getElementById("rsvp-intro");
+    const originalRsvpIntro = rsvpIntro.textContent;
+
     const rsvpForm =
       document.getElementById("rsvp-form");
 
@@ -1104,6 +1133,14 @@
 
     const editResponseButton =
       document.getElementById("edit-response-button");
+
+    const continuePageButton =
+      document.getElementById("continue-page-button");
+
+    const requestedPage = requestedReturnPath();
+    if (requestedPage) {
+      continuePageButton.href = requestedPage;
+    }
 
 
     let invitation = null;
@@ -1626,11 +1663,19 @@
       editResponseButton.textContent =
         "Update RSVP";
 
+      const declined = saved.attending === "No";
+      editResponseButton.hidden = declined;
+      rsvpIntro.textContent = declined
+        ? "You have declined this invitation. This response is final. If your circumstances change, please contact Claire or Carl directly."
+        : originalRsvpIntro;
+
       rsvpPanel.hidden =
         true;
 
       responsePanel.hidden =
         false;
+
+      continuePageButton.hidden = !requestedPage;
 
     }
 
@@ -1815,6 +1860,8 @@
 
         editResponseButton.textContent =
           "Change this response";
+        editResponseButton.hidden = false;
+        rsvpIntro.textContent = originalRsvpIntro;
 
       }
 
@@ -1933,6 +1980,8 @@
             data
           );
 
+          // Guests who already responded continue to their original page.
+          if (returnAfterRsvpIfAppropriate(data)) return;
 
           invitationView.scrollIntoView({
             block: "start"
@@ -2171,15 +2220,19 @@
 
           if (result.rsvp) {
 
-            invitation.rsvp =
-              result.rsvp;
+            invitation.rsvp = result.rsvp;
+            rememberInvitation(invitation);
 
-
-            rememberInvitation(
-              invitation
-            );
-
+            // A declined response can no longer be edited.
+            editResponseButton.hidden = result.rsvp.attending === "No";
+            if (result.rsvp.attending === "No") {
+              rsvpIntro.textContent =
+                "You have declined this invitation. This response is final. If your circumstances change, please contact Claire or Carl directly.";
+            }
           }
+
+          // Keep the confirmation visible; offer a link back to the requested page.
+          continuePageButton.hidden = !requestedPage;
 
 
           const confirmedNames =
@@ -2281,6 +2334,9 @@
     editResponseButton.addEventListener(
       "click",
       () => {
+
+        // UI defence in depth; the Worker also rejects changes to declines.
+        if (invitation?.rsvp?.attending === "No") return;
 
         submissionIdInput.value =
           "";
@@ -2427,19 +2483,15 @@
           refreshedInvitation
         );
 
+        returnAfterRsvpIfAppropriate(refreshedInvitation);
 
       } catch {
 
-        /*
-         * If the network is temporarily unavailable,
-         * show the remembered invitation.
-         * The next successful visit will refresh from D1.
-         */
-
-        renderInvitation(
-          savedInvitation,
-          false
-        );
+        // Do not trust stale browser data when the live RSVP check fails.
+        loginView.hidden = false;
+        invitationView.hidden = true;
+        loginStatus.textContent =
+          "We couldn't check your invitation right now. Please reload this page and try again.";
 
       }
 
