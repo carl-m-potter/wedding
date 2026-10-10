@@ -1,10 +1,12 @@
+
 /* Guest access is shared by every website page.
-   Login and RSVP details are always checked with the Cloudflare Worker. */
+   Login and RSVP details are checked with the Cloudflare Worker. */
+
 const INVITATION_STORAGE_KEY = "carl-claire-your-invitation-v1";
 const INVITATION_API = "https://api.carlandclaire.co.uk/invitation";
 const IS_INVITATION_PAGE = window.location.pathname.startsWith("/invitation");
 
-// Hide the old password screen if any other HTML page still contains it.
+// Hide the old password screen if another HTML page still contains it.
 const accessStyles = document.createElement("style");
 accessStyles.textContent = `
   .password-screen { display: none !important; }
@@ -13,33 +15,49 @@ accessStyles.textContent = `
 document.head.appendChild(accessStyles);
 
 function invitationLoginUrl() {
-  const original = window.location.pathname + window.location.search + window.location.hash;
+  const original =
+    window.location.pathname +
+    window.location.search +
+    window.location.hash;
+
   return "/invitation/?next=" + encodeURIComponent(original);
 }
 
 function showGuestCheckError() {
   // Never grant access using an old RSVP if D1 cannot be checked.
   document.body.replaceChildren();
+
   const panel = document.createElement("main");
-  panel.style.cssText = "max-width:520px;margin:12vh auto;padding:32px;text-align:center;font-family:Arial,sans-serif";
+  panel.style.cssText =
+    "max-width:520px;margin:12vh auto;padding:32px;text-align:center;font-family:Arial,sans-serif";
+
   const title = document.createElement("h1");
   title.textContent = "We couldn't check your invitation";
+
   const message = document.createElement("p");
-  message.textContent = "Please check your connection and try again. Your RSVP has not been changed.";
+  message.textContent =
+    "Please check your connection and try again. Your RSVP has not been changed.";
+
   const retry = document.createElement("button");
   retry.type = "button";
   retry.textContent = "Try again";
   retry.style.cssText = "padding:12px 24px;cursor:pointer";
+
   retry.addEventListener("click", () => window.location.reload());
+
   panel.append(title, message, retry);
   document.body.append(panel);
+
   document.documentElement.classList.remove("guest-auth-pending");
 }
 
 async function checkGuestAccess() {
   let saved = null;
+
   try {
-    saved = JSON.parse(localStorage.getItem(INVITATION_STORAGE_KEY) || "null");
+    saved = JSON.parse(
+      localStorage.getItem(INVITATION_STORAGE_KEY) || "null"
+    );
   } catch {
     localStorage.removeItem(INVITATION_STORAGE_KEY);
   }
@@ -52,9 +70,14 @@ async function checkGuestAccess() {
   try {
     const response = await fetch(INVITATION_API, {
       method: "POST",
-      headers: { "Content-Type": "application/json", "Accept": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
       cache: "no-store",
-      body: JSON.stringify({ sessionToken: saved.sessionToken })
+      body: JSON.stringify({
+        sessionToken: saved.sessionToken
+      })
     });
 
     if (response.status === 401) {
@@ -62,20 +85,38 @@ async function checkGuestAccess() {
       window.location.replace(invitationLoginUrl());
       return;
     }
-    if (!response.ok) throw new Error("Invitation check unavailable");
+
+    if (!response.ok) {
+      throw new Error("Invitation check unavailable");
+    }
 
     const fresh = await response.json();
-    if (!fresh.sessionToken) throw new Error("Missing session token");
-    localStorage.setItem(INVITATION_STORAGE_KEY, JSON.stringify(fresh));
 
+    if (!fresh.sessionToken) {
+      throw new Error("Missing session token");
+    }
+
+    localStorage.setItem(
+      INVITATION_STORAGE_KEY,
+      JSON.stringify(fresh)
+    );
+
+    // Guests who haven't responded must complete their RSVP.
     if (!fresh.rsvp) {
       window.location.replace(invitationLoginUrl());
       return;
     }
 
-    // Accepted and declined RSVPs both count as completed.
+    // Declined guests may only visit the invitation page.
+    // Check the current response from D1, not browser storage.
+    if (fresh.rsvp.attending === "No") {
+      window.location.replace("/invitation/");
+      return;
+    }
+
     document.documentElement.classList.remove("guest-auth-pending");
     upgradeInvitationNav();
+
   } catch {
     showGuestCheckError();
   }
@@ -84,18 +125,26 @@ async function checkGuestAccess() {
 if (!IS_INVITATION_PAGE) {
   document.documentElement.classList.add("guest-auth-pending");
   checkGuestAccess();
+
+  window.addEventListener("pageshow", event => {
+    if (event.persisted) {
+      document.documentElement.classList.add("guest-auth-pending");
+      checkGuestAccess();
+    }
+  });
 }
 
-/* ------------------------------------------------------------------
+/* -------------------------------------------------------
    Personalised invitation navigation
-   ------------------------------------------------------------------ */
+------------------------------------------------------- */
 
 function upgradeInvitationNav() {
   const navLinks = document.querySelector(".nav-links");
   if (!navLinks) return;
 
-  const hasRememberedInvitation =
-    Boolean(localStorage.getItem(INVITATION_STORAGE_KEY));
+  const hasRememberedInvitation = Boolean(
+    localStorage.getItem(INVITATION_STORAGE_KEY)
+  );
 
   const label = hasRememberedInvitation
     ? "View Your Plans"
@@ -158,22 +207,24 @@ function upgradeInvitationNav() {
   }
 }
 
-/* A guest who has not responded is redirected to their invitation,
-   so the old homepage RSVP button is no longer needed. */
+/* -------------------------------------------------------
+   Homepage RSVP button
+------------------------------------------------------- */
+
 function setupHomeRsvpButton() {
   const button = document.getElementById("home-rsvp-button");
+
+  // Guests without an RSVP are already redirected
+  // to the invitation page.
   if (button) button.hidden = true;
 }
 
-/* ------------------------------------------------------------------
+/* -------------------------------------------------------
    Navigation and FAQs
-   ------------------------------------------------------------------ */
+------------------------------------------------------- */
 
 document.addEventListener("DOMContentLoaded", () => {
-
   upgradeInvitationNav();
-
-  // NEW: Show or hide the homepage RSVP button.
   setupHomeRsvpButton();
 
   const menuButton = document.querySelector(".menu-button");
@@ -199,12 +250,11 @@ document.addEventListener("DOMContentLoaded", () => {
       );
     });
   });
-
 });
 
-/* ------------------------------------------------------------------
-   Wedding-site motion and page transitions
-   ------------------------------------------------------------------ */
+/* -------------------------------------------------------
+   Scroll motion
+------------------------------------------------------- */
 
 function setupScrollMotion() {
   const reduceMotion = window.matchMedia(
@@ -272,9 +322,9 @@ function setupScrollMotion() {
   });
 }
 
-/* ------------------------------------------------------------------
+/* -------------------------------------------------------
    Page transitions
-   ------------------------------------------------------------------ */
+------------------------------------------------------- */
 
 function setupPageTransitions() {
   const reduceMotion = window.matchMedia(
@@ -344,9 +394,9 @@ function setupPageTransitions() {
   });
 }
 
-/* ------------------------------------------------------------------
-   Initialise motion and page transitions
-   ------------------------------------------------------------------ */
+/* -------------------------------------------------------
+   Initialise
+------------------------------------------------------- */
 
 window.addEventListener("DOMContentLoaded", () => {
   setupScrollMotion();
