@@ -1241,3 +1241,13 @@ html.guest-auth-pending body {
   display: none !important;
 }
 
+/* Teal hyperlinks within page content only */
+main a:not(.btn):not(.button) {
+  color: #359c99;
+  text-decoration: none;
+}
+
+main a:not(.btn):not(.button):hover {
+  color: #287d7a;
+  text-decoration: none;
+}
