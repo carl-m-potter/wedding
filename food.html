@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <script>document.documentElement.classList.add('has-js', 'guest-auth-pending');</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="description" content="Food for Carl and Claire's wedding — 1 May 2027">
+  <title>Food | Claire &amp; Carl</title>
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/script.js" defer></script>
+  <style>
+    .food-intro { max-width: 800px; }
+    .food-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-top: 32px; }
+    .food-item { border: 1px solid var(--line); background: rgba(255,255,255,.7); padding: 22px 25px; }
+    .food-item h3 { margin: 0; font-family: "Fraunces", Georgia, serif; font-size: 1.35rem; font-weight: 400; }
+    .food-item p { margin: 7px 0 0; color: var(--muted); font-size: .92rem; }
+    .food-note { border-top: 1px solid var(--line); margin-top: 32px; padding-top: 22px; }
+    .food-note p { margin-bottom: 0; }
+    @media (max-width: 680px) { .food-grid { grid-template-columns: 1fr; } .food-item { padding: 20px; } }
+  </style>
+</head>
+<body class="theme-food">
+  <header class="site-header">
+    <nav class="nav" aria-label="Primary navigation">
+      <a class="brand" href="/">C &amp; C</a>
+      <button class="menu-button" type="button" aria-expanded="false">Menu</button>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/venue.html">Venue &amp; Travel</a>
+        <a href="/on-the-day.html">On The Day</a>
+        <a href="/food.html" aria-current="page">Food</a>
+        <a href="/accommodation.html">Accommodation</a>
+        <a href="/gifts.html">Gifts</a>
+        <a href="/faq.html">FAQ</a>
+        <a href="/invitation/">Your Invitation</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <p class="eyebrow">Saturday 1 May 2027</p>
+      <h1>Food</h1>
+      <p>Good food, great company, and plenty to go around.</p>
+    </section>
+
+    <section class="section section-surface surface-ivory">
+      <p class="eyebrow">5:30pm · Main meal</p>
+      <h2 class="section-title">Hog Roast &amp; BBQ</h2>
+      <p class="lead food-intro">A whole hog, slow-roasted for eight hours with olive oil, salt and a special blend of seasoning, served with crispy crackling.</p>
+      <p class="food-intro">Alongside the hog roast, there'll be a selection of BBQ favourites:</p>
+      <div class="food-grid">
+        <article class="food-item"><h3>Slow-roasted pork</h3><p>With crispy crackling</p></article>
+        <article class="food-item"><h3>Homemade burgers</h3></article>
+        <article class="food-item"><h3>Locally produced sausages</h3></article>
+        <article class="food-item"><h3>Marinated chicken drumsticks</h3></article>
+        <article class="food-item"><h3>Bread rolls &amp; stuffing</h3></article>
+        <article class="food-item"><h3>Apple or mint sauce</h3></article>
+      </div>
+    </section>
+
+    <section class="section section-surface surface-blush">
+      <p class="eyebrow">9:00pm · Evening food</p>
+      <h2 class="section-title">Derbyshire Grazing Boards</h2>
+      <p class="lead">A few more bites to keep everyone going into the evening.</p>
+      <div class="food-grid">
+        <article class="food-item"><h3>Homemade sausage rolls</h3></article>
+        <article class="food-item"><h3>Highfield Farm pork pies</h3></article>
+        <article class="food-item"><h3>Pizza slices</h3></article>
+      </div>
+    </section>
+
+    <section class="section section-surface surface-sage">
+      <p class="eyebrow">Dietary options</p>
+      <h2 class="section-title">Vegetarian</h2>
+      <p class="lead">Please contact us to discuss vegetarian options.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p class="footer-script">We can't wait to celebrate with you</p>
+    <p>Claire &amp; Carl · 1 May 2027</p>
+  </footer>
+</body>
+</html>
