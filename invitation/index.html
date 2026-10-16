@@ -410,9 +410,7 @@
           <span id="invitation-nav-label">Your Invitation</span>
         </a>
 
-        <a href="/venue.html">Venue & Travel</a>
-        <a href="/on-the-day.html">On The Day</a>
-<a href="/food.html">Food</a>
+        <a href="/venue.html">Venue</a>
         <a href="/accommodation.html">Accommodation</a>
         <a href="/gifts.html">Gifts</a>
         <a href="/faq.html">FAQ</a>
@@ -824,11 +822,11 @@
             Your response has been sent.
           </p>
 
-<p class="optional" style="margin-top: 16px;">
-  You should receive a confirmation email shortly.
-  If you can't find it, please check your spam or junk folder.
-</p>
-          
+          <p class="optional" style="margin-top: 16px;">
+            You should receive a confirmation email shortly.
+            If you can't find it, please check your spam or junk folder.
+          </p>
+
           <a id="continue-page-button" class="button secondary" href="/" hidden>
             Continue to the page you requested
           </a>
@@ -960,78 +958,74 @@
 
 
     const UNIQUE_FIRST_NAMES = {
-
-      "andrea": "pickering",
-      "anya": "pickering",
-      "darcie": "pickering",
-      "tristan": "pickering",
-      "debbie": "unwin",
-      "anna": "desalvo",
-      "buster": "dickinson",
-      "camilla": "dickinson",
-      "frank": "dickinson",
-      "carl": "potter",
-      "harper": "unwin",
-      "arwel": "williams",
-      "carrie": "potter-williams",
-      "katie": "davies",
-      "maxwell": "potter-williams",
-      "summer": "wilson-williams",
-      "rowena": "doughty",
-      "ellen": "smith",
-      "jody": "smith",
-      "pat": "fidler",
-      "erin": "jeffries",
-      "gemma": "stokes",
-      "marc": "tait",
-      "ian": "potter",
-      "jane": "potter",
-      "julie": "bennett",
-      "karen": "unwin",
-      "richard": "unwin",
-      "leonie": "fiveash",
-      "fiona": "potter",
-      "kyle": "potter",
-      "mark": "potter",
-      "iris": "potter",
-      "katherine": "potter",
-      "matt": "potter",
-      "phoebe": "potter",
-      "jean": "potter",
-      "mick": "potter",
-      "neil": "perkins",
-      "sioned": "perkins",
-      "eben": "howe",
-      "sam": "unwin",
-      "ralph": "bunting",
-      "rupert": "bunting",
-      "andy": "barr",
-      "jacob": "barr",
-      "stephanie": "wall",
-      "dianne": "wall",
-      "lee": "wall",
-      "steve": "wall",
-      "tilly": "wynne-thompson",
-      "wilfred": "wynne-thompson",
-      "evie-mair": "potter",
-      "lisa": "potter",
-      "tomos": "potter",
-      "tony": "potter",
-      "anne": "wall",
-      "eirlys": "potter",
-      "emily": "cotton",
-      "jamie": "unwin",
-      "joel": "mcavenne",
-      "lizzie": "pidd",
-      "pete": "owen",
-      "sally": "lebrun",
-      "sid": "morris",
-      "stella": "wall",
-      "thomas": "tracy",
-      "vikki": "lloyd",
-      "will": "unwin",
-      "zac": "gaskell"
-
+          "andrea": "pickering",
+          "andy": "barr",
+          "anna": "desalvo",
+          "anne": "wall",
+          "anya": "pickering",
+          "arwel": "williams",
+          "ben": "unwin",
+          "buster": "dickinson",
+          "camilla": "dickinson",
+          "carl": "potter",
+          "carrie": "potter-williams",
+          "daniel": "doughty",
+          "darcie": "pickering",
+          "debbie": "unwin",
+          "eben": "howe",
+          "eirlys": "potter",
+          "ellen": "smith",
+          "emily": "cotton",
+          "erin": "jeffries",
+          "evie-mair": "potter",
+          "fiona": "potter",
+          "frank": "dickinson",
+          "gemma": "stokes",
+          "harper": "unwin",
+          "ian": "potter",
+          "iris": "potter",
+          "jamie": "unwin",
+          "jane": "potter",
+          "jean": "potter",
+          "jody": "smith",
+          "joe": "casey",
+          "joel": "mcavenne",
+          "julie": "bennett",
+          "karen": "unwin",
+          "katherine": "potter",
+          "katie": "davies",
+          "kyle": "potter",
+          "leonie": "fiveash",
+          "lindsey": "norton",
+          "lisa": "potter",
+          "lizzie": "pidd",
+          "marc": "tait",
+          "mark": "potter",
+          "matthew": "potter",
+          "maxwell": "potter-williams",
+          "mick": "potter",
+          "neil": "perkins",
+          "pat": "fidler",
+          "pete": "owen",
+          "phoebe": "potter",
+          "richard": "unwin",
+          "rowena": "doughty",
+          "sally": "lebrun",
+          "sam": "unwin",
+          "scott": "openshaw",
+          "sid": "morris",
+          "sioned": "perkins",
+          "sophie": "norton",
+          "stella": "wall",
+          "summer": "wilson-williams",
+          "thomas": "tracy",
+          "tilly": "wynne-thompson",
+          "tomos": "potter",
+          "tony": "potter",
+          "tristan": "pickering",
+          "vicki": "lloyd",
+          "will": "unwin",
+          "zac": "gaskell"
     };
 
 
@@ -1719,7 +1713,7 @@
       const declined = saved.attending === "No";
       editResponseButton.hidden = declined;
       rsvpIntro.textContent = declined
-        ? "You have declined this invitation. If your circumstances change, please contact Claire or Carl directly."
+        ? "You have declined this invitation. This response is final. If your circumstances change, please contact Claire or Carl directly."
         : "Your RSVP is saved. If your plans change, you can update your response below.";
 
       rsvpPanel.hidden =
@@ -2288,7 +2282,7 @@
             editResponseButton.hidden = result.rsvp.attending === "No";
             if (result.rsvp.attending === "No") {
               rsvpIntro.textContent =
-                "You have declined this invitation. If your circumstances change, please contact Claire or Carl directly.";
+                "You have declined this invitation. This response is final. If your circumstances change, please contact Claire or Carl directly.";
             }
           }
 
