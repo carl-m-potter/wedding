@@ -69,46 +69,36 @@
       padding: 54px 0 90px;
     }
 
-.guest-greeting {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
+    /* Personalised welcome panel */
+    .invitation-page .guest-greeting {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      background: #d9f0ed;
+      border: 2px solid #359c99;
+      border-left: 6px solid #359c99;
+      border-radius: 8px;
+      padding: 28px;
+      margin-bottom: 30px;
+      box-shadow: 0 5px 18px rgba(53, 156, 153, 0.12);
+    }
 
-  background: #edf7f6;
-  border: 1px solid rgba(53, 156, 153, 0.2);
-  border-left: 5px solid #359c99;
+    .invitation-page .guest-greeting p {
+      margin: 0;
+      color: #263c3a;
+      font-size: 1.15rem;
+      line-height: 1.6;
+    }
 
-  padding: 24px 28px;
-  margin-bottom: 30px;
-  border-radius: 4px;
-}
+    .invitation-page .guest-greeting strong {
+      font-weight: 700;
+      color: #287d7a;
+    }
 
-.guest-greeting p {
-  margin: 0;
-  color: #303b3b;
-  font-size: 1.1rem;
-  line-height: 1.7;
-}
-
-.guest-greeting strong {
-  display: inline;
-  font-weight: 700;
-  color: #287d7a;
-}
-
-#invitation-view {
-  scroll-margin-top: 120px;
-}
-
-.guest-greeting strong {
-  font-weight: 700;
-  color: var(--ink);
-}
-
-#invitation-view {
-  scroll-margin-top: 120px;
-}
+    #invitation-view {
+      scroll-margin-top: 120px;
+    }
 
     .text-button {
       border: 0;
