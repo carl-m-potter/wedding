@@ -1,0 +1,787 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive"><meta name="theme-color" content="#f7f8f6">
+<title>Table Planner | Claire & Carl</title>
+<style>
+:root{--ink:#233b39;--muted:#697b78;--teal:#257d79;--teal-dark:#17635f;--mint:#e9f3f1;--gold:#e5b86c;--line:#dce5e2;--paper:#fff;--canvas:#f6f8f7;--shadow:0 5px 25px rgba(23,65,59,.055)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--canvas);color:var(--ink);font:14px/1.45 system-ui,-apple-system,'Segoe UI',sans-serif}button,input,select{font:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.45}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #e6b36a;outline-offset:2px}
+.top{padding:25px clamp(18px,3vw,48px) 18px;background:var(--paper);border-bottom:1px solid var(--line)}.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.2em;color:var(--teal);font-weight:800}.topline{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}.top h1{font:normal clamp(30px,3vw,45px)/1.15 Georgia,serif;margin:5px 0 7px}.top p{color:var(--muted);margin:0}.top .hint{max-width:740px}.btn{border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--ink);padding:9px 13px;font-weight:650;white-space:nowrap}.btn:hover{background:#f2f6f5}.btn.primary{background:var(--teal);border-color:var(--teal);color:#fff}.btn.primary:hover{background:var(--teal-dark)}.btn.subtle{border:0;background:transparent;color:var(--teal)}.btn.small{font-size:12px;padding:6px 9px}.toolbar{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:18px}.toolbar .divider{width:1px;height:27px;background:var(--line);margin:0 4px}.stats{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.stat{padding:9px 16px;border:1px solid var(--line);border-radius:10px;background:#fafcfb;min-width:118px}.stat strong{font-size:21px;display:block;line-height:1.15}.stat span{font-size:11px;color:var(--muted)}
+.workspace{display:grid;grid-template-columns:minmax(255px,315px) minmax(0,1fr);gap:18px;padding:18px clamp(16px,3vw,48px) 50px;max-width:1700px;margin:auto;align-items:start}.panel{background:var(--paper);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}.sidebar{position:sticky;top:12px;max-height:calc(100vh - 24px);display:flex;flex-direction:column;min-height:420px}.sidebar-head{padding:18px 17px 12px;border-bottom:1px solid var(--line)}.sidebar-head h2,.canvas-head h2{margin:0 0 4px;font:normal 23px Georgia,serif}.secondary{font-size:12px;color:var(--muted)}.search{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;margin-top:14px;background:#fbfdfc}.filterline{display:flex;gap:7px;margin-top:10px}.filterline select{min-width:0;width:50%;border:1px solid var(--line);border-radius:8px;background:#fff;padding:8px 5px;color:var(--ink);font-size:12px}.guest-list{overflow-y:auto;min-height:100px;flex:1;padding:9px}.guest-row{width:100%;display:flex;align-items:center;gap:8px;padding:10px 9px;text-align:left;background:#fff;border:1px solid transparent;border-radius:8px;color:var(--ink);margin-bottom:3px}.guest-row:hover{background:#f5f9f7;border-color:#d9eae6}.guest-row.selected{background:#e0f2ee;border-color:#79b7ac}.guest-row[draggable=true]{cursor:grab}.guest-row .name{flex:1;min-width:0;font-size:13px;font-weight:600}.guest-row .sub{display:block;font-size:11px;font-weight:400;color:var(--muted)}.tag{font-size:10px;padding:3px 5px;border-radius:5px;white-space:nowrap;background:#eef2f1;color:#65716f}.tag.child{background:#fff0d8;color:#95611d}.tag.evening{background:#eeeafa;color:#6a579b}.sidebar-bottom{border-top:1px solid var(--line);padding:12px 15px;display:grid;gap:8px}.addline{display:flex;gap:6px}.addline input{width:100%;min-width:0;border:1px solid var(--line);border-radius:8px;padding:9px}.addline button{flex-shrink:0}.selection{padding:10px 12px;background:var(--mint);border:1px solid #c4e0d9;border-radius:9px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:9px}.selection[hidden]{display:none}.selection strong{font-size:13px}
+.canvas{min-width:0}.canvas-head{padding:18px 21px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}.canvas-head p{margin:0}.table-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;padding:0 14px 16px}.table-card{background:#fff;border:1px solid var(--line);border-radius:13px;padding:15px;min-height:202px;transition:background .15s,border-color .15s}.table-card.drag-over{border:2px dashed var(--teal);background:#e9f4f1}.table-card.full{border-color:#edc5a7}.table-top{display:flex;justify-content:space-between;align-items:center;gap:7px}.table-title{display:flex;align-items:center;gap:7px;min-width:0}.table-number{width:29px;height:29px;display:grid;place-items:center;border-radius:50%;background:var(--mint);color:var(--teal);font-weight:800;flex-shrink:0}.table-name{min-width:0;max-width:200px;border:1px solid transparent;border-radius:5px;padding:4px 5px;background:transparent;color:var(--ink);font-weight:750}.table-name:hover,.table-name:focus{border-color:var(--line);background:#fff}.capacity{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--muted);white-space:nowrap}.capacity input{width:40px;padding:5px 2px;border:1px solid var(--line);border-radius:6px;text-align:center;color:var(--ink)}.occupancy{margin:12px 0 10px;display:flex;align-items:center;gap:9px;font-size:11px;color:var(--muted)}.bar{height:5px;background:#e8eeec;border-radius:8px;flex:1;overflow:hidden}.bar>i{display:block;height:100%;background:var(--teal);border-radius:8px}.full .bar>i{background:#d4864d}.seated{display:flex;gap:6px;flex-wrap:wrap;min-height:62px;align-content:start}.chip{display:flex;align-items:center;gap:6px;background:#edf4f2;border:1px solid #d7e8e3;border-radius:7px;padding:6px 5px 6px 9px;font-size:12px;cursor:grab;max-width:100%}.chip.selected{outline:2px solid var(--teal)}.chip .chip-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:190px}.chip.child{background:#fff7e9;border-color:#f0dec2}.chip.evening{background:#f3effa;border-color:#e2daf4}.chip .remove{border:0;background:transparent;font-size:16px;line-height:1;color:#697b78;padding:0 3px}.chip .remove:hover{color:#a13b36}.empty{color:#9aaba7;font-size:12px;padding:13px 0}.table-bottom{display:flex;justify-content:flex-end;margin-top:12px}.table-bottom .btn{font-size:11px}.notice{font-size:12px;color:var(--muted);padding:0 20px 18px}
+.modal-backdrop{position:fixed;inset:0;background:rgba(18,40,36,.52);z-index:30;display:grid;place-items:center;padding:15px}.modal-backdrop[hidden]{display:none}.modal{background:#fff;border-radius:15px;width:min(100%,1050px);max-height:90vh;overflow:auto;padding:25px;box-shadow:0 20px 60px #0002}.modal h2{font:normal 30px Georgia,serif;margin:0 0 6px}.modal-top{display:flex;justify-content:space-between;align-items:start;gap:20px}.version-row{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:17px 0}.version-card{border:1px solid var(--line);border-radius:10px;padding:12px;min-width:0}.version-card strong{display:block;overflow-wrap:anywhere}.version-card .buttons{display:flex;gap:5px;flex-wrap:wrap;margin-top:12px}.version-card .btn{font-size:11px;padding:6px 8px}.version-card.empty-slot{background:#fafbfa}.version-card .date{font-size:11px;color:var(--muted);margin-top:5px}.modal .row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.modal select,.modal input{border:1px solid var(--line);border-radius:8px;padding:9px;min-width:130px}.comparison{margin-top:15px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.compare-col{background:#fafcfa;border:1px solid var(--line);border-radius:10px;padding:13px}.compare-col h3{margin:0 0 10px;font-size:16px}.compare-table{padding:9px 0;border-top:1px solid var(--line)}.compare-table strong{font-size:12px}.compare-table p{font-size:12px;margin:5px 0;color:#576a66}.changed{background:#fff7e9;border-left:3px solid var(--gold);padding-left:8px}.muted{color:var(--muted)}.file-input{display:none}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}.footer{padding:0 48px 30px;color:var(--muted);font-size:12px}
+@media(min-width:1450px){.table-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:900px){.workspace{grid-template-columns:1fr}.sidebar{position:static;max-height:none;min-height:0}.guest-list{max-height:270px}.version-row{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:610px){.table-grid{grid-template-columns:1fr}.comparison{grid-template-columns:1fr}.top{padding:19px 16px}.workspace{padding:12px}.toolbar{gap:6px}.stat{min-width:0;flex:1}.version-row{grid-template-columns:1fr}.modal{padding:17px}.table-name{max-width:155px}.footer{padding:0 15px 30px}}@media print{.top .toolbar,.sidebar,.selection,.table-bottom,.footer,.notice,.modal-backdrop{display:none!important}.workspace{display:block;padding:0}.canvas{width:100%}.table-grid{grid-template-columns:repeat(2,1fr)}.table-card{break-inside:avoid;box-shadow:none}.top{padding:10px}.canvas-head{padding:10px}.table-name{border:0}}
+
+/* Full-screen, read-only overview: eight tables at a glance on desktop. */
+body.overview-open{overflow:hidden}
+.overview{position:fixed;inset:0;z-index:45;background:#f3f7f5;display:flex;flex-direction:column;padding:clamp(10px,1.7vh,22px) clamp(12px,2vw,32px);gap:clamp(8px,1.3vh,15px);height:100vh;height:100dvh;overflow:hidden}
+.overview[hidden]{display:none}
+.overview-header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-shrink:0}
+.overview-eyebrow{font-size:10px;letter-spacing:.18em;text-transform:uppercase;font-weight:800;color:var(--teal)}
+.overview-title{font:normal clamp(21px,2.3vw,34px)/1.12 Georgia,serif;margin:3px 0}
+.overview-meta{font-size:12px;color:var(--muted);margin:0}
+.overview-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.overview-actions select{max-width:220px;min-width:135px;padding:9px;border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--ink)}
+.overview-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));gap:clamp(7px,1.2vh,14px);flex:1;min-height:0}
+.overview-table{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:clamp(8px,1.3vh,15px);display:flex;flex-direction:column;min-height:0;overflow:hidden}
+.overview-table.overfull{border-color:#d89d65;background:#fffbf5}
+.overview-table-top{display:flex;gap:8px;align-items:center;min-width:0;flex-shrink:0;padding-bottom:clamp(5px,.9vh,10px);border-bottom:1px solid #e8eeeb}
+.overview-number{display:grid;place-items:center;flex-shrink:0;width:clamp(25px,3.3vh,34px);height:clamp(25px,3.3vh,34px);background:var(--mint);border-radius:50%;font-size:12px;font-weight:800;color:var(--teal)}
+.overview-table-title{min-width:0;flex:1;font-size:clamp(11px,1.6vh,16px);font-weight:750;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.overview-count{font-size:clamp(10px,1.25vh,12px);color:var(--muted);white-space:nowrap}
+.overview-names{list-style:none;margin:clamp(4px,.8vh,8px) 0 0;padding:0;display:grid;grid-template-rows:repeat(10,minmax(0,1fr));gap:0;flex:1;min-height:0}
+.overview-names li{display:flex;align-items:center;gap:5px;min-width:0;min-height:0;padding:0 2px;font-size:clamp(10px,1.55vh,13px);line-height:1.1;border-bottom:1px solid #f2f5f3}
+.overview-names li:last-child{border-bottom:0}
+.overview-names .seat-number{color:#96aaa5;font-size:10px;width:17px;flex-shrink:0;font-variant-numeric:tabular-nums}
+.overview-names .seat-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;flex:1}
+.overview-names .seat-empty{color:#bdc9c5}
+.overview-names .seat-child{color:#a3732e;font-size:9px;font-weight:700;flex-shrink:0}
+.overview-summary{display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:11px;color:var(--muted);flex-shrink:0}
+.overview-summary strong{color:var(--ink)}
+@media(max-width:850px){.overview{overflow:auto;height:100dvh}.overview-grid{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(4,minmax(235px,1fr));flex:none}.overview-table{min-height:235px}.overview-names li{font-size:12px}.overview-header{align-items:flex-start}}
+@media(max-width:520px){.overview-header{flex-direction:column}.overview-actions{justify-content:flex-start;width:100%}.overview-grid{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(4,minmax(255px,1fr))}.overview-table{padding:8px}.overview-table-title{font-size:11px}.overview-names li{font-size:10px}.overview-count{font-size:10px}.overview-actions select{flex:1;min-width:110px}}
+@media print{body.overview-open .top,body.overview-open .workspace,body.overview-open .footer{display:none!important}body.overview-open .overview{position:static;height:auto;overflow:visible;padding:8px}body.overview-open .overview-actions{display:none!important}body.overview-open .overview-grid{grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(2,auto);gap:6px}body.overview-open .overview-table{min-height:250px;break-inside:avoid}body.overview-open .overview-names li{font-size:10px;min-height:19px}body.overview-open .overview-summary{margin-top:5px}}
+</style>
+</head>
+<body>
+<header class="top">
+ <div class="topline"><div><div class="eyebrow">Claire & Carl · 1 May 2027</div><h1>Wedding table planner</h1><p class="hint">Drag names onto a table, or select a guest and choose a table. Rearrange freely, then save up to five different seating plans.</p></div><div><button class="btn" id="printBtn">Print layout</button></div></div>
+ <div class="toolbar"><button class="btn primary" id="versionsBtn">Save & manage versions</button><button class="btn" id="compareBtn">Compare versions</button><button class="btn primary" id="overviewBtn">View all tables</button><span class="divider"></span><button class="btn" id="exportBtn">Download backup</button><button class="btn" id="emailBackupBtn">Email backup</button><button class="btn" id="importBtn">Import backup</button><input class="file-input" id="fileInput" type="file" accept=".json,application/json"><span class="secondary" id="saveStatus" role="status">Working draft saved on this device</span></div>
+ <div class="stats"><div class="stat"><strong id="totalStat">0</strong><span>Total guests</span></div><div class="stat"><strong id="assignedStat">0</strong><span>Assigned to tables</span></div><div class="stat"><strong id="unassignedStat">0</strong><span>Unassigned</span></div><div class="stat"><strong id="dayStat">0</strong><span>Day guests</span></div><div class="stat"><strong id="eveningStat">0</strong><span>Evening guests</span></div></div>
+</header>
+<div class="workspace">
+ <aside class="sidebar panel" aria-label="Guest list"><div class="sidebar-head"><h2>Guest list <span class="secondary" id="guestCount"></span></h2><div class="secondary">All guests stay here, even after being seated. Select or drag to move them.</div><input id="search" class="search" type="search" placeholder="Search guests or groups…" aria-label="Search guests"><div class="filterline"><select id="inviteFilter" aria-label="Invitation filter"><option value="all">Day & evening</option><option value="Day">Day guests</option><option value="Evening">Evening guests</option></select><select id="seatFilter" aria-label="Seating filter"><option value="all">All guests</option><option value="unassigned">Unassigned</option><option value="assigned">Assigned</option></select></div></div><div id="guestList" class="guest-list" role="list"></div><div class="sidebar-bottom"><div class="secondary">Add someone missing from the guest list</div><div class="addline"><input id="newGuest" placeholder="Full name" aria-label="New guest name"><button class="btn small" id="addGuestBtn">Add</button></div><div class="filterline"><select id="newGuestType" aria-label="New guest age"><option value="Adult">Adult</option><option value="Child">Child</option></select><select id="newGuestInvite" aria-label="New guest invitation"><option value="Day">Day</option><option value="Evening">Evening</option></select></div></div></aside>
+ <main class="canvas"><div id="selection" class="selection" hidden><span>Selected: <strong id="selectedName"></strong> — choose a table below, or click “Remove from table”.</span><button class="btn small" id="clearSelection">Cancel</button></div><section class="panel"><div class="canvas-head"><div><h2>Reception tables</h2><p class="secondary">Eight tables · 10 seats each by default · click a table name or seat capacity to edit</p></div><button class="btn small" id="unassignBtn" title="Remove selected guest from their table" disabled>Remove selected guest</button></div><div id="tableGrid" class="table-grid"></div><p class="notice">An orange border means a table exceeds its chosen capacity. Evening-only guests are included in the list but do not have to be seated for the daytime meal.</p></section></main>
+</div>
+<footer class="footer">Your plans are stored in this browser, not in Cloudflare D1. Use Download backup or Email backup to move between devices; use Import backup on the other device. Email backup uses your device’s share menu when available, otherwise you’ll need to attach the downloaded file to the prepared email. This page is not linked from your wedding site, but an unlisted URL is not secure access control.</footer>
+<div id="modalBackdrop" class="modal-backdrop" hidden><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-top"><div><h2 id="modalTitle">Saved versions</h2><p class="secondary" id="modalDesc">Each slot keeps an independent snapshot of your seating plan.</p></div><button class="btn" id="closeModal" aria-label="Close dialog">Close</button></div><div id="modalContent"></div></div></div>
+<section id="overview" class="overview" role="dialog" aria-modal="true" aria-labelledby="overviewHeading" hidden>
+ <div class="overview-header">
+  <div><div class="overview-eyebrow">Claire &amp; Carl · Wedding reception</div><h2 id="overviewHeading" class="overview-title">All eight tables</h2><p id="overviewSubtitle" class="overview-meta">Your current seating plan, all in one view</p></div>
+  <div class="overview-actions"><label class="sr-only" for="overviewVersion">Choose a seating plan to view</label><select id="overviewVersion" aria-label="Choose a seating plan"><option value="draft">Working draft</option></select><button class="btn" id="overviewPrint">Print overview</button><button class="btn primary" id="overviewClose">Back to planner ✕</button></div>
+ </div>
+ <div class="overview-grid" id="overviewGrid"></div>
+ <div class="overview-summary"><span id="overviewTotals"></span><span>View only · use the planner to move guests</span></div>
+</section>
+<script id="initialGuestData" type="application/json">[
+  {
+    "id": "andrea-pickering",
+    "name": "Andrea Pickering",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Andrea & John"
+  },
+  {
+    "id": "anya-pickering",
+    "name": "Anya Pickering",
+    "type": "Child",
+    "invitation": "Day",
+    "party": "Andrea & John"
+  },
+  {
+    "id": "darcie-pickering",
+    "name": "Darcie Pickering",
+    "type": "Child",
+    "invitation": "Day",
+    "party": "Andrea & John"
+  },
+  {
+    "id": "john-pickering",
+    "name": "John Pickering",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Andrea & John"
+  },
+  {
+    "id": "tristan-pickering",
+    "name": "Tristan Pickering",
+    "type": "Child",
+    "invitation": "Day",
+    "party": "Andrea & John"
+  },
+  {
+    "id": "ben-unwin",
+    "name": "Ben Unwin",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Ben & Debbie"
+  },
+  {
+    "id": "debbie-unwin",
+    "name": "Debbie Unwin",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Ben & Debbie"
+  },
+  {
+    "id": "will-unwin",
+    "name": "Will Unwin",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Ben & Debbie"
+  },
+  {
+    "id": "jamie-unwin",
+    "name": "Jamie Unwin",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Ben & Debbie"
+  },
+  {
+    "id": "anna-desalvo",
+    "name": "Anna DeSalvo",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Cam & Buster"
+  },
+  {
+    "id": "buster-dickinson",
+    "name": "Buster Dickinson",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Cam & Buster"
+  },
+  {
+    "id": "camilla-dickinson",
+    "name": "Camilla Dickinson",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Cam & Buster"
+  },
+  {
+    "id": "frank-dickinson",
+    "name": "Frank Dickinson",
+    "type": "Child",
+    "invitation": "Day",
+    "party": "Cam & Buster"
+  },
+  {
+    "id": "carl-potter",
+    "name": "Carl Potter",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Carl & Claire"
+  },
+  {
+    "id": "claire-unwin",
+    "name": "Claire Unwin",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Carl & Claire"
+  },
+  {
+    "id": "harper-june-unwin",
+    "name": "Harper June Unwin",
+    "type": "Child",
+    "invitation": "Day",
+    "party": "Carl & Claire"
+  },
+  {
+    "id": "arwel-williams",
+    "name": "Arwel Williams",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Carrie & Arwel"
+  },
+  {
+    "id": "carrie-potter-williams",
+    "name": "Carrie Potter-Williams",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Carrie & Arwel"
+  },
+  {
+    "id": "katie-davies",
+    "name": "Katie Davies",
+    "type": "Child",
+    "invitation": "Day",
+    "party": "Carrie & Arwel"
+  },
+  {
+    "id": "maxwell-potter-williams",
+    "name": "Maxwell Potter-Williams",
+    "type": "Child",
+    "invitation": "Day",
+    "party": "Carrie & Arwel"
+  },
+  {
+    "id": "summer-wilson-williams",
+    "name": "Summer Wilson-Williams",
+    "type": "Child",
+    "invitation": "Day",
+    "party": "Carrie & Arwel"
+  },
+  {
+    "id": "daniel-doughty",
+    "name": "Daniel Doughty",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Daniel & Rowena"
+  },
+  {
+    "id": "rowena-doughty",
+    "name": "Rowena Doughty",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Daniel & Rowena"
+  },
+  {
+    "id": "ellen-smith",
+    "name": "Ellen Smith",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Ellen & Jody"
+  },
+  {
+    "id": "dakota-smith",
+    "name": "Dakota Smith",
+    "type": "Child",
+    "invitation": "Day",
+    "party": "Ellen & Jody"
+  },
+  {
+    "id": "jody-smith",
+    "name": "Jody Smith",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Ellen & Jody"
+  },
+  {
+    "id": "alex-hodgkinson",
+    "name": "Alex Hodgkinson",
+    "type": "Child",
+    "invitation": "Day",
+    "party": "Gemma & Marc"
+  },
+  {
+    "id": "pat-fidler",
+    "name": "Pat Fidler",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Gemma & Marc"
+  },
+  {
+    "id": "erin-jeffries",
+    "name": "Erin Jeffries",
+    "type": "Child",
+    "invitation": "Day",
+    "party": "Gemma & Marc"
+  },
+  {
+    "id": "gemma-stokes",
+    "name": "Gemma Stokes",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Gemma & Marc"
+  },
+  {
+    "id": "marc-tait",
+    "name": "Marc Tait",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Gemma & Marc"
+  },
+  {
+    "id": "ian-potter",
+    "name": "Ian Potter",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Ian & Jane"
+  },
+  {
+    "id": "jane-potter",
+    "name": "Jane Potter",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Ian & Jane"
+  },
+  {
+    "id": "john-bennett",
+    "name": "John Bennett",
+    "type": "Adult",
+    "invitation": "Evening",
+    "party": "Julie & John"
+  },
+  {
+    "id": "julie-bennett",
+    "name": "Julie Bennett",
+    "type": "Adult",
+    "invitation": "Evening",
+    "party": "Julie & John"
+  },
+  {
+    "id": "alex-bennett",
+    "name": "Alex Bennett",
+    "type": "Child",
+    "invitation": "Evening",
+    "party": "Julie & John"
+  },
+  {
+    "id": "ben-bennett",
+    "name": "Ben Bennett",
+    "type": "Child",
+    "invitation": "Evening",
+    "party": "Julie & John"
+  },
+  {
+    "id": "karen-unwin",
+    "name": "Karen Unwin",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Karen & Richard"
+  },
+  {
+    "id": "richard-unwin",
+    "name": "Richard Unwin",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Karen & Richard"
+  },
+  {
+    "id": "leonie-fiveash",
+    "name": "Leonie Fiveash",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Leonie & Scott"
+  },
+  {
+    "id": "scott-openshaw",
+    "name": "Scott Openshaw",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Leonie & Scott"
+  },
+  {
+    "id": "fiona-potter",
+    "name": "Fiona Potter",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Mark & Fiona"
+  },
+  {
+    "id": "kyle-potter",
+    "name": "Kyle Potter",
+    "type": "Child",
+    "invitation": "Day",
+    "party": "Mark & Fiona"
+  },
+  {
+    "id": "mark-potter",
+    "name": "Mark Potter",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Mark & Fiona"
+  },
+  {
+    "id": "iris-potter",
+    "name": "Iris Potter",
+    "type": "Child",
+    "invitation": "Day",
+    "party": "Matthew & Kathryn"
+  },
+  {
+    "id": "kathryn-potter",
+    "name": "Kathryn Potter",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Matthew & Kathryn"
+  },
+  {
+    "id": "matthew-potter",
+    "name": "Matthew Potter",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Matthew & Kathryn"
+  },
+  {
+    "id": "phoebe-potter",
+    "name": "Phoebe Potter",
+    "type": "Child",
+    "invitation": "Day",
+    "party": "Matthew & Kathryn"
+  },
+  {
+    "id": "jean-potter",
+    "name": "Jean Potter",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Mick & Jean"
+  },
+  {
+    "id": "mick-potter",
+    "name": "Mick Potter",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Mick & Jean"
+  },
+  {
+    "id": "neil-perkins",
+    "name": "Neil Perkins",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Neil & Sioned"
+  },
+  {
+    "id": "sioned-perkins",
+    "name": "Sioned Perkins",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Neil & Sioned"
+  },
+  {
+    "id": "claire-algar",
+    "name": "Claire Algar",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Sam & Fam"
+  },
+  {
+    "id": "eben-howe",
+    "name": "Eben Howe",
+    "type": "Child",
+    "invitation": "Day",
+    "party": "Sam & Fam"
+  },
+  {
+    "id": "samuel-unwin",
+    "name": "Samuel Unwin",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Sam & Fam"
+  },
+  {
+    "id": "sarah-bunting",
+    "name": "Sarah Bunting",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Sarah"
+  },
+  {
+    "id": "andrew-barr",
+    "name": "Andrew Barr",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Sarah & Andy"
+  },
+  {
+    "id": "sarah-barr",
+    "name": "Sarah Barr",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Sarah & Andy"
+  },
+  {
+    "id": "alex-wynne-thompson",
+    "name": "Alex Wynne-Thompson",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Tilly & Alex"
+  },
+  {
+    "id": "tilly-wynne-thompson",
+    "name": "Tilly Wynne-Thompson",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Tilly & Alex"
+  },
+  {
+    "id": "evie-mair-potter",
+    "name": "Evie-mair Potter",
+    "type": "Child",
+    "invitation": "Day",
+    "party": "Tony & Lisa"
+  },
+  {
+    "id": "lisa-potter",
+    "name": "Lisa Potter",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Tony & Lisa"
+  },
+  {
+    "id": "tomos-potter",
+    "name": "Tomos Potter",
+    "type": "Child",
+    "invitation": "Day",
+    "party": "Tony & Lisa"
+  },
+  {
+    "id": "tony-potter",
+    "name": "Tony Potter",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Tony & Lisa"
+  },
+  {
+    "id": "anne-wall",
+    "name": "Anne Wall",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Anne Wall"
+  },
+  {
+    "id": "eirlys-potter",
+    "name": "Eirlys Potter",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Eirlys Potter"
+  },
+  {
+    "id": "emily-cotton",
+    "name": "Emily Cotton",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Emily Cotton"
+  },
+  {
+    "id": "hannah-keeling",
+    "name": "Hannah Keeling",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Hannah Keeling"
+  },
+  {
+    "id": "hannah-macleod",
+    "name": "Hannah Macleod",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Hannah Macleod"
+  },
+  {
+    "id": "joel-david-mcavenne",
+    "name": "Joel David McAvenne",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Joel David McAvenne"
+  },
+  {
+    "id": "lizzie-pidd",
+    "name": "Lizzie Pidd",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Lizzie Pidd"
+  },
+  {
+    "id": "pete-owen",
+    "name": "Pete Owen",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Pete Owen"
+  },
+  {
+    "id": "sally-le-brun",
+    "name": "Sally Le Brun",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Sally & André"
+  },
+  {
+    "id": "andre-le-brun",
+    "name": "André Le Brun",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Sally & André"
+  },
+  {
+    "id": "mirabelle-le-brun",
+    "name": "Mirabelle Le Brun",
+    "type": "Child",
+    "invitation": "Day",
+    "party": "Sally & André"
+  },
+  {
+    "id": "sarah-lloyd",
+    "name": "Sarah Lloyd",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Sarah Lloyd"
+  },
+  {
+    "id": "sid-morris",
+    "name": "Sid Morris",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Sid Morris"
+  },
+  {
+    "id": "stella-wall",
+    "name": "Stella Wall",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Stella Wall"
+  },
+  {
+    "id": "thomas-tracy",
+    "name": "Thomas Tracy",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Thomas Tracy"
+  },
+  {
+    "id": "zac-gaskell",
+    "name": "Zac Gaskell",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Zac Gaskell"
+  },
+  {
+    "id": "joe-casey",
+    "name": "Joe Casey",
+    "type": "Adult",
+    "invitation": "Evening",
+    "party": "Joe Casey"
+  },
+  {
+    "id": "vicki-lloyd",
+    "name": "Vicki Lloyd",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Vicki Lloyd"
+  },
+  {
+    "id": "sophie-norton",
+    "name": "Sophie Norton",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Sophie Norton"
+  },
+  {
+    "id": "lindsey-norton",
+    "name": "Lindsey Norton",
+    "type": "Adult",
+    "invitation": "Evening",
+    "party": "Lindsey Norton"
+  }
+]</script>
+<script>
+(()=>{'use strict';
+const STARTER_GUESTS=JSON.parse(document.getElementById('initialGuestData').textContent);
+const STORAGE_KEY='carl-claire-table-planner-v1';
+const $=id=>document.getElementById(id);
+const clone=v=>JSON.parse(JSON.stringify(v));
+const freshTables=()=>Array.from({length:8},(_,i)=>({id:'table-'+(i+1),name:'Table '+(i+1),capacity:10,guestIds:[]}));
+const blankState=()=>({capacityRevision:8,guests:clone(STARTER_GUESTS),draft:{tables:freshTables()},versions:Array(5).fill(null)});
+let data=blankState(), selected=null,dragged=null, modalMode='versions';
+function validateImported(raw){
+ if(!raw||!Array.isArray(raw.guests)||!raw.draft||!Array.isArray(raw.draft.tables)||![8,10].includes(raw.draft.tables.length)||!Array.isArray(raw.versions)||raw.versions.length!==5)throw Error('Not a valid table planner backup.');
+ if(raw.guests.length>500||raw.guests.some(g=>typeof g.id!=='string'||typeof g.name!=='string'||g.name.length>180||typeof g.invitation!=='string'))throw Error('Invalid guest list.');
+ const ids=new Set(raw.guests.map(g=>g.id));if(ids.size!==raw.guests.length)throw Error('Duplicate guest identifiers.');
+ const checkTables=t=>{if(!Array.isArray(t)||![8,10].includes(t.length))throw Error('Each plan must contain eight or ten tables.');const seen=new Set();for(const x of t){if(!x||!Array.isArray(x.guestIds)||typeof x.name!=='string'||x.name.length>100||!Number.isFinite(Number(x.capacity)))throw Error('Invalid table.');for(const id of x.guestIds){if(!ids.has(id)||seen.has(id))throw Error('Invalid or duplicate seating assignment.');seen.add(id)}}};
+ checkTables(raw.draft.tables);for(const v of raw.versions)if(v!==null){if(typeof v.name!=='string'||!v.snapshot||!v.snapshot.tables)throw Error('Invalid saved version.');checkTables(v.snapshot.tables)}
+ // Preserve custom capacities. Upgrade older 8-seat defaults to 10 seats.
+ if(raw.capacityRevision!==10 && raw.capacityRevision!==8){
+  for(const t of raw.draft.tables)if(Number(t.capacity)===8)t.capacity=10;
+  for(const v of raw.versions)if(v)for(const t of v.snapshot.tables)if(Number(t.capacity)===8)t.capacity=10;
+ }
+ // Upgrade old 10-table plans without deleting guests: guests assigned to
+ // tables 9 and 10 return to the unassigned list, ready to be reseated.
+ // Apply the same change to all five saved versions.
+ const trimToEight=plan=>{if(plan.tables.length===10)plan.tables=plan.tables.slice(0,8)};
+ trimToEight(raw.draft);
+ for(const v of raw.versions)if(v)trimToEight(v.snapshot);
+ raw.capacityRevision=8;
+ return raw;
+}
+try{const stored=localStorage.getItem(STORAGE_KEY);if(stored){const previous=JSON.parse(stored);const wasTenTables=previous.draft?.tables?.length===10;data=validateImported(previous);if(wasTenTables)alert('Your planner now has eight tables. Guests previously seated at Tables 9 and 10 are still in the guest list, but are now unassigned. The same applies to saved versions.');const known=new Set(data.guests.map(g=>g.id));for(const g of STARTER_GUESTS)if(!known.has(g.id))data.guests.push(g)}}catch(err){console.warn('Unable to load saved plan',err);alert('A saved plan could not be loaded. Starting with a new working draft. Your original backup has not been deliberately deleted.');}
+function persist(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(data));$('saveStatus').textContent='Working draft saved on this device';}catch(err){$('saveStatus').textContent='Storage unavailable — export a backup';console.warn(err)}}
+function tableOf(id,tables=data.draft.tables){return tables.find(t=>t.guestIds.includes(id))}
+function nameOf(id){return data.guests.find(g=>g.id===id)?.name||'Unknown guest'}
+function guestOf(id){return data.guests.find(g=>g.id===id)}
+function assign(id,tableId){if(!guestOf(id))return;for(const t of data.draft.tables)t.guestIds=t.guestIds.filter(x=>x!==id);const dest=data.draft.tables.find(t=>t.id===tableId);if(dest)dest.guestIds.push(id);selected=null;persist();render()}
+function remove(id){assign(id,null)}
+function choose(id){selected=selected===id?null:id;render()}
+function render(){const assigned=data.draft.tables.reduce((n,t)=>n+t.guestIds.length,0);$('totalStat').textContent=data.guests.length;$('assignedStat').textContent=assigned;$('unassignedStat').textContent=data.guests.length-assigned;$('dayStat').textContent=data.guests.filter(g=>g.invitation==='Day').length;$('eveningStat').textContent=data.guests.filter(g=>g.invitation==='Evening').length;$('selection').hidden=!selected;$('unassignBtn').disabled=!selected||!tableOf(selected);if(selected)$('selectedName').textContent=nameOf(selected);renderGuests();renderTables()}
+function renderGuests(){const root=$('guestList');root.replaceChildren();const q=$('search').value.trim().toLocaleLowerCase();const invite=$('inviteFilter').value,seat=$('seatFilter').value;const shown=data.guests.filter(g=>(invite==='all'||g.invitation===invite)&&(seat==='all'||(seat==='assigned'?!!tableOf(g.id):!tableOf(g.id)))&&(g.name+' '+(g.party||'')).toLocaleLowerCase().includes(q)).sort((a,b)=>a.name.localeCompare(b.name));$('guestCount').textContent='('+shown.length+')';for(const g of shown){const seated=tableOf(g.id);const row=document.createElement('button');row.type='button';row.className='guest-row'+(selected===g.id?' selected':'');row.draggable=true;row.dataset.id=g.id;row.title='Click to select, then click a table. Or drag directly onto a table.';row.setAttribute('aria-pressed',selected===g.id?'true':'false');const txt=document.createElement('span');txt.className='name';txt.textContent=g.name;const sub=document.createElement('span');sub.className='sub';sub.textContent=seated?seated.name:(g.party||'Not seated');txt.append(sub);row.append(txt);const tag=document.createElement('span');tag.className='tag '+(g.type==='Child'?'child':g.invitation==='Evening'?'evening':'');tag.textContent=g.type==='Child'?'Child':g.invitation==='Evening'?'Evening':'';if(tag.textContent)row.append(tag);row.addEventListener('click',()=>choose(g.id));row.addEventListener('dragstart',e=>startDrag(e,g.id));row.addEventListener('dragend',()=>dragged=null);root.append(row)}if(!shown.length){const empty=document.createElement('p');empty.className='secondary';empty.style.padding='10px';empty.textContent='No guests match these filters.';root.append(empty)} }
+function startDrag(e,id){dragged=id;e.dataTransfer.setData('text/plain',id);e.dataTransfer.effectAllowed='move'}
+function renderTables(){const root=$('tableGrid');root.replaceChildren();for(const [i,t] of data.draft.tables.entries()){const card=document.createElement('section');card.className='table-card'+(t.guestIds.length>Number(t.capacity)?' full':'');card.setAttribute('aria-label',t.name);card.addEventListener('dragover',e=>{e.preventDefault();card.classList.add('drag-over');e.dataTransfer.dropEffect='move'});card.addEventListener('dragleave',e=>{if(!card.contains(e.relatedTarget))card.classList.remove('drag-over')});card.addEventListener('drop',e=>{e.preventDefault();card.classList.remove('drag-over');const id=dragged||e.dataTransfer.getData('text/plain');if(guestOf(id))assign(id,t.id);dragged=null});const top=document.createElement('div');top.className='table-top';const title=document.createElement('div');title.className='table-title';const num=document.createElement('span');num.className='table-number';num.textContent=i+1;const inp=document.createElement('input');inp.className='table-name';inp.value=t.name;inp.maxLength=100;inp.setAttribute('aria-label','Name for table '+(i+1));inp.addEventListener('change',()=>{t.name=inp.value.trim()||'Table '+(i+1);persist();render()});title.append(num,inp);const cap=document.createElement('label');cap.className='capacity';cap.append('Seats ');const capInput=document.createElement('input');capInput.type='number';capInput.min='1';capInput.max='100';capInput.value=t.capacity;capInput.setAttribute('aria-label','Capacity for '+t.name);capInput.addEventListener('change',()=>{t.capacity=Math.max(1,Math.min(100,Number(capInput.value)||10));persist();render()});cap.append(capInput);top.append(title,cap);card.append(top);const occ=document.createElement('div');occ.className='occupancy';const label=document.createElement('span');label.textContent=t.guestIds.length+' / '+t.capacity+' seats';const bar=document.createElement('span');bar.className='bar';const fill=document.createElement('i');fill.style.width=Math.min(100,t.guestIds.length/t.capacity*100)+'%';bar.append(fill);occ.append(label,bar);card.append(occ);const seated=document.createElement('div');seated.className='seated';for(const id of t.guestIds){const g=guestOf(id);if(!g)continue;const chip=document.createElement('div');chip.className='chip'+(g.type==='Child'?' child':g.invitation==='Evening'?' evening':'')+(selected===id?' selected':'');chip.draggable=true;chip.addEventListener('dragstart',e=>startDrag(e,id));chip.addEventListener('dragend',()=>dragged=null);const n=document.createElement('span');n.className='chip-name';n.textContent=g.name;chip.append(n);const x=document.createElement('button');x.type='button';x.className='remove';x.textContent='×';x.title='Remove '+g.name+' from '+t.name;x.setAttribute('aria-label',x.title);x.addEventListener('click',e=>{e.stopPropagation();remove(id)});chip.append(x);chip.addEventListener('click',()=>choose(id));seated.append(chip)}if(!t.guestIds.length){const msg=document.createElement('span');msg.className='empty';msg.textContent='Drop guests here';seated.append(msg)}card.append(seated);const bottom=document.createElement('div');bottom.className='table-bottom';const place=document.createElement('button');place.className='btn small';place.textContent=selected?'Place selected guest here':'Select a guest to place';place.disabled=!selected;place.addEventListener('click',()=>{if(selected)assign(selected,t.id)});bottom.append(place);card.append(bottom);root.append(card)}}
+function createVersionContent(){const wrapper=document.createElement('div');const intro=document.createElement('p');intro.className='secondary';intro.textContent='Saving replaces only the selected slot. Loading a slot replaces your current working draft; your other saved versions stay unchanged.';wrapper.append(intro);const row=document.createElement('div');row.className='version-row';data.versions.forEach((v,i)=>{const card=document.createElement('div');card.className='version-card'+(!v?' empty-slot':'');const heading=document.createElement('strong');heading.textContent=v?v.name:'Empty slot '+(i+1);card.append(heading);const date=document.createElement('div');date.className='date';date.textContent=v?'Saved '+new Date(v.savedAt).toLocaleString('en-GB'):'Ready for a new plan';card.append(date);const actions=document.createElement('div');actions.className='buttons';const save=document.createElement('button');save.className='btn primary';save.textContent=v?'Overwrite':'Save here';save.addEventListener('click',()=>{const proposed=prompt('Name this version:',v?.name||'Plan '+(i+1));if(proposed===null)return;const name=proposed.trim().slice(0,80)||'Plan '+(i+1);if(v&&!confirm('Overwrite "'+v.name+'" with your current working draft?'))return;data.versions[i]={name,savedAt:new Date().toISOString(),snapshot:clone(data.draft)};persist();openModal('versions')});actions.append(save);if(v){const load=document.createElement('button');load.className='btn';load.textContent='Load';load.addEventListener('click',()=>{if(!confirm('Load "'+v.name+'"? Your current working draft will be replaced. Save it to a slot first if you want to keep it.'))return;data.draft=clone(v.snapshot);selected=null;persist();render();closeModal()});const del=document.createElement('button');del.className='btn';del.textContent='Delete';del.addEventListener('click',()=>{if(!confirm('Delete saved version "'+v.name+'"?'))return;data.versions[i]=null;persist();openModal('versions')});actions.append(load,del)}card.append(actions);row.append(card)});wrapper.append(row);return wrapper}
+function createComparison(){const wrapper=document.createElement('div');const available=data.versions.map((v,i)=>v?{index:i,name:v.name}:null).filter(Boolean);if(available.length<2){const p=document.createElement('p');p.textContent='Save at least two versions to compare them side by side.';wrapper.append(p);const b=document.createElement('button');b.className='btn primary';b.textContent='Manage saved versions';b.addEventListener('click',()=>openModal('versions'));wrapper.append(b);return wrapper}const row=document.createElement('div');row.className='row';const a=document.createElement('select'),b=document.createElement('select');for(const sel of [a,b])for(const v of available){const opt=document.createElement('option');opt.value=v.index;opt.textContent=v.name;sel.append(opt)}b.value=String(available[1].index);row.append('Compare ',a,' with ',b);wrapper.append(row);const comparison=document.createElement('div');comparison.className='comparison';wrapper.append(comparison);function draw(){comparison.replaceChildren();const left=data.versions[Number(a.value)],right=data.versions[Number(b.value)];for(const [version,other] of [[left,right],[right,left]]){const col=document.createElement('div');col.className='compare-col';const heading=document.createElement('h3');heading.textContent=version.name;col.append(heading);version.snapshot.tables.forEach((t,i)=>{const otherT=other.snapshot.tables[i];const changed=JSON.stringify([...t.guestIds].sort())!==JSON.stringify([...(otherT?.guestIds||[])].sort());const block=document.createElement('div');block.className='compare-table'+(changed?' changed':'');const h=document.createElement('strong');h.textContent=t.name+' ('+t.guestIds.length+'/'+t.capacity+')'+(changed?' · Different':'');const p=document.createElement('p');p.textContent=t.guestIds.map(nameOf).join(', ')||'Empty';block.append(h,p);col.append(block)});comparison.append(col)}}a.addEventListener('change',draw);b.addEventListener('change',draw);draw();return wrapper}
+function openModal(mode){modalMode=mode;$('modalTitle').textContent=mode==='compare'?'Compare seating plans':'Saved versions';$('modalDesc').textContent=mode==='compare'?'Highlighted tables have different guest assignments.':'Keep up to five independent snapshots of your seating plan.';$('modalContent').replaceChildren(mode==='compare'?createComparison():createVersionContent());$('modalBackdrop').hidden=false}
+function closeModal(){$('modalBackdrop').hidden=true}
+
+// Full-screen, non-editable overview. The selector previews snapshots without loading them.
+function openOverview(){
+ const select=$('overviewVersion');select.replaceChildren();
+ const draft=document.createElement('option');draft.value='draft';draft.textContent='Working draft';select.append(draft);
+ data.versions.forEach((v,i)=>{if(!v)return;const opt=document.createElement('option');opt.value=String(i);opt.textContent=v.name;select.append(opt)});
+ select.value='draft';drawOverview();$('overview').hidden=false;document.body.classList.add('overview-open');$('overviewClose').focus();
+}
+function closeOverview(){$('overview').hidden=true;document.body.classList.remove('overview-open');$('overviewBtn').focus()}
+function drawOverview(){
+ const choice=$('overviewVersion').value;
+ const version=choice==='draft'?null:data.versions[Number(choice)];
+ const plan=version?version.snapshot:data.draft;
+ const label=version?version.name:'Working draft';
+ $('overviewSubtitle').textContent=label+' · all guest names at a glance';
+ const root=$('overviewGrid');root.replaceChildren();
+ let seated=0,capacity=0;
+ plan.tables.forEach((t,i)=>{
+  seated+=t.guestIds.length;capacity+=Number(t.capacity);
+  const card=document.createElement('article');card.className='overview-table'+(t.guestIds.length>Number(t.capacity)?' overfull':'');
+  const head=document.createElement('div');head.className='overview-table-top';
+  const num=document.createElement('span');num.className='overview-number';num.textContent=i+1;
+  const title=document.createElement('span');title.className='overview-table-title';title.textContent=t.name;title.title=t.name;
+  const count=document.createElement('span');count.className='overview-count';count.textContent=t.guestIds.length+' / '+t.capacity;
+  head.append(num,title,count);card.append(head);
+  const names=document.createElement('ol');names.className='overview-names';
+  const rows=Math.max(10,t.guestIds.length);
+  for(let j=0;j<rows;j++){
+   const li=document.createElement('li');const seat=document.createElement('span');seat.className='seat-number';seat.textContent=String(j+1).padStart(2,'0');
+   const guest=t.guestIds[j]?guestOf(t.guestIds[j]):null;
+   const name=document.createElement('span');name.className='seat-name'+(!guest?' seat-empty':'');name.textContent=guest?guest.name:'—';name.title=guest?.name||'Empty seat';li.append(seat,name);
+   if(guest?.type==='Child'){const child=document.createElement('span');child.className='seat-child';child.textContent='CHILD';li.append(child)}
+   names.append(li);
+  }
+  card.append(names);root.append(card);
+ });
+ const unassigned=data.guests.length-seated;
+ $('overviewTotals').textContent=seated+' seated · '+capacity+' seats · '+unassigned+' unassigned';
+}
+$('overviewBtn').addEventListener('click',openOverview);
+$('overviewClose').addEventListener('click',closeOverview);
+$('overviewVersion').addEventListener('change',drawOverview);
+$('overviewPrint').addEventListener('click',()=>window.print());
+
+$('versionsBtn').addEventListener('click',()=>openModal('versions'));$('compareBtn').addEventListener('click',()=>openModal('compare'));$('closeModal').addEventListener('click',closeModal);$('modalBackdrop').addEventListener('click',e=>{if(e.target===$('modalBackdrop'))closeModal()});document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!$('overview').hidden)closeOverview();else closeModal()}});$('search').addEventListener('input',renderGuests);$('inviteFilter').addEventListener('change',renderGuests);$('seatFilter').addEventListener('change',renderGuests);$('clearSelection').addEventListener('click',()=>{selected=null;render()});$('unassignBtn').addEventListener('click',()=>{if(selected)remove(selected)});$('printBtn').addEventListener('click',()=>window.print());
+$('addGuestBtn').addEventListener('click',()=>{const name=$('newGuest').value.trim().replace(/\s+/g,' ');if(!name)return alert('Enter a guest name.');if(data.guests.some(g=>g.name.toLocaleLowerCase()===name.toLocaleLowerCase()))return alert('This guest is already on the list.');const id='custom-'+(typeof crypto!=='undefined'&&crypto.randomUUID?crypto.randomUUID():Date.now()+'-'+Math.random());data.guests.push({id,name,type:$('newGuestType').value,invitation:$('newGuestInvite').value,party:'Added manually'});$('newGuest').value='';persist();render()});$('newGuest').addEventListener('keydown',e=>{if(e.key==='Enter')$('addGuestBtn').click()});
+function createBackupFile(){
+ const filename='claire-carl-table-plans-'+new Date().toISOString().slice(0,10)+'.json';
+ const contents=JSON.stringify({...data,exportedAt:new Date().toISOString()},null,2);
+ return new File([contents],filename,{type:'application/json'});
+}
+function downloadBackup(file){
+ const url=URL.createObjectURL(file);
+ const a=document.createElement('a');a.href=url;a.download=file.name;
+ document.body.append(a);a.click();a.remove();
+ setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+$('exportBtn').addEventListener('click',()=>downloadBackup(createBackupFile()));
+$('emailBackupBtn').addEventListener('click',async()=>{
+ const file=createBackupFile();
+ // On supported mobile devices, the system share sheet can attach the JSON file
+ // directly to the user's chosen email application.
+ if(navigator.share && navigator.canShare && navigator.canShare({files:[file]})){
+  try{
+   await navigator.share({files:[file],title:'Claire & Carl wedding table plans backup',text:'Table planner backup — open the planner on the other device and choose Import backup.'});
+   return;
+  }catch(error){
+   if(error && error.name==='AbortError')return;
+   console.warn('File sharing unavailable; using email draft fallback',error);
+  }
+ }
+ // Browsers cannot attach files using mailto:. Download the backup first and
+ // make that requirement explicit rather than implying an attachment was sent.
+ downloadBackup(file);
+ const subject=encodeURIComponent('Claire & Carl — table planner backup');
+ const body=encodeURIComponent('I have downloaded the table planner backup file: '+file.name+'\n\nIMPORTANT: Attach the downloaded .json file to this email before sending. It cannot be attached automatically in this browser.\n\nOn the other device, open the table planner, click Import backup and select the attached file. Importing replaces the current draft and all five saved versions on that device.');
+ alert('Your backup file has been downloaded. An email draft will open next. IMPORTANT: attach the downloaded JSON file to the email before sending.');
+ window.location.href='mailto:?subject='+subject+'&body='+body;
+});$('importBtn').addEventListener('click',()=>$('fileInput').click());$('fileInput').addEventListener('change',async e=>{const f=e.target.files?.[0];if(!f)return;try{const incoming=validateImported(JSON.parse(await f.text()));if(!confirm('Import this backup? It will replace the working draft and all five saved versions on this device.'))return;data=incoming;selected=null;persist();render();alert('Backup imported successfully. If this was a 10-table backup, guests from Tables 9 and 10 are now unassigned, not deleted.')}catch(err){alert('Could not import backup: '+err.message)}finally{e.target.value=''}});
+// Allow a guest to be dragged back to the guest list to unseat them.
+$('guestList').addEventListener('dragover',e=>{e.preventDefault();e.dataTransfer.dropEffect='move'});$('guestList').addEventListener('drop',e=>{e.preventDefault();const id=dragged||e.dataTransfer.getData('text/plain');if(guestOf(id))remove(id);dragged=null});
+render();persist();
+})();
+</script>
+</body>
+</html>
