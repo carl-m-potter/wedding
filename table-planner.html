@@ -59,12 +59,64 @@ body.overview-open{overflow:hidden}
 .selection{flex-wrap:wrap}
 .selection .selection-message{flex:1;min-width:180px}
 @media(max-width:900px){.bulk-tools{padding:12px 15px}}
+
+/* Editable floorplan: positions follow the supplied hand-drawn room sketch. */
+body.floorplan-open{overflow:hidden}
+.floorplan{position:fixed;inset:0;z-index:48;display:flex;flex-direction:column;background:#f2f6f4;color:var(--ink)}
+.floorplan[hidden]{display:none}
+.floorplan-head{background:#fff;border-bottom:1px solid var(--line);padding:12px clamp(12px,2vw,28px);display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap;flex-shrink:0}
+.floorplan-head h2{font:normal 27px/1.15 Georgia,serif;margin:3px 0}
+.floorplan-head .secondary{margin:0}
+.floorplan-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.floorplan-actions select,.floorplan-actions input{border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);padding:8px;max-width:220px}
+.floorplan-actions input[type=range]{width:115px;padding:0;accent-color:var(--teal)}
+.floorplan-main{display:grid;grid-template-columns:minmax(0,1fr) 285px;flex:1;min-height:0}
+.floorplan-viewport{overflow:auto;min-width:0;min-height:0;position:relative;background:#e8efeb;overscroll-behavior:contain}
+.floorplan-stage{position:relative;margin:24px auto;box-shadow:0 12px 45px #294a3b24;transition:width .12s,height .12s}
+.floorplan-room{width:1700px;height:2460px;position:absolute;left:0;top:0;transform-origin:0 0;border:12px solid #8fa9a1;border-radius:20px;background-color:#fcfdfb;background-image:radial-gradient(#d8e5df 1px,transparent 1px);background-size:32px 32px;overflow:hidden}
+.floorplan-room::before{content:'RECEPTION ROOM';position:absolute;top:19px;left:35px;letter-spacing:.22em;font-size:19px;font-weight:800;color:#9caea6}
+.floorplan-bar{position:absolute;display:flex;align-items:center;justify-content:center;border:8px solid #b7a88e;background:#eee4d3;color:#776245;font-size:29px;letter-spacing:.24em;font-weight:800}
+.floorplan-wall{position:absolute;border:8px solid #98aaa5;border-top:0;background:repeating-linear-gradient(135deg,#e0e7e3,#e0e7e3 12px,#d5dfda 12px,#d5dfda 24px);display:grid;place-items:center;color:#758780;font-size:21px;font-weight:750;letter-spacing:.1em;text-align:center;padding:30px}
+.floorplan-dj{position:absolute;display:grid;place-items:center;border:7px solid #b4c7be;background:#eef3ee;border-radius:10px;color:#597e70;font-size:29px;font-weight:800;letter-spacing:.14em}
+.floorplan-pillar{position:absolute;width:74px;height:74px;border:8px solid #98a7a0;border-radius:7px;background:#d1dad5;box-shadow:0 4px 8px #254b3b14}
+.floorplan-pillar::after{content:'PILLAR';display:grid;place-items:center;height:100%;font-size:10px;color:#5b6c65;font-weight:800}
+.floorplan-table{position:absolute;width:1px;height:1px;overflow:visible;z-index:2}
+.floorplan-disc{position:absolute;left:-72px;top:-72px;width:144px;height:144px;border:5px solid #b6d4cb;border-radius:50%;background:linear-gradient(145deg,#fff,#e8f4ee);box-shadow:0 5px 20px #1f635522;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:12px}
+.floorplan-disc strong{font:normal 28px/1.1 Georgia,serif;color:#216c63}
+.floorplan-disc span{font-size:14px;font-weight:800;color:#3b5b53;max-width:115px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.floorplan-disc small{font-size:13px;color:#667f74}
+.floorplan-seat{position:absolute;width:158px;height:36px;display:flex;align-items:center;gap:6px;padding:4px 7px;border:1px solid #c6dbd2;background:#fff;border-radius:9px;color:#2d5148;font-size:13px;text-align:left;box-shadow:0 2px 5px #1c4b3820;transform:translate(-50%,-50%);white-space:nowrap;cursor:pointer;z-index:4}
+.floorplan-seat .floorplan-seat-num{display:grid;place-items:center;width:21px;height:21px;border-radius:50%;background:#d6eae3;color:#287267;font-weight:800;font-size:11px;flex-shrink:0}
+.floorplan-seat .floorplan-seat-name{overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0}
+.floorplan-seat.empty{color:#9baaa4;border-style:dashed;background:#f9fcfa}
+.floorplan-seat.empty .floorplan-seat-num{background:#ecf1ee;color:#8a9e96}
+.floorplan-seat.child{background:#fff7e9;border-color:#eddfc5}
+.floorplan-seat.active{border:3px solid #d89a48;box-shadow:0 0 0 4px #f8e6c9}
+.floorplan-seat.drop-over{border:3px dashed var(--teal);background:#d7efe7}
+.floorplan-seat:focus-visible{outline:4px solid #e9b86c;outline-offset:2px}
+.floorplan-side{background:#fff;border-left:1px solid var(--line);overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:16px}
+.floorplan-side h3{font:normal 23px Georgia,serif;margin:0 0 6px}
+.floorplan-side p{margin:0;color:var(--muted);font-size:12px}
+.floorplan-side label{display:block;font-weight:700;font-size:12px;margin-bottom:6px}
+.floorplan-side select{width:100%;border:1px solid var(--line);padding:11px 8px;border-radius:8px;background:#fff;color:var(--ink)}
+.floorplan-side .floorplan-edit-buttons{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+.floorplan-side .floorplan-help{padding:12px;border-radius:10px;background:#f2f7f4;display:grid;gap:8px}
+.floorplan-side .floorplan-help strong{font-size:13px}
+.floorplan-side .floorplan-help p{line-height:1.5}
+.floorplan-side .floorplan-info{padding:11px 12px;background:#e9f3f1;border-radius:10px;font-size:12px;color:#28645c}
+.floorplan-side .floorplan-info.warning{background:#fff3df;color:#8a5a23}
+.floorplan-legend{display:flex;gap:8px;flex-wrap:wrap;font-size:11px;color:var(--muted)}
+.floorplan-legend i{display:inline-block;width:11px;height:11px;background:#fff;border:1px solid #c6dbd2;border-radius:3px;margin-right:3px}
+.floorplan-legend i.child{background:#fff7e9}
+.floorplan-foot{padding:7px 22px;background:#fff;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:15px;color:var(--muted);font-size:12px;flex-shrink:0}
+@media(max-width:860px){.floorplan-main{grid-template-columns:minmax(0,1fr)}.floorplan-side{position:absolute;right:10px;bottom:43px;max-height:40%;width:min(330px,calc(100% - 20px));border:1px solid var(--line);border-radius:13px;box-shadow:0 8px 35px #1b4b352b;z-index:10;padding:12px}.floorplan-side:not(.editing) .floorplan-editor{display:none}.floorplan-side:not(.editing){width:230px}.floorplan-head h2{font-size:21px}.floorplan-actions{gap:5px}.floorplan-actions .btn{padding:6px 8px;font-size:12px}.floorplan-actions input[type=range]{width:80px}}
+@media print{body.floorplan-open .top,body.floorplan-open .workspace,body.floorplan-open .footer,body.floorplan-open .overview,body.floorplan-open .floorplan-actions,body.floorplan-open .floorplan-side,body.floorplan-open .floorplan-foot{display:none!important}body.floorplan-open .floorplan{position:static;display:block!important;background:#fff;height:auto;overflow:visible}body.floorplan-open .floorplan-head{padding:3px 8px}body.floorplan-open .floorplan-main{display:block}body.floorplan-open .floorplan-viewport{overflow:visible;background:#fff}body.floorplan-open .floorplan-stage{margin:0;width:918px!important;height:1329px!important;box-shadow:none}body.floorplan-open .floorplan-room{transform:scale(.54)!important}body.floorplan-open .floorplan-seat{box-shadow:none} @page{size:A3 portrait;margin:10mm}}
 </style>
 </head>
 <body>
 <header class="top">
- <div class="topline"><div><div class="eyebrow">Claire & Carl · 1 May 2027</div><h1>Wedding table planner</h1><p class="hint">Select multiple guests or a whole invitation group, then place them at a table together. You can still drag names, move them between tables, and save five versions.</p></div><div><button class="btn" id="printBtn">Print layout</button></div></div>
- <div class="toolbar"><button class="btn primary" id="versionsBtn">Save & manage versions</button><button class="btn" id="compareBtn">Compare versions</button><button class="btn primary" id="overviewBtn">View all tables</button><span class="divider"></span><button class="btn" id="exportBtn">Download backup</button><button class="btn" id="emailBackupBtn">Email backup</button><button class="btn" id="importBtn">Import backup</button><input class="file-input" id="fileInput" type="file" accept=".json,application/json"><span class="secondary" id="saveStatus" role="status">Working draft saved on this device</span></div>
+ <div class="topline"><div><div class="eyebrow">Claire & Carl · 1 May 2027</div><h1>Wedding table planner</h1><p class="hint">Select multiple guests or a whole invitation group, then place them at a table together. You can still drag names, move them between tables, and save five versions. Use Floorplan view to choose individual seats around the room.</p></div><div><button class="btn" id="printBtn">Print layout</button></div></div>
+ <div class="toolbar"><button class="btn primary" id="versionsBtn">Save & manage versions</button><button class="btn" id="compareBtn">Compare versions</button><button class="btn primary" id="overviewBtn">View all tables</button><button class="btn primary" id="floorplanBtn">Floorplan view</button><span class="divider"></span><button class="btn" id="exportBtn">Download backup</button><button class="btn" id="emailBackupBtn">Email backup</button><button class="btn" id="importBtn">Import backup</button><input class="file-input" id="fileInput" type="file" accept=".json,application/json"><span class="secondary" id="saveStatus" role="status">Working draft saved on this device</span></div>
  <div class="stats"><div class="stat"><strong id="totalStat">0</strong><span>Total guests</span></div><div class="stat"><strong id="assignedStat">0</strong><span>Assigned to tables</span></div><div class="stat"><strong id="unassignedStat">0</strong><span>Unassigned</span></div><div class="stat"><strong id="dayStat">0</strong><span>Day guests</span></div><div class="stat"><strong id="eveningStat">0</strong><span>Evening guests</span></div></div>
 </header>
 <div class="workspace">
@@ -80,6 +132,22 @@ body.overview-open{overflow:hidden}
  </div>
  <div class="overview-grid" id="overviewGrid"></div>
  <div class="overview-summary"><span id="overviewTotals"></span><span>View only · use the planner to move guests</span></div>
+</section>
+
+<section id="floorplan" class="floorplan" role="dialog" aria-modal="true" aria-labelledby="floorplanHeading" hidden>
+ <header class="floorplan-head"><div><div class="eyebrow">Claire &amp; Carl · Reception layout</div><h2 id="floorplanHeading">Your wedding floorplan</h2><p class="secondary">Eight round tables · two pillars · bar and walled-off area · DJ position</p></div>
+  <div class="floorplan-actions"><label class="sr-only" for="floorplanVersion">Plan to view</label><select id="floorplanVersion" aria-label="Plan to view"><option value="draft">Working draft</option></select><button class="btn small" id="floorplanFit">Fit room</button><label for="floorplanZoom" class="secondary">Zoom <span id="floorplanZoomLabel">50%</span></label><input type="range" id="floorplanZoom" min="20" max="160" step="5" value="50" aria-label="Floorplan zoom"><button class="btn" id="floorplanPrint">Print floorplan</button><button class="btn primary" id="floorplanClose">Back to planner ✕</button></div>
+ </header>
+ <div class="floorplan-main"><div id="floorplanViewport" class="floorplan-viewport" aria-label="Scrollable and zoomable reception floorplan"><div id="floorplanStage" class="floorplan-stage"><div id="floorplanRoom" class="floorplan-room">
+  <div class="floorplan-bar" style="left:1110px;top:1660px;width:590px;height:170px">BAR</div>
+  <div class="floorplan-wall" style="left:1110px;top:1830px;width:590px;height:630px">WALLED-OFF SPACE<br>(NO ACCESS)</div>
+  <div class="floorplan-dj" style="left:80px;top:2170px;width:610px;height:260px">DJ</div>
+  <div class="floorplan-pillar" style="left:1025px;top:435px" title="Pillar"></div>
+  <div class="floorplan-pillar" style="left:1025px;top:895px" title="Pillar"></div>
+  <div id="floorplanTables"></div>
+ </div></div></div>
+ <aside id="floorplanSide" class="floorplan-side" aria-label="Floorplan seat editor"><div><h3>Arrange individual seats</h3><p>Click a name or an empty chair on the floorplan to assign a guest. Drag a name onto an empty chair, or swap two chairs at the same table.</p></div><div class="floorplan-legend"><span><i></i>Adult</span><span><i class="child"></i>Child</span><span>Dashed = empty</span></div><div id="floorplanEditor" class="floorplan-editor"><div class="floorplan-help"><strong>Select a seat</strong><p>Each table has ten numbered places. The main planner controls which table people sit at; this view also lets you choose their exact chair.</p></div></div><div id="floorplanStatus" class="floorplan-info">Working draft · changes save automatically</div></aside></div>
+ <footer class="floorplan-foot"><span id="floorplanTotals">8 tables · 80 seats</span><span>Use Fit room for the whole layout; zoom in to read and edit names</span></footer>
 </section>
 <script id="initialGuestData" type="application/json">[
   {
@@ -684,7 +752,7 @@ function validateImported(raw){
  if(!raw||!Array.isArray(raw.guests)||!raw.draft||!Array.isArray(raw.draft.tables)||![8,10].includes(raw.draft.tables.length)||!Array.isArray(raw.versions)||raw.versions.length!==5)throw Error('Not a valid table planner backup.');
  if(raw.guests.length>500||raw.guests.some(g=>typeof g.id!=='string'||typeof g.name!=='string'||g.name.length>180||typeof g.invitation!=='string'))throw Error('Invalid guest list.');
  const ids=new Set(raw.guests.map(g=>g.id));if(ids.size!==raw.guests.length)throw Error('Duplicate guest identifiers.');
- const checkTables=t=>{if(!Array.isArray(t)||![8,10].includes(t.length))throw Error('Each plan must contain eight or ten tables.');const seen=new Set();for(const x of t){if(!x||!Array.isArray(x.guestIds)||typeof x.name!=='string'||x.name.length>100||!Number.isFinite(Number(x.capacity)))throw Error('Invalid table.');for(const id of x.guestIds){if(!ids.has(id)||seen.has(id))throw Error('Invalid or duplicate seating assignment.');seen.add(id)}}};
+ const checkTables=t=>{if(!Array.isArray(t)||![8,10].includes(t.length))throw Error('Each plan must contain eight or ten tables.');const seen=new Set();for(const x of t){if(!x||!Array.isArray(x.guestIds)||typeof x.name!=='string'||x.name.length>100||!Number.isFinite(Number(x.capacity)))throw Error('Invalid table.');for(const id of x.guestIds){if(!ids.has(id)||seen.has(id))throw Error('Invalid or duplicate seating assignment.');seen.add(id)}if(x.seatIds!==undefined){if(!Array.isArray(x.seatIds)||x.seatIds.length!==10)throw Error('Invalid individual seat layout.');const seated=new Set();for(const id of x.seatIds){if(id===null)continue;if(typeof id!=='string'||!x.guestIds.includes(id)||seated.has(id))throw Error('Invalid seat assignment.');seated.add(id)}}}};
  checkTables(raw.draft.tables);for(const v of raw.versions)if(v!==null){if(typeof v.name!=='string'||!v.snapshot||!v.snapshot.tables)throw Error('Invalid saved version.');checkTables(v.snapshot.tables)}
  // Preserve custom capacities. Upgrade older 8-seat defaults to 10 seats.
  if(raw.capacityRevision!==10 && raw.capacityRevision!==8){
@@ -698,10 +766,21 @@ function validateImported(raw){
  trimToEight(raw.draft);
  for(const v of raw.versions)if(v)trimToEight(v.snapshot);
  raw.capacityRevision=8;
+ ensureSeatLayout(raw.draft);for(const v of raw.versions)if(v)ensureSeatLayout(v.snapshot);
  return raw;
 }
+function ensureSeatLayout(plan){
+ for(const t of plan.tables){
+  const assigned=new Set(t.guestIds),seen=new Set();
+  const seats=Array.isArray(t.seatIds)&&t.seatIds.length===10?t.seatIds.slice():Array(10).fill(null);
+  for(let i=0;i<10;i++){if(!assigned.has(seats[i])||seen.has(seats[i]))seats[i]=null;else seen.add(seats[i])}
+  for(const id of t.guestIds){if(seen.has(id))continue;const empty=seats.indexOf(null);if(empty<0)break;seats[empty]=id;seen.add(id)}
+  t.seatIds=seats;
+ }
+}
+function seatPlanTable(plan,id){return plan.tables.find(t=>t.id===id)}
 try{const stored=localStorage.getItem(STORAGE_KEY);if(stored){const previous=JSON.parse(stored);const wasTenTables=previous.draft?.tables?.length===10;data=validateImported(previous);if(wasTenTables)alert('Your planner now has eight tables. Guests previously seated at Tables 9 and 10 are still in the guest list, but are now unassigned. The same applies to saved versions.');const known=new Set(data.guests.map(g=>g.id));for(const g of STARTER_GUESTS)if(!known.has(g.id))data.guests.push(g)}}catch(err){console.warn('Unable to load saved plan',err);alert('A saved plan could not be loaded. Starting with a new working draft. Your original backup has not been deliberately deleted.');}
-function persist(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(data));$('saveStatus').textContent='Working draft saved on this device';}catch(err){$('saveStatus').textContent='Storage unavailable — export a backup';console.warn(err)}}
+function persist(){ensureSeatLayout(data.draft);try{localStorage.setItem(STORAGE_KEY,JSON.stringify(data));$('saveStatus').textContent='Working draft saved on this device';}catch(err){$('saveStatus').textContent='Storage unavailable — export a backup';console.warn(err)}}
 function tableOf(id,tables=data.draft.tables){return tables.find(t=>t.guestIds.includes(id))}
 function nameOf(id){return data.guests.find(g=>g.id===id)?.name||'Unknown guest'}
 function guestOf(id){return data.guests.find(g=>g.id===id)}
@@ -720,7 +799,7 @@ function assignMany(ids,tableId){
  }
  for(const t of data.draft.tables)t.guestIds=t.guestIds.filter(id=>!valid.includes(id));
  if(dest)dest.guestIds.push(...valid);
- selectedIds.clear();persist();render();
+ ensureSeatLayout(data.draft);selectedIds.clear();persist();render();
 }
 function assign(id,tableId){assignMany([id],tableId)}
 function remove(id){assignMany([id],null)}
@@ -775,12 +854,12 @@ function renderTables(){
 function clearTable(tableId){
  const t=data.draft.tables.find(t=>t.id===tableId);if(!t||!t.guestIds.length)return;
  if(!confirm('Clear '+t.name+'? All '+t.guestIds.length+' guests will return to the unassigned list. Your saved versions will not change.'))return;
- t.guestIds=[];selectedIds.clear();persist();render();
+ t.guestIds=[];t.seatIds=Array(10).fill(null);selectedIds.clear();persist();render();
 }
 function clearAllTables(){
  const total=data.draft.tables.reduce((n,t)=>n+t.guestIds.length,0);if(!total)return;
  if(!confirm('Clear ALL eight tables and unseat '+total+' guests? This changes your working draft only. Your five saved versions will stay intact.'))return;
- for(const t of data.draft.tables)t.guestIds=[];
+ for(const t of data.draft.tables){t.guestIds=[];t.seatIds=Array(10).fill(null)}
  selectedIds.clear();persist();render();
 }
 function updateGroupPicker(){
@@ -823,7 +902,7 @@ function drawOverview(){
   const rows=Math.max(10,t.guestIds.length);
   for(let j=0;j<rows;j++){
    const li=document.createElement('li');const seat=document.createElement('span');seat.className='seat-number';seat.textContent=String(j+1).padStart(2,'0');
-   const guest=t.guestIds[j]?guestOf(t.guestIds[j]):null;
+   const seatId=t.seatIds?t.seatIds[j]:t.guestIds[j];const guest=seatId?guestOf(seatId):null;
    const name=document.createElement('span');name.className='seat-name'+(!guest?' seat-empty':'');name.textContent=guest?guest.name:'—';name.title=guest?.name||'Empty seat';li.append(seat,name);
    if(guest?.type==='Child'){const child=document.createElement('span');child.className='seat-child';child.textContent='CHILD';li.append(child)}
    names.append(li);
@@ -833,6 +912,94 @@ function drawOverview(){
  const unassigned=data.guests.length-seated;
  $('overviewTotals').textContent=seated+' seated · '+capacity+' seats · '+unassigned+' unassigned';
 }
+
+// Floorplan table centres correspond to the eight circles on the supplied sketch.
+// Names are displayed beside the circular tables, with five seats on each side.
+const FLOORPLAN_POSITIONS=[{x:805,y:650},{x:805,y:240},{x:1400,y:245},{x:245,y:245},{x:1400,y:650},{x:1400,y:1080},{x:245,y:1240},{x:805,y:1480}];
+const ROOM_WIDTH=1700,ROOM_HEIGHT=2460;
+let floorplanZoom=0.5,activeFloorSeat=null,floorplanDragged=null;
+function floorplanPlan(){const choice=$('floorplanVersion').value;return choice==='draft'?data.draft:(data.versions[Number(choice)]?.snapshot||data.draft)}
+function floorplanReadOnly(){return $('floorplanVersion').value!=='draft'}
+function floorplanZoomTo(value){floorplanZoom=Math.max(.2,Math.min(1.6,value));$('floorplanZoom').value=String(Math.round(floorplanZoom*100/5)*5);$('floorplanZoomLabel').textContent=Math.round(floorplanZoom*100)+'%';$('floorplanStage').style.width=(ROOM_WIDTH*floorplanZoom)+'px';$('floorplanStage').style.height=(ROOM_HEIGHT*floorplanZoom)+'px';$('floorplanRoom').style.transform='scale('+floorplanZoom+')'}
+function fitFloorplan(){const viewport=$('floorplanViewport');const scale=Math.min((viewport.clientWidth-50)/ROOM_WIDTH,(viewport.clientHeight-50)/ROOM_HEIGHT,1.6);floorplanZoomTo(Math.max(.2,scale));viewport.scrollTo({top:0,left:0})}
+function openFloorplan(){
+ const picker=$('floorplanVersion');picker.replaceChildren();const draft=document.createElement('option');draft.value='draft';draft.textContent='Working draft';picker.append(draft);
+ data.versions.forEach((v,i)=>{if(!v)return;const o=document.createElement('option');o.value=String(i);o.textContent=v.name+' (view only)';picker.append(o)});
+ picker.value='draft';activeFloorSeat=null;$('floorplan').hidden=false;document.body.classList.add('floorplan-open');drawFloorplan();requestAnimationFrame(()=>{floorplanZoomTo(.5);$('floorplanViewport').scrollTo({top:0,left:0});$('floorplanClose').focus()});
+}
+function closeFloorplan(){$('floorplan').hidden=true;document.body.classList.remove('floorplan-open');activeFloorSeat=null;$('floorplanBtn').focus()}
+function drawFloorplan(){
+ const plan=floorplanPlan();ensureSeatLayout(plan);const root=$('floorplanTables');root.replaceChildren();const readonly=floorplanReadOnly();
+ let assigned=0,capacity=0;
+ plan.tables.forEach((t,i)=>{
+  assigned+=t.guestIds.length;capacity+=Number(t.capacity);
+  const pos=FLOORPLAN_POSITIONS[i];if(!pos)return;
+  const pod=document.createElement('div');pod.className='floorplan-table';pod.style.left=pos.x+'px';pod.style.top=pos.y+'px';
+  const disc=document.createElement('div');disc.className='floorplan-disc';const n=document.createElement('strong');n.textContent=String(i+1);const title=document.createElement('span');title.textContent=t.name;title.title=t.name;const count=document.createElement('small');count.textContent=t.guestIds.length+'/'+t.capacity+' seated';disc.append(n,title,count);pod.append(disc);
+  for(let seatIndex=0;seatIndex<10;seatIndex++){
+   const id=t.seatIds[seatIndex],guest=id?guestOf(id):null,side=seatIndex<5?-1:1,row=seatIndex%5;
+   const chair=document.createElement('button');chair.type='button';chair.className='floorplan-seat'+(!guest?' empty':'')+(guest?.type==='Child'?' child':'')+(activeFloorSeat?.tableId===t.id&&activeFloorSeat.index===seatIndex?' active':'');
+   chair.style.left=(side*164)+'px';chair.style.top=((row-2)*53)+'px';chair.title=t.name+', seat '+(seatIndex+1)+': '+(guest?.name||'Empty');chair.setAttribute('aria-label',chair.title);
+   const num=document.createElement('span');num.className='floorplan-seat-num';num.textContent=String(seatIndex+1);const text=document.createElement('span');text.className='floorplan-seat-name';text.textContent=guest?.name||'Empty seat';chair.append(num,text);
+   chair.addEventListener('click',()=>{activeFloorSeat={tableId:t.id,index:seatIndex};drawFloorplan()});
+   if(!readonly){
+    if(guest){chair.draggable=true;chair.addEventListener('dragstart',e=>{floorplanDragged=guest.id;e.dataTransfer.setData('text/plain',guest.id);e.dataTransfer.effectAllowed='move'});chair.addEventListener('dragend',()=>floorplanDragged=null)}
+    chair.addEventListener('dragover',e=>{e.preventDefault();chair.classList.add('drop-over');e.dataTransfer.dropEffect='move'});
+    chair.addEventListener('dragleave',()=>chair.classList.remove('drop-over'));
+    chair.addEventListener('drop',e=>{e.preventDefault();e.stopPropagation();const moving=floorplanDragged||e.dataTransfer.getData('text/plain');floorplanDragged=null;if(moving)moveGuestToSeat(moving,t.id,seatIndex)});
+   }
+   pod.append(chair);
+  }
+  root.append(pod);
+ });
+ $('floorplanTotals').textContent=assigned+' guests seated · '+capacity+' seats · '+(data.guests.length-assigned)+' unassigned';
+ $('floorplanStatus').textContent=readonly?'Saved version · view only. Load this version from Save & manage versions to edit.':'Working draft · seat changes save automatically';
+ $('floorplanStatus').classList.toggle('warning',readonly);
+ drawFloorplanEditor();
+}
+function drawFloorplanEditor(){
+ const root=$('floorplanEditor');root.replaceChildren();$('floorplanSide').classList.toggle('editing',!!activeFloorSeat);
+ if(!activeFloorSeat){const help=document.createElement('div');help.className='floorplan-help';const heading=document.createElement('strong');heading.textContent='Select a seat';const desc=document.createElement('p');desc.textContent='Click a numbered seat to place or swap a guest. Drag a name to an empty seat, or to another seat at the same table to swap.';help.append(heading,desc);root.append(help);return}
+ const plan=floorplanPlan(),t=seatPlanTable(plan,activeFloorSeat.tableId);if(!t){activeFloorSeat=null;return}
+ const index=activeFloorSeat.index,currentId=t.seatIds[index],readonly=floorplanReadOnly();
+ const heading=document.createElement('h3');heading.textContent=t.name+' · Seat '+(index+1);root.append(heading);
+ const current=document.createElement('p');current.textContent='Currently: '+(currentId?nameOf(currentId):'Empty');root.append(current);
+ if(readonly){const p=document.createElement('p');p.style.marginTop='10px';p.textContent='This is a saved snapshot. Switch to Working draft to edit individual seats.';root.append(p);return}
+ const form=document.createElement('div');form.style.marginTop='14px';const label=document.createElement('label');label.textContent='Choose a guest';label.htmlFor='floorplanGuestSelect';const select=document.createElement('select');select.id='floorplanGuestSelect';
+ const placeholder=document.createElement('option');placeholder.value='';placeholder.textContent='Select a guest…';select.append(placeholder);
+ const seated=document.createElement('optgroup');seated.label='Guests at '+t.name;
+ for(const id of t.guestIds){const opt=document.createElement('option');opt.value=id;opt.textContent=nameOf(id);seated.append(opt)}select.append(seated);
+ const unassigned=document.createElement('optgroup');unassigned.label='Unassigned guests';for(const g of data.guests.filter(g=>!tableOf(g.id)).sort((a,b)=>a.name.localeCompare(b.name))){const opt=document.createElement('option');opt.value=g.id;opt.textContent=g.name;unassigned.append(opt)}select.append(unassigned);select.value=currentId||'';
+ const buttons=document.createElement('div');buttons.className='floorplan-edit-buttons';const place=document.createElement('button');place.type='button';place.className='btn primary small';place.textContent='Assign to this seat';place.addEventListener('click',()=>{if(!select.value)return alert('Choose a guest first.');moveGuestToSeat(select.value,t.id,index)});
+ const clear=document.createElement('button');clear.type='button';clear.className='btn small danger';clear.textContent='Unseat guest';clear.disabled=!currentId;clear.addEventListener('click',()=>{if(confirm('Unseat '+nameOf(currentId)+' from '+t.name+'?'))moveGuestToSeat(null,t.id,index)});
+ buttons.append(place,clear);form.append(label,select,buttons);root.append(form);
+ const note=document.createElement('p');note.style.marginTop='12px';note.textContent='Assigning an unassigned guest requires an empty chair. Selecting a guest already at this table swaps their seat. To move guests between tables, drag to an empty chair or use the main planner.';root.append(note);
+}
+function moveGuestToSeat(id,tableId,index){
+ if(floorplanReadOnly())return;const plan=data.draft;ensureSeatLayout(plan);const target=seatPlanTable(plan,tableId);if(!target||index<0||index>9)return;
+ const occupant=target.seatIds[index];
+ if(id===null){if(!occupant)return;target.guestIds=target.guestIds.filter(g=>g!==occupant);target.seatIds[index]=null}
+ else{
+  if(!guestOf(id))return;
+  const source=tableOf(id,plan.tables);
+  if(source===target){const origin=target.seatIds.indexOf(id);if(origin===index)return;if(origin<0){alert('This guest has no available seat in the floorplan. Check table capacity in the main planner.');return}target.seatIds[origin]=occupant||null;target.seatIds[index]=id}
+  else{
+   if(occupant){alert('That chair is occupied. Choose an empty chair when moving guests between tables, or swap seats within the same table.');return}
+   if(target.guestIds.length>=Math.min(10,Number(target.capacity))){alert(target.name+' has no available chairs. Choose another table or adjust its capacity in the main planner.');return}
+   if(source){source.guestIds=source.guestIds.filter(g=>g!==id);const origin=source.seatIds.indexOf(id);if(origin>=0)source.seatIds[origin]=null}
+   target.guestIds.push(id);target.seatIds[index]=id;
+  }
+ }
+ // Preserve individual seat positions, and keep the main planner's guest lists in sync.
+ ensureSeatLayout(plan);for(const t of plan.tables){const mapped=t.seatIds.filter(Boolean);const overflow=t.guestIds.filter(g=>!mapped.includes(g));t.guestIds=[...mapped,...overflow]}
+ persist();render();drawFloorplan();
+}
+$('floorplanBtn').addEventListener('click',openFloorplan);
+$('floorplanClose').addEventListener('click',closeFloorplan);
+$('floorplanVersion').addEventListener('change',()=>{activeFloorSeat=null;drawFloorplan()});
+$('floorplanZoom').addEventListener('input',e=>floorplanZoomTo(Number(e.target.value)/100));
+$('floorplanFit').addEventListener('click',fitFloorplan);
+$('floorplanPrint').addEventListener('click',()=>window.print());
 $('overviewBtn').addEventListener('click',openOverview);
 $('overviewClose').addEventListener('click',closeOverview);
 $('overviewVersion').addEventListener('change',drawOverview);
@@ -842,7 +1009,7 @@ $('versionsBtn').addEventListener('click',()=>openModal('versions'));
 $('compareBtn').addEventListener('click',()=>openModal('compare'));
 $('closeModal').addEventListener('click',closeModal);
 $('modalBackdrop').addEventListener('click',e=>{if(e.target===$('modalBackdrop'))closeModal()});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!$('overview').hidden)closeOverview();else closeModal()}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!$('floorplan').hidden)closeFloorplan();else if(!$('overview').hidden)closeOverview();else closeModal()}});
 $('search').addEventListener('input',renderGuests);$('inviteFilter').addEventListener('change',renderGuests);$('seatFilter').addEventListener('change',renderGuests);
 $('clearSelection').addEventListener('click',()=>{selectedIds.clear();render()});
 $('deselectBtn').addEventListener('click',()=>{selectedIds.clear();render()});
