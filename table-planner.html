@@ -117,11 +117,11 @@ body.floorplan-open{overflow:hidden}
 <header class="top">
  <div class="topline"><div><div class="eyebrow">Claire & Carl · 1 May 2027</div><h1>Wedding table planner</h1><p class="hint">Select multiple guests or a whole invitation group, then place them at a table together. You can still drag names, move them between tables, and save five versions. Use Floorplan view to choose individual seats around the room.</p></div><div><button class="btn" id="printBtn">Print layout</button></div></div>
  <div class="toolbar"><button class="btn primary" id="versionsBtn">Save & manage versions</button><button class="btn" id="compareBtn">Compare versions</button><button class="btn primary" id="overviewBtn">View all tables</button><button class="btn primary" id="floorplanBtn">Floorplan view</button><span class="divider"></span><button class="btn" id="exportBtn">Download backup</button><button class="btn" id="emailBackupBtn">Email backup</button><button class="btn" id="importBtn">Import backup</button><input class="file-input" id="fileInput" type="file" accept=".json,application/json"><span class="secondary" id="saveStatus" role="status">Working draft saved on this device</span></div>
- <div class="stats"><div class="stat"><strong id="totalStat">0</strong><span>Total guests</span></div><div class="stat"><strong id="assignedStat">0</strong><span>Assigned to tables</span></div><div class="stat"><strong id="unassignedStat">0</strong><span>Unassigned</span></div><div class="stat"><strong id="dayStat">0</strong><span>Day guests</span></div><div class="stat"><strong id="eveningStat">0</strong><span>Evening guests</span></div></div>
+ <div class="stats"><div class="stat"><strong id="totalStat">0</strong><span>Total guests</span></div><div class="stat"><strong id="assignedStat">0</strong><span>Assigned to tables</span></div><div class="stat"><strong id="unassignedStat">0</strong><span>Unassigned</span></div><div class="stat"><strong id="dayStat">0</strong><span>Day guests</span></div></div>
 </header>
 <div class="workspace">
- <aside class="sidebar panel" aria-label="Guest list"><div class="sidebar-head"><h2>Guest list <span class="secondary" id="guestCount"></span></h2><div class="secondary">All guests stay here, even after being seated. Select or drag to move them.</div><input id="search" class="search" type="search" placeholder="Search guests or groups…" aria-label="Search guests"><div class="filterline"><select id="inviteFilter" aria-label="Invitation filter"><option value="all">Day & evening</option><option value="Day">Day guests</option><option value="Evening">Evening guests</option></select><select id="seatFilter" aria-label="Seating filter"><option value="all">All guests</option><option value="unassigned">Unassigned</option><option value="assigned">Assigned</option></select></div></div><div class="bulk-tools" aria-label="Bulk guest selection"><div class="bulk-heading">Seat a whole group</div><div class="group-row"><select id="groupPicker" aria-label="Choose invitation group"><option value="">Choose a group…</option></select><button class="btn small primary" id="selectGroupBtn">Select group</button></div><div class="bulk-buttons"><button class="btn small" id="selectVisibleBtn" title="Select every guest matching the current search and filters">Select visible guests</button><button class="btn small" id="deselectBtn">Deselect all</button></div><div class="secondary">Tap names to select more than one. Selected guests move together when placed or dragged.</div></div><div id="guestList" class="guest-list" role="list"></div><div class="sidebar-bottom"><div class="secondary">Add someone missing from the guest list</div><div class="addline"><input id="newGuest" placeholder="Full name" aria-label="New guest name"><button class="btn small" id="addGuestBtn">Add</button></div><div class="filterline"><select id="newGuestType" aria-label="New guest age"><option value="Adult">Adult</option><option value="Child">Child</option></select><select id="newGuestInvite" aria-label="New guest invitation"><option value="Day">Day</option><option value="Evening">Evening</option></select></div></div></aside>
- <main class="canvas"><div id="selection" class="selection" hidden><span class="selection-message"><strong id="selectedName"></strong> selected — click “Place selected here” on a table, or drag any selected name.</span><button class="btn small" id="clearSelection">Cancel</button></div><section class="panel"><div class="canvas-head"><div><h2>Reception tables</h2><p class="secondary">Eight tables · 10 seats each by default · click a table name or seat capacity to edit</p></div><div class="addline"><button class="btn small" id="unassignBtn" title="Remove selected guests from their tables" disabled>Unseat selected</button><button class="btn small danger" id="clearAllBtn" title="Empty all eight tables in the working draft">Clear all tables</button></div></div><div id="tableGrid" class="table-grid"></div><p class="notice">Clearing tables changes only your working draft, not your five saved versions. An orange border means a table exceeds its chosen capacity. Evening-only guests are included in the list but do not have to be seated for the daytime meal.</p></section></main>
+ <aside class="sidebar panel" aria-label="Guest list"><div class="sidebar-head"><h2>Guest list <span class="secondary" id="guestCount"></span></h2><div class="secondary">All guests stay here, even after being seated. Select or drag to move them.</div><input id="search" class="search" type="search" placeholder="Search guests or groups…" aria-label="Search guests"><div class="filterline"><select id="inviteFilter" aria-label="Invitation filter"><option value="all">Day & evening</option><option value="Day">Day guests</option></select><select id="seatFilter" aria-label="Seating filter"><option value="all">All guests</option><option value="unassigned">Unassigned</option><option value="assigned">Assigned</option></select></div></div><div class="bulk-tools" aria-label="Bulk guest selection"><div class="bulk-heading">Seat a whole group</div><div class="group-row"><select id="groupPicker" aria-label="Choose invitation group"><option value="">Choose a group…</option></select><button class="btn small primary" id="selectGroupBtn">Select group</button></div><div class="bulk-buttons"><button class="btn small" id="selectVisibleBtn" title="Select every guest matching the current search and filters">Select visible guests</button><button class="btn small" id="deselectBtn">Deselect all</button></div><div class="secondary">Tap names to select more than one. Selected guests move together when placed or dragged.</div></div><div id="guestList" class="guest-list" role="list"></div><div class="sidebar-bottom"><div class="secondary">Add someone missing from the guest list</div><div class="addline"><input id="newGuest" placeholder="Full name" aria-label="New guest name"><button class="btn small" id="addGuestBtn">Add</button></div><div class="filterline"><select id="newGuestType" aria-label="New guest age"><option value="Adult">Adult</option><option value="Child">Child</option></select><select id="newGuestInvite" aria-label="New guest invitation"><option value="Day">Day</option></select></div></div></aside>
+ <main class="canvas"><div id="selection" class="selection" hidden><span class="selection-message"><strong id="selectedName"></strong> selected — click “Place selected here” on a table, or drag any selected name.</span><button class="btn small" id="clearSelection">Cancel</button></div><section class="panel"><div class="canvas-head"><div><h2>Reception tables</h2><p class="secondary">Eight tables · 10 seats each by default · click a table name or seat capacity to edit</p></div><div class="addline"><button class="btn small" id="unassignBtn" title="Remove selected guests from their tables" disabled>Unseat selected</button><button class="btn small danger" id="clearAllBtn" title="Empty all eight tables in the working draft">Clear all tables</button></div></div><div id="tableGrid" class="table-grid"></div><p class="notice">Clearing tables changes only your working draft, not your five saved versions. An orange border means a table exceeds its chosen capacity. Only day-invited guests from the wedding Worker are included.</p></section></main>
 </div>
 <footer class="footer">Your plans are stored in this browser, not in Cloudflare D1. Use Download backup or Email backup to move between devices; use Import backup on the other device. Email backup uses your device’s share menu when available, otherwise you’ll need to attach the downloaded file to the prepared email. This page is not linked from your wedding site, but an unlisted URL is not secure access control.</footer>
 <div id="modalBackdrop" class="modal-backdrop" hidden><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-top"><div><h2 id="modalTitle">Saved versions</h2><p class="secondary" id="modalDesc">Each slot keeps an independent snapshot of your seating plan.</p></div><button class="btn" id="closeModal" aria-label="Close dialog">Close</button></div><div id="modalContent"></div></div></div>
@@ -149,7 +149,22 @@ body.floorplan-open{overflow:hidden}
  <aside id="floorplanSide" class="floorplan-side" aria-label="Floorplan seat editor"><div><h3>Arrange individual seats</h3><p>Click a name or an empty chair on the floorplan to assign a guest. Drag a name onto an empty chair, or swap two chairs at the same table.</p></div><div class="floorplan-legend"><span><i></i>Adult</span><span><i class="child"></i>Child</span><span>Dashed = empty</span></div><div id="floorplanEditor" class="floorplan-editor"><div class="floorplan-help"><strong>Select a seat</strong><p>Each table has ten numbered places. The main planner controls which table people sit at; this view also lets you choose their exact chair.</p></div></div><div id="floorplanStatus" class="floorplan-info">Working draft · changes save automatically</div></aside></div>
  <footer class="floorplan-foot"><span id="floorplanTotals">8 tables · 80 seats</span><span>Use Fit room for the whole layout; zoom in to read and edit names</span></footer>
 </section>
-<script id="initialGuestData" type="application/json">[
+<script id="initialGuestData" type="application/json">
+[
+  {
+    "id": "claire-gamal",
+    "name": "Claire Gamal",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Waleed & Claire"
+  },
+  {
+    "id": "waleed-gamal",
+    "name": "Waleed Gamal",
+    "type": "Adult",
+    "invitation": "Day",
+    "party": "Waleed & Claire"
+  },
   {
     "id": "andrea-pickering",
     "name": "Andrea Pickering",
@@ -380,34 +395,6 @@ body.floorplan-open{overflow:hidden}
     "type": "Adult",
     "invitation": "Day",
     "party": "Ian & Jane"
-  },
-  {
-    "id": "john-bennett",
-    "name": "John Bennett",
-    "type": "Adult",
-    "invitation": "Evening",
-    "party": "Julie & John"
-  },
-  {
-    "id": "julie-bennett",
-    "name": "Julie Bennett",
-    "type": "Adult",
-    "invitation": "Evening",
-    "party": "Julie & John"
-  },
-  {
-    "id": "alex-bennett",
-    "name": "Alex Bennett",
-    "type": "Child",
-    "invitation": "Evening",
-    "party": "Julie & John"
-  },
-  {
-    "id": "ben-bennett",
-    "name": "Ben Bennett",
-    "type": "Child",
-    "invitation": "Evening",
-    "party": "Julie & John"
   },
   {
     "id": "karen-unwin",
@@ -711,13 +698,6 @@ body.floorplan-open{overflow:hidden}
     "party": "Zac Gaskell"
   },
   {
-    "id": "joe-casey",
-    "name": "Joe Casey",
-    "type": "Adult",
-    "invitation": "Evening",
-    "party": "Joe Casey"
-  },
-  {
     "id": "vicki-lloyd",
     "name": "Vicki Lloyd",
     "type": "Adult",
@@ -730,15 +710,9 @@ body.floorplan-open{overflow:hidden}
     "type": "Adult",
     "invitation": "Day",
     "party": "Sophie Norton"
-  },
-  {
-    "id": "lindsey-norton",
-    "name": "Lindsey Norton",
-    "type": "Adult",
-    "invitation": "Evening",
-    "party": "Lindsey Norton"
   }
-]</script>
+]
+</script>
 <script>
 (()=>{'use strict';
 const STARTER_GUESTS=JSON.parse(document.getElementById('initialGuestData').textContent);
@@ -767,7 +741,23 @@ function validateImported(raw){
  for(const v of raw.versions)if(v)trimToEight(v.snapshot);
  raw.capacityRevision=8;
  ensureSeatLayout(raw.draft);for(const v of raw.versions)if(v)ensureSeatLayout(v.snapshot);
- return raw;
+ return syncDayGuests(raw);
+}
+function syncDayGuests(state){
+ // The current wedding Worker is authoritative for invited daytime guests.
+ // Retain existing seat assignments for day guests; remove evening-only assignments
+ // from the working draft and all five saved versions.
+ const valid=new Set(STARTER_GUESTS.map(g=>g.id));
+ const cleanPlan=plan=>{for(const table of plan.tables){
+  table.guestIds=table.guestIds.filter(id=>valid.has(id));
+  if(Array.isArray(table.seatIds))table.seatIds=table.seatIds.map(id=>valid.has(id)?id:null);
+ }};
+ cleanPlan(state.draft);
+ for(const version of state.versions)if(version)cleanPlan(version.snapshot);
+ state.guests=clone(STARTER_GUESTS);
+ ensureSeatLayout(state.draft);
+ for(const version of state.versions)if(version)ensureSeatLayout(version.snapshot);
+ return state;
 }
 function ensureSeatLayout(plan){
  for(const t of plan.tables){
@@ -779,7 +769,7 @@ function ensureSeatLayout(plan){
  }
 }
 function seatPlanTable(plan,id){return plan.tables.find(t=>t.id===id)}
-try{const stored=localStorage.getItem(STORAGE_KEY);if(stored){const previous=JSON.parse(stored);const wasTenTables=previous.draft?.tables?.length===10;data=validateImported(previous);if(wasTenTables)alert('Your planner now has eight tables. Guests previously seated at Tables 9 and 10 are still in the guest list, but are now unassigned. The same applies to saved versions.');const known=new Set(data.guests.map(g=>g.id));for(const g of STARTER_GUESTS)if(!known.has(g.id))data.guests.push(g)}}catch(err){console.warn('Unable to load saved plan',err);alert('A saved plan could not be loaded. Starting with a new working draft. Your original backup has not been deliberately deleted.');}
+try{const stored=localStorage.getItem(STORAGE_KEY);if(stored){const previous=JSON.parse(stored);const wasTenTables=previous.draft?.tables?.length===10;data=validateImported(previous);if(wasTenTables)alert('Your planner now has eight tables. Guests previously seated at Tables 9 and 10 are still in the guest list, but are now unassigned. The same applies to saved versions.');}}catch(err){console.warn('Unable to load saved plan',err);alert('A saved plan could not be loaded. Starting with a new working draft. Your original backup has not been deliberately deleted.');}
 function persist(){ensureSeatLayout(data.draft);try{localStorage.setItem(STORAGE_KEY,JSON.stringify(data));$('saveStatus').textContent='Working draft saved on this device';}catch(err){$('saveStatus').textContent='Storage unavailable — export a backup';console.warn(err)}}
 function tableOf(id,tables=data.draft.tables){return tables.find(t=>t.guestIds.includes(id))}
 function nameOf(id){return data.guests.find(g=>g.id===id)?.name||'Unknown guest'}
@@ -807,7 +797,7 @@ function choose(id){if(selectedIds.has(id))selectedIds.delete(id);else selectedI
 function render(){
  const assigned=data.draft.tables.reduce((n,t)=>n+t.guestIds.length,0);
  $('totalStat').textContent=data.guests.length;$('assignedStat').textContent=assigned;$('unassignedStat').textContent=data.guests.length-assigned;
- $('dayStat').textContent=data.guests.filter(g=>g.invitation==='Day').length;$('eveningStat').textContent=data.guests.filter(g=>g.invitation==='Evening').length;
+ $('dayStat').textContent=data.guests.filter(g=>g.invitation==='Day').length;
  $('selection').hidden=selectedIds.size===0;
  $('unassignBtn').disabled=![...selectedIds].some(id=>tableOf(id));
  $('unassignBtn').textContent='Unseat selected ('+[...selectedIds].filter(id=>tableOf(id)).length+')';
@@ -1051,7 +1041,7 @@ $('emailBackupBtn').addEventListener('click',async()=>{
  const body=encodeURIComponent('I have downloaded the table planner backup file: '+file.name+'\n\nIMPORTANT: Attach the downloaded .json file to this email before sending. It cannot be attached automatically in this browser.\n\nOn the other device, open the table planner, click Import backup and select the attached file. Importing replaces the current draft and all five saved versions on that device.');
  alert('Your backup file has been downloaded. An email draft will open next. IMPORTANT: attach the downloaded JSON file to the email before sending.');
  window.location.href='mailto:?subject='+subject+'&body='+body;
-});$('importBtn').addEventListener('click',()=>$('fileInput').click());$('fileInput').addEventListener('change',async e=>{const f=e.target.files?.[0];if(!f)return;try{const incoming=validateImported(JSON.parse(await f.text()));if(!confirm('Import this backup? It will replace the working draft and all five saved versions on this device.'))return;data=incoming;selectedIds.clear();updateGroupPicker();persist();render();alert('Backup imported successfully. If this was a 10-table backup, guests from Tables 9 and 10 are now unassigned, not deleted.')}catch(err){alert('Could not import backup: '+err.message)}finally{e.target.value=''}});
+});$('importBtn').addEventListener('click',()=>$('fileInput').click());$('fileInput').addEventListener('change',async e=>{const f=e.target.files?.[0];if(!f)return;try{const incoming=validateImported(JSON.parse(await f.text()));if(!confirm('Import this backup? It will replace the working draft and all five saved versions on this device.'))return;data=incoming;selectedIds.clear();updateGroupPicker();persist();render();alert('Backup imported successfully. Guest list synced to the latest wedding Worker (day guests only). If this was a 10-table backup, guests from Tables 9 and 10 are now unassigned, not deleted.')}catch(err){alert('Could not import backup: '+err.message)}finally{e.target.value=''}});
 // Allow a guest to be dragged back to the guest list to unseat them.
 $('guestList').addEventListener('dragover',e=>{e.preventDefault();e.dataTransfer.dropEffect='move'});$('guestList').addEventListener('drop',e=>{e.preventDefault();const id=dragged||e.dataTransfer.getData('text/plain');if(guestOf(id))assignMany(draggedIds.length?draggedIds:[id],null);draggedIds=[]});
 updateGroupPicker();render();persist();
