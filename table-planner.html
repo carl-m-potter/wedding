@@ -99,6 +99,10 @@ body.floorplan-open{overflow:hidden}
 .floorplan-side p{margin:0;color:var(--muted);font-size:12px}
 .floorplan-side label{display:block;font-weight:700;font-size:12px;margin-bottom:6px}
 .floorplan-side select{width:100%;border:1px solid var(--line);padding:11px 8px;border-radius:8px;background:#fff;color:var(--ink)}
+.floorplan-swapbar{display:flex;align-items:center;flex-wrap:wrap;gap:9px;padding:10px 20px;background:#f1f7f3;border-bottom:1px solid #cdded4;font-size:13px}
+.floorplan-swapbar select{padding:7px 9px;border:1px solid #a9c9bd;border-radius:8px;background:white;color:#234b40}
+.floorplan-swapbar .secondary{font-size:12px}
+.floorplan-swapbar select:disabled{opacity:.5}
 .floorplan-side .floorplan-edit-buttons{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
 .floorplan-side .floorplan-help{padding:12px;border-radius:10px;background:#f2f7f4;display:grid;gap:8px}
 .floorplan-side .floorplan-help strong{font-size:13px}
@@ -138,6 +142,7 @@ body.floorplan-open{overflow:hidden}
  <header class="floorplan-head"><div><div class="eyebrow">Claire &amp; Carl · Reception layout</div><h2 id="floorplanHeading">Your wedding floorplan</h2><p class="secondary">Eight round tables · two pillars · bar and walled-off area · DJ position</p></div>
   <div class="floorplan-actions"><label class="sr-only" for="floorplanVersion">Plan to view</label><select id="floorplanVersion" aria-label="Plan to view"><option value="draft">Working draft</option></select><button class="btn small" id="floorplanFit">Fit room</button><label for="floorplanZoom" class="secondary">Zoom <span id="floorplanZoomLabel">50%</span></label><input type="range" id="floorplanZoom" min="20" max="160" step="5" value="50" aria-label="Floorplan zoom"><button class="btn" id="floorplanPrint">Print floorplan</button><button class="btn primary" id="floorplanClose">Back to planner ✕</button></div>
  </header>
+ <div class="floorplan-swapbar"><strong>Swap table positions</strong><label for="floorSwapA">Move</label><select id="floorSwapA" aria-label="First table"><option value="0">Table 1</option><option value="1">Table 2</option><option value="2">Table 3</option><option value="3">Table 4</option><option value="4">Table 5</option><option value="5">Table 6</option><option value="6">Table 7</option><option value="7">Table 8</option></select><span>with</span><select id="floorSwapB" aria-label="Second table"><option value="0">Table 1</option><option value="1">Table 2</option><option value="2">Table 3</option><option value="4" selected>Table 5</option><option value="3">Table 4</option><option value="5">Table 6</option><option value="6">Table 7</option><option value="7">Table 8</option></select><button class="btn primary small" id="floorSwapBtn">Swap positions</button><span class="secondary">Moves tables and their guests together; does not change table assignments.</span></div>
  <div class="floorplan-main"><div id="floorplanViewport" class="floorplan-viewport" aria-label="Scrollable and zoomable reception floorplan"><div id="floorplanStage" class="floorplan-stage"><div id="floorplanRoom" class="floorplan-room">
   <div class="floorplan-bar" style="left:1110px;top:1660px;width:590px;height:170px">BAR</div>
   <div class="floorplan-wall" style="left:1110px;top:1830px;width:590px;height:630px">WALLED-OFF SPACE<br>(NO ACCESS)</div>
@@ -760,6 +765,7 @@ function syncDayGuests(state){
  return state;
 }
 function ensureSeatLayout(plan){
+ ensureFloorPositions(plan);
  for(const t of plan.tables){
   const assigned=new Set(t.guestIds),seen=new Set();
   const seats=Array.isArray(t.seatIds)&&t.seatIds.length===10?t.seatIds.slice():Array(10).fill(null);
@@ -907,6 +913,21 @@ function drawOverview(){
 // Names are displayed beside the circular tables, with five seats on each side.
 const FLOORPLAN_POSITIONS=[{x:805,y:650},{x:805,y:240},{x:1400,y:245},{x:245,y:245},{x:1400,y:650},{x:1400,y:1080},{x:245,y:1240},{x:805,y:1480}];
 const ROOM_WIDTH=1700,ROOM_HEIGHT=2460;
+function ensureFloorPositions(plan){
+ const positions=plan.floorPositions;
+ if(!Array.isArray(positions)||positions.length!==8||new Set(positions).size!==8||positions.some(x=>!Number.isInteger(x)||x<0||x>7))plan.floorPositions=[0,1,2,3,4,5,6,7];
+}
+function swapFloorTables(){
+ if(floorplanReadOnly())return alert('Switch to Working draft to swap table positions.');
+ const a=Number($('floorSwapA').value),b=Number($('floorSwapB').value);
+ if(a===b)return alert('Choose two different tables.');
+ ensureFloorPositions(data.draft);
+ const positions=data.draft.floorPositions;
+ [positions[a],positions[b]]=[positions[b],positions[a]];
+ activeFloorSeat=null;persist();drawFloorplan();
+ $('floorplanStatus').textContent='Table '+(a+1)+' and Table '+(b+1)+' swapped locations · saved automatically';
+}
+
 let floorplanZoom=0.5,activeFloorSeat=null,floorplanDragged=null;
 function floorplanPlan(){const choice=$('floorplanVersion').value;return choice==='draft'?data.draft:(data.versions[Number(choice)]?.snapshot||data.draft)}
 function floorplanReadOnly(){return $('floorplanVersion').value!=='draft'}
@@ -919,11 +940,11 @@ function openFloorplan(){
 }
 function closeFloorplan(){$('floorplan').hidden=true;document.body.classList.remove('floorplan-open');activeFloorSeat=null;$('floorplanBtn').focus()}
 function drawFloorplan(){
- const plan=floorplanPlan();ensureSeatLayout(plan);const root=$('floorplanTables');root.replaceChildren();const readonly=floorplanReadOnly();
+ const plan=floorplanPlan();ensureSeatLayout(plan);ensureFloorPositions(plan);const root=$('floorplanTables');root.replaceChildren();const readonly=floorplanReadOnly();
  let assigned=0,capacity=0;
  plan.tables.forEach((t,i)=>{
   assigned+=t.guestIds.length;capacity+=Number(t.capacity);
-  const pos=FLOORPLAN_POSITIONS[i];if(!pos)return;
+  const pos=FLOORPLAN_POSITIONS[plan.floorPositions[i]];if(!pos)return;
   const pod=document.createElement('div');pod.className='floorplan-table';pod.style.left=pos.x+'px';pod.style.top=pos.y+'px';
   const disc=document.createElement('div');disc.className='floorplan-disc';const n=document.createElement('strong');n.textContent=String(i+1);const title=document.createElement('span');title.textContent=t.name;title.title=t.name;const count=document.createElement('small');count.textContent=t.guestIds.length+'/'+t.capacity+' seated';disc.append(n,title,count);pod.append(disc);
   for(let seatIndex=0;seatIndex<10;seatIndex++){
@@ -944,7 +965,7 @@ function drawFloorplan(){
  });
  $('floorplanTotals').textContent=assigned+' guests seated · '+capacity+' seats · '+(data.guests.length-assigned)+' unassigned';
  $('floorplanStatus').textContent=readonly?'Saved version · view only. Load this version from Save & manage versions to edit.':'Working draft · seat changes save automatically';
- $('floorplanStatus').classList.toggle('warning',readonly);
+ $('floorplanStatus').classList.toggle('warning',readonly);$('floorSwapA').disabled=readonly;$('floorSwapB').disabled=readonly;$('floorSwapBtn').disabled=readonly;
  drawFloorplanEditor();
 }
 function drawFloorplanEditor(){
@@ -990,6 +1011,7 @@ $('floorplanVersion').addEventListener('change',()=>{activeFloorSeat=null;drawFl
 $('floorplanZoom').addEventListener('input',e=>floorplanZoomTo(Number(e.target.value)/100));
 $('floorplanFit').addEventListener('click',fitFloorplan);
 $('floorplanPrint').addEventListener('click',()=>window.print());
+$('floorSwapBtn').addEventListener('click',swapFloorTables);
 $('overviewBtn').addEventListener('click',openOverview);
 $('overviewClose').addEventListener('click',closeOverview);
 $('overviewVersion').addEventListener('change',drawOverview);
